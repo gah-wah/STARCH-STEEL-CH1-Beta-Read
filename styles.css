@@ -68,7 +68,7 @@ body::-webkit-scrollbar {
 }
 
 .comic-logo {
-    height: 70px; /* Increased height to make the logo larger */
+    height: 100px; /* Increased height to make the logo larger */
     width: auto;
     object-fit: contain;
     margin: 0;
@@ -109,9 +109,7 @@ body::-webkit-scrollbar {
     height: 50px;
     border-radius: 50%;
     background-color: var(--accent-color);
-    color: #fff;
     border: none;
-    font-size: 1.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -131,13 +129,6 @@ body::-webkit-scrollbar {
 .back-to-top:hover {
     background-color: #2563eb;
     transform: translateY(-3px);
-}
-
-.georgia-arrow {
-    font-family: 'Georgia', serif;
-    font-size: 2.5rem;
-    line-height: 0;
-    margin-top: 12px; /* Slight optical adjustment to vertically center the caret */
 }
 
 /* Comic Container */
@@ -201,12 +192,14 @@ body::-webkit-scrollbar {
 /* Footer */
 .site-footer {
     text-align: center;
-    padding: 3rem 1rem 8rem 1rem; /* Added massive padding at the bottom so the mobile URL bar doesn't cover the end of the comic */
+    padding: 2rem 1rem 6rem 1rem; /* Acts as a solid bar at the bottom */
+    background-color: var(--header-bg); /* Match the top nav bar */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     color: var(--text-secondary);
     font-size: 0.875rem;
     border-top: 1px solid var(--header-border);
-    max-width: 800px;
-    margin: 0 auto;
+    width: 100%;
 }
 
 /* Responsive adjustments */
