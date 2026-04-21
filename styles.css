@@ -1,13 +1,18 @@
 /* Reset & Base Styles */
+<<<<<<< HEAD
 *,
 *::before,
 *::after {
+=======
+*, *::before, *::after {
+>>>>>>> 3ddcbb6030ebd7b9b9790717ca5cb9f752127799
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
 :root {
+<<<<<<< HEAD
     --bg-color: #0f1115;
     /* Deep, rich dark background */
     --text-primary: #e2e8f0;
@@ -16,6 +21,13 @@
     /* Subtle blue accent for loading/links */
     --header-bg: rgba(15, 17, 21, 0.75);
     /* Semi-transparent for glassmorphism */
+=======
+    --bg-color: #0f1115; /* Deep, rich dark background */
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --accent-color: #3b82f6; /* Subtle blue accent for loading/links */
+    --header-bg: rgba(15, 17, 21, 0.75); /* Semi-transparent for glassmorphism */
+>>>>>>> 3ddcbb6030ebd7b9b9790717ca5cb9f752127799
     --header-border: rgba(255, 255, 255, 0.08);
 }
 
@@ -27,6 +39,7 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     /* Hide horizontal scrollbar if it ever occurs, though max-width should prevent it */
+<<<<<<< HEAD
     overflow-x: hidden;
 
     /* Hide the vertical scrollbar but keep scrolling functionality */
@@ -39,6 +52,9 @@ body {
 /* Hide scrollbar for Chrome, Safari and Opera */
 body::-webkit-scrollbar {
     display: none;
+=======
+    overflow-x: hidden; 
+>>>>>>> 3ddcbb6030ebd7b9b9790717ca5cb9f752127799
 }
 
 /* Glassmorphism Header */
@@ -54,6 +70,7 @@ body::-webkit-scrollbar {
     z-index: 100;
     padding: 1rem 0;
     transition: transform 0.3s ease;
+<<<<<<< HEAD
     transform: translateY(-100%);
     /* Hidden by default */
 }
@@ -61,6 +78,13 @@ body::-webkit-scrollbar {
 .top-nav.visible {
     transform: translateY(0);
     /* Shown when toggled */
+=======
+    transform: translateY(-100%); /* Hidden by default */
+}
+
+.top-nav.visible {
+    transform: translateY(0); /* Shown when toggled */
+>>>>>>> 3ddcbb6030ebd7b9b9790717ca5cb9f752127799
 }
 
 /* Optional: hide header on scroll down, show on scroll up (can be done in JS, but static positioning is also fine. Let's keep it sticky and always visible for simplicity, or just static if we don't want it covering the comic.)
@@ -77,13 +101,21 @@ body::-webkit-scrollbar {
 }
 
 .comic-logo {
+<<<<<<< HEAD
     height: 70px;
     /* Increased height to make the logo larger */
+=======
+    height: 70px; /* Increased height to make the logo larger */
+>>>>>>> 3ddcbb6030ebd7b9b9790717ca5cb9f752127799
     width: auto;
     object-fit: contain;
     margin: 0;
     /* Adjust this value to shift left (negative) or right (positive) */
+<<<<<<< HEAD
     transform: translateX(-10px);
+=======
+    transform: translateX(-10px); 
+>>>>>>> 3ddcbb6030ebd7b9b9790717ca5cb9f752127799
 }
 
 .chapter-title {
@@ -126,7 +158,11 @@ body::-webkit-scrollbar {
     align-items: center;
     justify-content: center;
     cursor: pointer;
+<<<<<<< HEAD
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+=======
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+>>>>>>> 3ddcbb6030ebd7b9b9790717ca5cb9f752127799
     z-index: 90;
     transform: translateY(150px);
     opacity: 0;
@@ -147,17 +183,27 @@ body::-webkit-scrollbar {
     font-family: 'Georgia', serif;
     font-size: 2.5rem;
     line-height: 0;
+<<<<<<< HEAD
     margin-top: 12px;
     /* Slight optical adjustment to vertically center the caret */
+=======
+    margin-top: 12px; /* Slight optical adjustment to vertically center the caret */
+>>>>>>> 3ddcbb6030ebd7b9b9790717ca5cb9f752127799
 }
 
 /* Comic Container */
 .comic-container {
+<<<<<<< HEAD
     max-width: 800px;
     /* Standard optimal width for webcomics */
     margin: 0 auto;
     padding-top: 0;
     /* Remove padding so comic hits the top of screen */
+=======
+    max-width: 800px; /* Standard optimal width for webcomics */
+    margin: 0 auto;
+    padding-top: 0; /* Remove padding so comic hits the top of screen */
+>>>>>>> 3ddcbb6030ebd7b9b9790717ca5cb9f752127799
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -173,8 +219,12 @@ body::-webkit-scrollbar {
     width: 100%;
     max-width: 100%;
     height: auto;
+<<<<<<< HEAD
     display: block;
     /* Removes inline bottom spacing typical of images */
+=======
+    display: block; /* Removes inline bottom spacing typical of images */
+>>>>>>> 3ddcbb6030ebd7b9b9790717ca5cb9f752127799
     margin: 0;
     padding: 0;
     border: none;
@@ -209,16 +259,24 @@ body::-webkit-scrollbar {
 }
 
 @keyframes spin {
+<<<<<<< HEAD
     to {
         transform: rotate(360deg);
     }
+=======
+    to { transform: rotate(360deg); }
+>>>>>>> 3ddcbb6030ebd7b9b9790717ca5cb9f752127799
 }
 
 /* Footer */
 .site-footer {
     text-align: center;
+<<<<<<< HEAD
     padding: 3rem 1rem 8rem 1rem;
     /* Added massive padding at the bottom so the mobile URL bar doesn't cover the end of the comic */
+=======
+    padding: 3rem 1rem;
+>>>>>>> 3ddcbb6030ebd7b9b9790717ca5cb9f752127799
     color: var(--text-secondary);
     font-size: 0.875rem;
     border-top: 1px solid var(--header-border);
@@ -232,6 +290,7 @@ body::-webkit-scrollbar {
         width: 100%;
     }
 }
+<<<<<<< HEAD
 
 /* Hide scrollbar for Chrome, Safari and Opera */
 html::-webkit-scrollbar,
@@ -248,3 +307,5 @@ body {
     scrollbar-width: none;
     /* Firefox */
 }
+=======
+>>>>>>> 3ddcbb6030ebd7b9b9790717ca5cb9f752127799
