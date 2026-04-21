@@ -11,32 +11,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const backToTopBtn = document.getElementById('back-to-top');
     const bottomNav = document.getElementById('bottom-nav');
     const progressBar = document.getElementById('progress-bar');
-    const fullscreenBtn = document.getElementById('fullscreen-btn');
-
-    // Handle Fullscreen Button
-    if (fullscreenBtn) {
-        // Hide on iOS where Fullscreen API isn't well supported
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        if (isIOS) {
-            fullscreenBtn.style.display = 'none';
-        } else {
-            fullscreenBtn.addEventListener('click', (e) => {
-                e.stopPropagation(); // prevent toggling the nav
-                if (!document.fullscreenElement) {
-                    document.documentElement.requestFullscreen().catch(err => {
-                        console.log(`Error attempting to enable fullscreen: ${err.message}`);
-                    });
-                } else {
-                    document.exitFullscreen();
-                }
-            });
-        }
-    }
-
     document.addEventListener('click', () => {
-        topNav.classList.toggle('visible');
-        backToTopBtn.classList.toggle('visible');
+        const isNowVisible = topNav.classList.toggle('visible');
         if (bottomNav) bottomNav.classList.toggle('visible');
+        
+        if (isNowVisible && window.scrollY > 500) {
+            backToTopBtn.classList.add('visible');
+        } else {
+            backToTopBtn.classList.remove('visible');
+        }
     });
 
     // Handle back to top click
@@ -51,6 +34,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const docHeight = document.documentElement.scrollHeight - window.innerHeight;
         const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
         progressBar.style.width = scrollPercent + '%';
+
+        if (scrollTop < 500) {
+            backToTopBtn.classList.remove('visible');
+        } else if (topNav.classList.contains('visible')) {
+            backToTopBtn.classList.add('visible');
+        }
     });
 
     // Function to fetch the comic data
