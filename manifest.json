@@ -1,0 +1,15 @@
+{
+    "name": "Starch & Steel",
+    "short_name": "Starch & Steel",
+    "display": "standalone",
+    "start_url": "/",
+    "background_color": "#0f1115",
+    "theme_color": "#0f1115",
+    "icons": [
+        {
+            "src": "https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/stst4lgoogoootrans.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
