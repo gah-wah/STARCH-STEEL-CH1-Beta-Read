@@ -1,4 +1,49 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Preload opened door image
+    const openedDoorImg = new Image();
+    openedDoorImg.src = 'https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/Fridge%20Door%20Opened.png';
+
+    // Prevent scrolling while intro is active
+    document.body.style.overflow = 'hidden';
+
+    const introScreen = document.getElementById('intro-screen');
+    const introImage = document.getElementById('intro-image');
+    
+    if (introImage && introScreen) {
+        // Prevent clicks on the intro screen from toggling the comic nav bars behind it
+        introScreen.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        introImage.addEventListener('click', () => {
+            if (introImage.classList.contains('zoom-fade')) return; // Prevent multiple clicks
+
+            // Lock scrolling on intro screen while animating
+            introScreen.style.overflowY = 'hidden';
+
+            // Fade out the landing image and text
+            introScreen.classList.add('animating');
+
+            // Switch image
+            introImage.src = openedDoorImg.src;
+            
+            // Wait slightly for the swap to register visually, then animate
+            setTimeout(() => {
+                introImage.classList.add('zoom-fade');
+                
+                // After animation, hide intro screen and restore scrolling
+                setTimeout(() => {
+                    introScreen.classList.add('fade-out');
+                    document.body.style.overflow = ''; // Restore scrolling
+                    
+                    setTimeout(() => {
+                        introScreen.style.display = 'none';
+                    }, 800); // Matches the opacity transition on .intro-screen
+                }, 1500); // Wait for the zoom-fade animation
+            }, 100);
+        });
+    }
+
     // Set current year in footer
     document.getElementById('current-year').textContent = new Date().getFullYear();
 
