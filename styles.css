@@ -307,11 +307,33 @@ body {
 }
 
 .intro-screen.animating #intro-landing-image,
-.intro-screen.animating .intro-text {
+.intro-screen.animating .intro-text,
+.intro-screen.animating .customize-link {
     opacity: 0;
 }
 
 .intro-screen.fade-out {
     opacity: 0;
     pointer-events: none;
+}
+
+.customize-link {
+    display: inline-block;
+    margin-bottom: 4rem;
+    padding: 1rem 2rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #000;
+    background-color: #fff;
+    text-decoration: none;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 1s ease-in-out;
+    font-family: 'Times New Roman', Times, serif;
+    z-index: 5;
+}
+
+.customize-link:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
 }
