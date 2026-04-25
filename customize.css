@@ -26,7 +26,7 @@ body {
 }
 
 .customizer-container {
-    max-width: 450px;
+    max-width: 400px;
     margin: 0 auto;
     min-height: 100vh;
     display: flex;
@@ -45,7 +45,7 @@ body {
     border-bottom: 1px solid var(--border-color);
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 9999;
 }
 
 .back-button {
@@ -76,7 +76,7 @@ body {
     position: relative;
     width: 100%;
     aspect-ratio: 1 / 1;
-    max-height: 380px;
+    max-height: 320px;
     margin: 2rem auto;
     display: flex;
     justify-content: center;
@@ -127,7 +127,7 @@ body {
 
 .control-group {
     display: grid;
-    grid-template-columns: 32px 1fr 32px;
+    grid-template-columns: 28px 1fr 28px;
     align-items: center;
     gap: 1rem;
     padding: 1rem 0;
@@ -139,12 +139,12 @@ body {
 }
 
 .list-number {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: bold;
     color: var(--text-secondary);
 }
@@ -164,8 +164,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     transition: color 0.2s, transform 0.2s, background 0.2s;
 }
@@ -183,9 +183,9 @@ body {
 
 .control-label {
     font-weight: 600;
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: var(--text-primary);
-    min-width: 120px;
+    min-width: 100px;
     text-align: center;
 }
 
@@ -193,10 +193,10 @@ body {
     background: rgba(255, 255, 255, 0.1);
     border: none;
     color: white;
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: bold;
     cursor: pointer;
     display: flex;
