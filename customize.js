@@ -59,6 +59,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const category = categories[categoryKey];
         const option = category.options[category.currentIndex];
         
+        // Update the list number display
+        const numDisplay = document.getElementById(`num-${categoryKey}`);
+        if (numDisplay) {
+            // If the first option is 'None', currentIndex 0 is 0. Otherwise it's 1-based.
+            const hasNone = category.options[0].name === 'None';
+            numDisplay.textContent = hasNone ? category.currentIndex : category.currentIndex + 1;
+        }
+
         const layerImg = document.getElementById(category.layerId);
 
         if (option.file) {
