@@ -26,7 +26,7 @@ body {
 }
 
 .customizer-container {
-    max-width: 500px;
+    max-width: 450px;
     margin: 0 auto;
     min-height: 100vh;
     display: flex;
@@ -64,9 +64,10 @@ body {
 
 .header h1 {
     font-size: 1.25rem;
-    margin-left: auto;
-    margin-right: auto;
-    transform: translateX(-20px); /* Adjust to visually center considering back button */
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
     font-family: 'Times New Roman', Times, serif;
 }
 
@@ -75,7 +76,7 @@ body {
     position: relative;
     width: 100%;
     aspect-ratio: 1 / 1;
-    max-height: 500px;
+    max-height: 380px;
     margin: 2rem auto;
     display: flex;
     justify-content: center;
@@ -125,10 +126,10 @@ body {
 }
 
 .control-group {
-    display: flex;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 32px 1fr 32px;
     align-items: center;
-    gap: 2rem;
+    gap: 1rem;
     padding: 1rem 0;
     border-bottom: 1px solid var(--border-color);
 }
@@ -137,11 +138,45 @@ body {
     border-bottom: none;
 }
 
+.selector-arrows {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    grid-column: 2;
+}
+
+.refresh-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    transition: color 0.2s, transform 0.2s, background 0.2s;
+    grid-column: 3;
+}
+
+.refresh-btn:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(90deg);
+}
+
+.refresh-btn:active {
+    transform: rotate(90deg) scale(0.9);
+}
+
+
 .control-label {
     font-weight: 600;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     color: var(--text-primary);
-    min-width: 130px;
+    min-width: 120px;
     text-align: center;
 }
 
@@ -149,10 +184,10 @@ body {
     background: rgba(255, 255, 255, 0.1);
     border: none;
     color: white;
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: bold;
     cursor: pointer;
     display: flex;
