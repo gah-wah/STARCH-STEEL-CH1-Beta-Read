@@ -72,12 +72,12 @@ body {
 }
 
 .character-preview {
-    flex: 1;
+    flex: 0 0 auto;
     position: relative;
-    width: 100%;
+    width: calc(100% - 2rem);
     aspect-ratio: 1 / 1;
-    max-height: 320px;
-    margin: 2rem auto;
+    max-height: 280px;
+    margin: 1.5rem auto;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -117,12 +117,39 @@ body {
 
 
 .controls-container {
-    padding: 1.5rem;
+    padding: 1rem;
     background: var(--panel-bg);
-    border-radius: 20px 20px 0 0;
-    border-top: 1px solid var(--border-color);
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
-    margin-top: auto; /* Push to bottom if space is available */
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    margin: 0 1rem;
+}
+
+.randomize-btn {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: white;
+    color: black;
+    font-family: 'Times New Roman', Times, serif;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.randomize-btn:hover {
+    background: #e2e8f0;
+}
+
+.randomize-btn:active {
+    transform: scale(0.98);
 }
 
 .control-group {
@@ -130,7 +157,7 @@ body {
     grid-template-columns: 28px 1fr 28px;
     align-items: center;
     gap: 1rem;
-    padding: 1rem 0;
+    padding: 0.75rem 0;
     border-bottom: 1px solid var(--border-color);
 }
 

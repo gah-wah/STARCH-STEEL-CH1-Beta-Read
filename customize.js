@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         face: {
             layerId: 'layer-face',
-            options: generateOptions('Face', 19, true),
+            options: generateOptions('Face', 22, true),
             currentIndex: 0
         },
         hat: {
@@ -31,12 +31,12 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         acc1: {
             layerId: 'layer-acc1',
-            options: generateOptions('Accessory', 17, true),
+            options: generateOptions('Accessory', 19, true),
             currentIndex: 0
         },
         acc2: {
             layerId: 'layer-acc2',
-            options: generateOptions('Accessory', 17, true),
+            options: generateOptions('Accessory', 19, true),
             currentIndex: 0
         }
     };
@@ -130,6 +130,21 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             updateLayer(categoryKey);
         });
+    }
+
+    // Randomize all categories
+    function randomizeAll() {
+        for (const key in categories) {
+            const category = categories[key];
+            const max = category.options.length;
+            category.currentIndex = Math.floor(Math.random() * max);
+            updateLayer(key);
+        }
+    }
+
+    const randomBtn = document.getElementById('btn-randomize');
+    if (randomBtn) {
+        randomBtn.addEventListener('click', randomizeAll);
     }
 
     // Initialize all controls and layers on load
