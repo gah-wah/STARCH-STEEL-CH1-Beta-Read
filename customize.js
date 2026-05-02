@@ -147,6 +147,118 @@ document.addEventListener('DOMContentLoaded', () => {
         randomBtn.addEventListener('click', randomizeAll);
     }
 
+    // --- Export Functionality ---
+    async function flattenCharacter() {
+        const canvas = document.createElement('canvas');
+        const size = 800; // Output size
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+        ctx.imageSmoothingEnabled = false; // Keep pixel art crisp
+
+        // Get all layers, sort by z-index
+        const layers = Array.from(document.querySelectorAll('.character-layer'))
+            .filter(img => img.classList.contains('visible') && img.src && !img.src.startsWith('data:image/gif'))
+            .sort((a, b) => {
+                return (parseInt(getComputedStyle(a).zIndex) || 0) - (parseInt(getComputedStyle(b).zIndex) || 0);
+            });
+
+        for (const layer of layers) {
+            try {
+                // Fetch the image as a blob to cleanly bypass canvas tainting (if CORS allows)
+                const response = await fetch(layer.src, { mode: 'cors' });
+                const blob = await response.blob();
+                const objectUrl = URL.createObjectURL(blob);
+                
+                await new Promise((resolve, reject) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        // Draw scaled up to fill canvas
+                        ctx.drawImage(img, 0, 0, size, size);
+                        URL.revokeObjectURL(objectUrl);
+                        resolve();
+                    };
+                    img.onerror = () => {
+                        URL.revokeObjectURL(objectUrl);
+                        reject(new Error("Failed to load image layer"));
+                    };
+                    img.src = objectUrl;
+                });
+            } catch (err) {
+                console.error("Error drawing layer:", layer.id, err);
+            }
+        }
+
+        return new Promise(resolve => {
+            canvas.toBlob(blob => resolve(blob), 'image/png');
+        });
+    }
+
+    const downloadBtn = document.getElementById('btn-download');
+    if (downloadBtn) {
+        downloadBtn.addEventListener('click', async () => {
+            const originalText = downloadBtn.innerHTML;
+            downloadBtn.textContent = "Processing...";
+            downloadBtn.disabled = true;
+            try {
+                const blob = await flattenCharacter();
+                if (blob) {
+                    // Generate character code
+                    const codeParts = ['body', 'face', 'hat', 'acc1', 'acc2'].map(key => {
+                        const category = categories[key];
+                        const hasNone = category.options[0].name === 'None';
+                        return hasNone ? category.currentIndex : category.currentIndex + 1;
+                    });
+                    const charCode = codeParts.join('_');
+
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `starchandsteelcustomcharacter_${charCode}.png`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }
+            } catch (e) {
+                console.error("Export failed", e);
+                alert("Failed to export. Please check CORS settings.");
+            }
+            downloadBtn.innerHTML = originalText;
+            downloadBtn.disabled = false;
+        });
+    }
+
+    const copyBtn = document.getElementById('btn-copy');
+    if (copyBtn) {
+        copyBtn.addEventListener('click', async () => {
+            const originalText = copyBtn.innerHTML;
+            copyBtn.textContent = "Copying...";
+            copyBtn.disabled = true;
+            try {
+                const blob = await flattenCharacter();
+                if (blob) {
+                    await navigator.clipboard.write([
+                        new ClipboardItem({ 'image/png': blob })
+                    ]);
+                    copyBtn.textContent = "Copied!";
+                    setTimeout(() => {
+                        if (copyBtn.textContent === "Copied!") {
+                            copyBtn.innerHTML = originalText;
+                            copyBtn.disabled = false;
+                        }
+                    }, 2000);
+                    return; // exit early so we don't reset disabled below
+                }
+            } catch (e) {
+                console.error("Copy failed", e);
+                alert("Failed to copy. Please check CORS settings or browser permissions.");
+            }
+            copyBtn.innerHTML = originalText;
+            copyBtn.disabled = false;
+        });
+    }
+
     // Initialize all controls and layers on load
     for (const key in categories) {
         setupControls(key);
