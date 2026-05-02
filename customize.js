@@ -75,6 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (animate) {
                 // Preload image to prevent clunky animation of old image
                 const tempImg = new Image();
+                tempImg.crossOrigin = "anonymous";
                 tempImg.onload = () => {
                     layerImg.src = newSrc;
                     layerImg.classList.add('visible');
@@ -165,25 +166,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
         for (const layer of layers) {
             try {
-                // Fetch the image as a blob to cleanly bypass canvas tainting (if CORS allows)
-                const response = await fetch(layer.src, { mode: 'cors' });
-                const blob = await response.blob();
-                const objectUrl = URL.createObjectURL(blob);
-                
-                await new Promise((resolve, reject) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        // Draw scaled up to fill canvas
-                        ctx.drawImage(img, 0, 0, size, size);
-                        URL.revokeObjectURL(objectUrl);
-                        resolve();
-                    };
-                    img.onerror = () => {
-                        URL.revokeObjectURL(objectUrl);
-                        reject(new Error("Failed to load image layer"));
-                    };
-                    img.src = objectUrl;
-                });
+                // Draw the DOM image directly. Since the images have crossorigin="anonymous" in HTML,
+                // and the CORS headers are set on the bucket, this will not taint the canvas.
+                // We use a small timeout fallback just in case the image hasn't fully rendered its latest source,
+                // though the load event in updateLayer usually guarantees it.
+                if (layer.complete && layer.naturalHeight !== 0) {
+                    ctx.drawImage(layer, 0, 0, size, size);
+                } else {
+                    await new Promise((resolve) => {
+                        const tempImg = new Image();
+                        tempImg.crossOrigin = "anonymous";
+                        tempImg.onload = () => {
+                            ctx.drawImage(tempImg, 0, 0, size, size);
+                            resolve();
+                        };
+                        tempImg.onerror = resolve; // Skip on error
+                        tempImg.src = layer.src;
+                    });
+                }
             } catch (err) {
                 console.error("Error drawing layer:", layer.id, err);
             }
