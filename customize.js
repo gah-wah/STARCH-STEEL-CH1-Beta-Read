@@ -21,22 +21,22 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         face: {
             layerId: 'layer-face',
-            options: generateOptions('Face', 26, true),
+            options: generateOptions('Face', 34, true),
             currentIndex: 0
         },
         hat: {
             layerId: 'layer-hat',
-            options: generateOptions('Hat', 22, true),
+            options: generateOptions('Hat', 24, true),
             currentIndex: 0
         },
         acc1: {
             layerId: 'layer-acc1',
-            options: generateOptions('Accessory', 28, true),
+            options: generateOptions('Accessory', 31, true),
             currentIndex: 0
         },
         acc2: {
             layerId: 'layer-acc2',
-            options: generateOptions('Accessory', 28, true),
+            options: generateOptions('Accessory', 31, true),
             currentIndex: 0
         }
     };
