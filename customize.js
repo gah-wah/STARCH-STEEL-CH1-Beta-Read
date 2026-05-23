@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const category = categories[key];
             const max = category.options.length;
             category.currentIndex = Math.floor(Math.random() * max);
-            updateLayer(key);
+            updateLayer(key, false);
         }
     }
 

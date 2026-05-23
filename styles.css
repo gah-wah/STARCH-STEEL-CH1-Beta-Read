@@ -462,6 +462,8 @@ body {
 }
 
 .patreon-char-name {
+    display: inline-block;
+    text-align: center;
     font-family: 'RetroNumbers', 'Georgia', 'Times New Roman', Times, serif;
     font-size: 0.6rem;
     font-weight: bold;
@@ -489,25 +491,25 @@ body {
 /* Shelf 1 positions (Top Shelf) */
 #patreon-char-tato {
     left: 25%;
-    top: 24%;
+    top: 23.5%;
 }
 
 #patreon-char-karreth {
     left: 59%;
-    top: 24%;
+    top: 23.5%;
 }
 
 /* Shelf 2 positions (Middle Shelf) */
-.patreon-char-s2-c1 { left: 12%; top: 43.9%; }
-.patreon-char-s2-c2 { left: 32%; top: 43.9%; }
-.patreon-char-s2-c3 { left: 52%; top: 43.9%; }
-.patreon-char-s2-c4 { left: 72%; top: 43.9%; }
+.patreon-char-s2-c1 { left: 12%; top: 43.0%; }
+.patreon-char-s2-c2 { left: 32%; top: 43.0%; }
+.patreon-char-s2-c3 { left: 52%; top: 43.0%; }
+.patreon-char-s2-c4 { left: 72%; top: 43.0%; }
 
 /* Shelf 3 positions (Lower Shelf) */
-.patreon-char-s3-c1 { left: 12%; top: 59%; }
-.patreon-char-s3-c2 { left: 32%; top: 59%; }
-.patreon-char-s3-c3 { left: 52%; top: 59%; }
-.patreon-char-s3-c4 { left: 72%; top: 59%; }
+.patreon-char-s3-c1 { left: 12%; top: 58.2%; }
+.patreon-char-s3-c2 { left: 32%; top: 58.2%; }
+.patreon-char-s3-c3 { left: 52%; top: 58.2%; }
+.patreon-char-s3-c4 { left: 72%; top: 58.2%; }
 
 .intro-screen.fade-out {
     opacity: 0;
@@ -518,7 +520,7 @@ body {
     display: inline-block;
     position: absolute;
     left: 50%;
-    bottom: 7%;
+    bottom: 5.5%;
     transform: translateX(-50%);
     margin-bottom: 0;
     padding: 1rem 2rem;
