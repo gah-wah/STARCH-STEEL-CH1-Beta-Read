@@ -445,7 +445,6 @@ body {
     flex-direction: column;
     align-items: center;
     width: 16%;
-    transform: translateY(-100%);
     transform-origin: bottom center;
     transition: transform 0.2s ease;
     cursor: pointer;
@@ -454,7 +453,7 @@ body {
 }
 
 .patreon-character:hover {
-    transform: translateY(-100%) translateY(-4px) scale(1.05);
+    transform: translateY(-4px) scale(1.05);
 }
 
 .patreon-character:hover .patreon-char-name {
@@ -462,7 +461,8 @@ body {
 }
 
 .patreon-char-name {
-    display: inline-block;
+    display: block;
+    width: max-content;
     text-align: center;
     font-family: 'RetroNumbers', 'Georgia', 'Times New Roman', Times, serif;
     font-size: 0.6rem;
@@ -491,25 +491,25 @@ body {
 /* Shelf 1 positions (Top Shelf) */
 #patreon-char-tato {
     left: 25%;
-    top: 23.5%;
+    bottom: 76.5%;
 }
 
 #patreon-char-karreth {
     left: 59%;
-    top: 23.5%;
+    bottom: 76.5%;
 }
 
 /* Shelf 2 positions (Middle Shelf) */
-.patreon-char-s2-c1 { left: 12%; top: 43.0%; }
-.patreon-char-s2-c2 { left: 32%; top: 43.0%; }
-.patreon-char-s2-c3 { left: 52%; top: 43.0%; }
-.patreon-char-s2-c4 { left: 72%; top: 43.0%; }
+.patreon-char-s2-c1 { left: 12%; bottom: 56.8%; }
+.patreon-char-s2-c2 { left: 32%; bottom: 56.8%; }
+.patreon-char-s2-c3 { left: 52%; bottom: 56.8%; }
+.patreon-char-s2-c4 { left: 72%; bottom: 56.8%; }
 
 /* Shelf 3 positions (Lower Shelf) */
-.patreon-char-s3-c1 { left: 12%; top: 58.2%; }
-.patreon-char-s3-c2 { left: 32%; top: 58.2%; }
-.patreon-char-s3-c3 { left: 52%; top: 58.2%; }
-.patreon-char-s3-c4 { left: 72%; top: 58.2%; }
+.patreon-char-s3-c1 { left: 12%; bottom: 41.2%; }
+.patreon-char-s3-c2 { left: 32%; bottom: 41.2%; }
+.patreon-char-s3-c3 { left: 52%; bottom: 41.2%; }
+.patreon-char-s3-c4 { left: 72%; bottom: 41.2%; }
 
 .intro-screen.fade-out {
     opacity: 0;

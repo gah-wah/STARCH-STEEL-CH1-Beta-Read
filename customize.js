@@ -19,27 +19,32 @@ document.addEventListener('DOMContentLoaded', () => {
         body: {
             layerId: 'layer-body',
             options: generateOptions('Body', 5, false),
-            currentIndex: 0
+            currentIndex: 0,
+            activeTimeout: null
         },
         face: {
             layerId: 'layer-face',
             options: generateOptions('Face', 34, true),
-            currentIndex: 0
+            currentIndex: 0,
+            activeTimeout: null
         },
         hat: {
             layerId: 'layer-hat',
             options: generateOptions('Hat', 24, true),
-            currentIndex: 0
+            currentIndex: 0,
+            activeTimeout: null
         },
         acc1: {
             layerId: 'layer-acc1',
             options: generateOptions('Accessory', 31, true),
-            currentIndex: 0
+            currentIndex: 0,
+            activeTimeout: null
         },
         acc2: {
             layerId: 'layer-acc2',
             options: generateOptions('Accessory', 31, true),
-            currentIndex: 0
+            currentIndex: 0,
+            activeTimeout: null
         }
     };
 
@@ -71,38 +76,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const layerImg = document.getElementById(category.layerId);
 
-        if (option.file) {
-            const newSrc = baseUrl + option.file + '?cb=' + cacheBuster;
-
-            if (animate) {
-                // Preload image to prevent clunky animation of old image
-                const tempImg = new Image();
-                tempImg.crossOrigin = "anonymous";
-                tempImg.onload = () => {
-                    layerImg.src = newSrc;
-                    layerImg.classList.add('visible');
-                    bringToFront(categoryKey);
-                    
-                    // Re-trigger CSS animation
-                    layerImg.classList.remove('pop-animation');
-                    void layerImg.offsetWidth; // trigger reflow
-                    layerImg.classList.add('pop-animation');
-                };
-                tempImg.src = newSrc;
-            } else {
-                layerImg.src = newSrc;
-                layerImg.classList.add('visible');
-            }
-        } else {
-            // Hide layer if "None" is selected
-            layerImg.classList.remove('visible');
-            // Remove source and replace with transparent pixel after fade out transition (0.3s)
-            setTimeout(() => {
-                if (!layerImg.classList.contains('visible')) {
-                    layerImg.src = transparentPixel;
-                }
-            }, 300);
+        // Cancel any active animation timeout for this layer to prevent overlapping state updates
+        if (category.activeTimeout) {
+            clearTimeout(category.activeTimeout);
+            category.activeTimeout = null;
         }
+
+        if (!animate) {
+            // Instant update (used for init and randomize)
+            if (option.file) {
+                layerImg.src = baseUrl + option.file + '?cb=' + cacheBuster;
+                layerImg.classList.remove('pop-out', 'pop-in');
+                layerImg.classList.add('visible');
+                bringToFront(categoryKey);
+            } else {
+                layerImg.classList.remove('visible', 'pop-out', 'pop-in');
+                layerImg.src = transparentPixel;
+            }
+            return;
+        }
+
+        // Animated update: pop out first
+        layerImg.classList.remove('pop-in');
+        layerImg.classList.add('pop-out');
+
+        // Wait for pop-out animation to complete (200ms)
+        category.activeTimeout = setTimeout(() => {
+            category.activeTimeout = null;
+            if (option.file) {
+                layerImg.src = baseUrl + option.file + '?cb=' + cacheBuster;
+                layerImg.classList.add('visible');
+                bringToFront(categoryKey);
+                
+                layerImg.classList.remove('pop-out');
+                void layerImg.offsetWidth; // trigger reflow to restart animation
+                layerImg.classList.add('pop-in');
+            } else {
+                layerImg.classList.remove('visible', 'pop-out');
+                layerImg.src = transparentPixel;
+            }
+        }, 200);
     }
 
     function setupControls(categoryKey) {

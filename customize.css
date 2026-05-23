@@ -113,9 +113,8 @@ body {
 .character-preview {
     flex: 0 0 auto;
     position: relative;
-    width: calc(100% - 2rem);
-    aspect-ratio: 1 / 1;
-    max-height: 280px;
+    width: 280px;
+    height: 280px;
     margin: 1.5rem auto;
     display: flex;
     justify-content: center;
@@ -127,8 +126,8 @@ body {
 
 .character-layers-container {
     position: relative;
-    width: 88%;
-    height: 88%;
+    width: 70%;
+    height: 70%;
     filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.12)) url(#chromatic-aberration);
 }
 
@@ -140,7 +139,7 @@ body {
     height: 100%;
     object-fit: contain;
     image-rendering: pixelated; /* Ensures pixel art is crisp */
-    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0.3s;
+    transition: opacity 0.3s ease, visibility 0s linear 0.3s;
     /* Hide initially until a src is set */
     opacity: 0;
     visibility: hidden;
@@ -151,7 +150,7 @@ body {
     opacity: 1;
     visibility: visible;
     transform: scale(1);
-    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0s;
+    transition: opacity 0.3s ease, visibility 0s linear 0s;
 }
 
 /* Layer stacking order */
@@ -296,8 +295,17 @@ body {
     100% { transform: scale(1); opacity: 1; }
 }
 
-.pop-animation {
-    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+@keyframes popOut {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(0.8); opacity: 0; }
+}
+
+.pop-in {
+    animation: popIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.pop-out {
+    animation: popOut 0.2s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards;
 }
 
 .export-actions {
