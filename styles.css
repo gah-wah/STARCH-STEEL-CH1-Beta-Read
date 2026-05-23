@@ -1,3 +1,9 @@
+@font-face {
+    font-family: 'RetroNumbers';
+    src: local('Times New Roman'), local('Times'), local('Liberation Serif');
+    unicode-range: U+0030-0039;
+}
+
 /* Reset & Base Styles */
 *, *::before, *::after {
     box-sizing: border-box;
@@ -17,7 +23,7 @@
 body {
     background-color: var(--bg-color);
     color: var(--text-primary);
-    font-family: 'Times New Roman', Times, serif;
+    font-family: 'RetroNumbers', 'Georgia', 'Times New Roman', Times, serif;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -48,6 +54,7 @@ body::-webkit-scrollbar {
     padding: 1rem 0;
     transition: transform 0.3s ease;
     transform: translateY(-100%); /* Hidden by default */
+    overflow: hidden;
 }
 
 .top-nav.visible {
@@ -96,7 +103,7 @@ body::-webkit-scrollbar {
 .progress-bar {
     height: 100%;
     width: 0%;
-    background-color: var(--accent-color);
+    background-color: #ffffff;
     transition: width 0.1s ease-out;
 }
 
@@ -108,7 +115,8 @@ body::-webkit-scrollbar {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background-color: var(--accent-color);
+    background-color: #ffffff;
+    color: #000000;
     border: none;
     display: flex;
     align-items: center;
@@ -127,7 +135,7 @@ body::-webkit-scrollbar {
 }
 
 .back-to-top:hover {
-    background-color: #2563eb;
+    background-color: #e2e8f0;
     transform: translateY(-3px);
 }
 
@@ -200,7 +208,7 @@ body::-webkit-scrollbar {
     height: 40px;
     border: 3px solid rgba(255, 255, 255, 0.1);
     border-radius: 50%;
-    border-top-color: var(--accent-color);
+    border-top-color: #ffffff;
     animation: spin 1s ease-in-out infinite;
     margin-bottom: 1rem;
 }
@@ -211,6 +219,8 @@ body::-webkit-scrollbar {
 
 /* Footer */
 .site-footer {
+    position: relative;
+    overflow: hidden;
     text-align: center;
     padding: 2rem 1rem 6rem 1rem; /* Acts as a solid bar at the bottom */
     background-color: var(--header-bg); /* Match the top nav bar */
@@ -252,19 +262,27 @@ body {
     height: 100dvh;
     background-color: #000;
     z-index: 2000;
+    overflow: hidden;
+    transition: opacity 0.8s ease-out;
+    animation: crt-brightness 10s infinite;
+}
+
+.intro-scroll-container {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: #fff;
     text-align: center;
-    transition: opacity 0.8s ease-out;
-    overflow-y: auto;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+    color: #fff;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
 }
 
-.intro-screen::-webkit-scrollbar {
-    display: none;
+.intro-scroll-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
 }
 
 #intro-landing-image {
@@ -274,13 +292,25 @@ body {
     flex-shrink: 0;
     margin-bottom: 1rem;
     transition: opacity 1s ease-in-out;
+    filter: 
+        drop-shadow(-1.5px 0 0 rgba(255, 0, 80, 0.4)) 
+        drop-shadow(1.5px 0 0 rgba(0, 240, 255, 0.4)) 
+        drop-shadow(0 0 8px rgba(255, 255, 255, 0.25));
+    position: relative;
+    z-index: 1;
 }
 
 .intro-text {
     padding: 1rem;
-    font-size: 1.3rem;
-    font-family: 'Times New Roman', Times, serif;
+    font-size: 1.2rem;
+    font-family: 'RetroNumbers', 'Georgia', 'Times New Roman', Times, serif;
+    font-weight: bold;
+    text-shadow: 
+        -1.5px 0 0 rgba(255, 0, 80, 0.55), 
+        1.5px 0 0 rgba(0, 240, 255, 0.55),
+        0 0 8px rgba(255, 255, 255, 0.35);
     flex-shrink: 0;
+    position: relative;
     z-index: 2;
     max-width: 600px;
     transition: opacity 1s ease-in-out;
@@ -288,29 +318,196 @@ body {
 
 .intro-text p {
     margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+.door-wrapper {
+    position: relative;
+    width: fit-content;
+    max-width: calc(100% - 2rem);
+    margin: 0 auto 2rem auto;
+    cursor: pointer;
+    z-index: 2;
 }
 
 #intro-image {
-    width: 100%;
+    display: block;
     height: 85vh;
+    width: auto;
+    max-width: 100%;
+    transition: transform 2s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease;
+    filter: 
+        drop-shadow(-1.5px 0 0 rgba(255, 0, 80, 0.4)) 
+        drop-shadow(1.5px 0 0 rgba(0, 240, 255, 0.4)) 
+        drop-shadow(0 0 8px rgba(255, 255, 255, 0.25));
+}
+
+#intro-image-hover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
-    object-position: center;
-    cursor: pointer;
-    flex-shrink: 0;
-    transition: transform 2s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 1.5s ease-in-out;
-    margin-bottom: 6rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 2s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease;
+    filter: 
+        drop-shadow(-1.5px 0 0 rgba(255, 0, 80, 0.4)) 
+        drop-shadow(1.5px 0 0 rgba(0, 240, 255, 0.4)) 
+        drop-shadow(0 0 8px rgba(255, 255, 255, 0.25));
+}
+
+/* Hover styles - only apply if not animating to avoid transition conflicts */
+#intro-screen:not(.animating) .door-wrapper:hover #intro-image {
+    opacity: 0;
+}
+
+#intro-screen:not(.animating) .door-wrapper:hover #intro-image-hover {
+    opacity: 1;
 }
 
 #intro-image.zoom-fade {
     transform: scale(3);
     opacity: 0;
+    transition: transform 2s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 1.5s ease-in-out;
 }
 
 .intro-screen.animating #intro-landing-image,
 .intro-screen.animating .intro-text,
-.intro-screen.animating .customize-link {
+.intro-screen.animating .customize-link,
+.intro-screen.animating .patreon-fridge-container {
     opacity: 0;
 }
+
+.patreon-fridge-container {
+    width: 100%;
+    max-width: 520px;
+    padding: 0 0.5rem;
+    margin: 0 auto 3rem auto;
+    transition: opacity 1s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+}
+
+.patreon-fridge-title {
+    font-family: 'RetroNumbers', 'Georgia', 'Times New Roman', Times, serif;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #ffffff;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: transform 0.2s ease, color 0.2s ease;
+    text-shadow: 
+        -1.5px 0 0 rgba(255, 0, 80, 0.55), 
+        1.5px 0 0 rgba(0, 240, 255, 0.55),
+        0 0 8px rgba(255, 255, 255, 0.35);
+    cursor: pointer;
+}
+
+.patreon-fridge-title:hover {
+    color: var(--text-secondary);
+    transform: scale(1.05);
+}
+
+.patreon-fridge-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.patreon-fridge-stack {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    filter: 
+        drop-shadow(-1.5px 0 0 rgba(255, 0, 80, 0.4)) 
+        drop-shadow(1.5px 0 0 rgba(0, 240, 255, 0.4)) 
+        drop-shadow(0 0 8px rgba(255, 255, 255, 0.25));
+}
+
+.patreon-fridge-part {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 0;
+}
+
+/* Patreon Character Overlays */
+.patreon-character {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 16%;
+    transform: translateY(-100%);
+    transform-origin: bottom center;
+    transition: transform 0.2s ease;
+    cursor: pointer;
+    z-index: 5;
+    text-decoration: none;
+}
+
+.patreon-character:hover {
+    transform: translateY(-100%) translateY(-4px) scale(1.05);
+}
+
+.patreon-character:hover .patreon-char-name {
+    transform: scale(1.5);
+}
+
+.patreon-char-name {
+    font-family: 'RetroNumbers', 'Georgia', 'Times New Roman', Times, serif;
+    font-size: 0.6rem;
+    font-weight: bold;
+    color: #ffcc00;
+    text-transform: uppercase;
+    text-shadow: 
+        -1px -1px 0 #000,  1px -1px 0 #000, -1px  1px 0 #000,  1px  1px 0 #000,
+        -2px -2px 0 #000,  2px -2px 0 #000, -2px  2px 0 #000,  2px  2px 0 #000,
+        -2px  0px 0 #000,  2px  0px 0 #000,  0px -2px 0 #000,  0px  2px 0 #000,
+         0 0 5px rgba(0, 0, 0, 0.9);
+    margin-bottom: 2px;
+    white-space: nowrap;
+    transition: transform 0.2s ease;
+    transform-origin: bottom center;
+}
+
+.patreon-char-sprite {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    image-rendering: pixelated;
+    filter: drop-shadow(0 0 1.5px rgba(255, 255, 255, 0.35)) drop-shadow(0 0 5px rgba(255, 255, 255, 0.18)) url(#chromatic-aberration);
+}
+
+/* Shelf 1 positions (Top Shelf) */
+#patreon-char-tato {
+    left: 25%;
+    top: 24%;
+}
+
+#patreon-char-karreth {
+    left: 59%;
+    top: 24%;
+}
+
+/* Shelf 2 positions (Middle Shelf) */
+.patreon-char-s2-c1 { left: 12%; top: 43.9%; }
+.patreon-char-s2-c2 { left: 32%; top: 43.9%; }
+.patreon-char-s2-c3 { left: 52%; top: 43.9%; }
+.patreon-char-s2-c4 { left: 72%; top: 43.9%; }
+
+/* Shelf 3 positions (Lower Shelf) */
+.patreon-char-s3-c1 { left: 12%; top: 59%; }
+.patreon-char-s3-c2 { left: 32%; top: 59%; }
+.patreon-char-s3-c3 { left: 52%; top: 59%; }
+.patreon-char-s3-c4 { left: 72%; top: 59%; }
 
 .intro-screen.fade-out {
     opacity: 0;
@@ -319,21 +516,121 @@ body {
 
 .customize-link {
     display: inline-block;
-    margin-bottom: 4rem;
+    position: absolute;
+    left: 50%;
+    bottom: 7%;
+    transform: translateX(-50%);
+    margin-bottom: 0;
     padding: 1rem 2rem;
-    font-size: 1.5rem;
-    font-weight: bold;
+    font-size: 1.25rem;
+    font-weight: 900; /* Extra bold */
+    text-transform: uppercase;
     color: #000;
     background-color: #fff;
     text-decoration: none;
     border-radius: 50px;
     box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
     transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 1s ease-in-out;
-    font-family: 'Times New Roman', Times, serif;
+    font-family: 'RetroNumbers', 'Georgia', 'Times New Roman', Times, serif;
     z-index: 5;
+    text-shadow: 
+        -1px 0 0 rgba(255, 0, 80, 0.55), 
+        1.5px 0 0 rgba(0, 240, 255, 0.55);
+    filter: 
+        drop-shadow(-1.5px 0 0 rgba(255, 0, 80, 0.45)) 
+        drop-shadow(1.5px 0 0 rgba(0, 240, 255, 0.45));
+    white-space: nowrap;
 }
 
 .customize-link:hover {
-    transform: scale(1.05);
+    transform: translateX(-50%) scale(1.05);
     box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
+    animation: button-chromatic-jitter 0.15s infinite linear;
+}
+
+/* --- VHS & CRT Retro Effects --- */
+
+.vhs-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        rgba(0, 0, 0, 0) 0px,
+        rgba(0, 0, 0, 0) 1px,
+        rgba(0, 0, 0, 0.15) 2px,
+        rgba(0, 0, 0, 0.15) 3px
+    );
+    background-size: 100% 3px;
+    animation: scanlines-scroll 10s linear infinite;
+    pointer-events: none;
+    z-index: 10;
+    overflow: hidden;
+}
+
+.vhs-overlay::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    filter: blur(1px);
+    animation: tracking-roll 6s linear infinite;
+    z-index: 3;
+    opacity: 0;
+}
+
+.vhs-overlay::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.45) 100%);
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* Animations */
+@keyframes scanlines-scroll {
+    from { background-position: 0 0; }
+    to { background-position: 0 100%; }
+}
+
+@keyframes tracking-roll {
+    0% { top: -20px; opacity: 0; }
+    8% { opacity: 0.5; }
+    33% { top: 100%; opacity: 0.5; }
+    34% { opacity: 0; }
+    100% { top: 100%; opacity: 0; }
+}
+
+@keyframes crt-brightness {
+    0% { filter: brightness(1); }
+    5% { filter: brightness(0.97); }
+    7% { filter: brightness(1); }
+    22% { filter: brightness(0.98); }
+    24% { filter: brightness(1.02); }
+    26% { filter: brightness(0.99); }
+    40% { filter: brightness(1); }
+    75% { filter: brightness(0.96); }
+    77% { filter: brightness(1.01); }
+    79% { filter: brightness(0.98); }
+    80% { filter: brightness(1); }
+    100% { filter: brightness(1); }
+}
+
+@keyframes button-chromatic-jitter {
+    0% {
+        text-shadow: -1.5px 0 0 rgba(255, 0, 80, 0.55), 1.5px 0 0 rgba(0, 240, 255, 0.55);
+    }
+    50% {
+        text-shadow: -0.8px 0.5px 0 rgba(255, 0, 80, 0.55), 0.8px -0.5px 0 rgba(0, 240, 255, 0.55);
+    }
+    100% {
+        text-shadow: -1.5px 0 0 rgba(255, 0, 80, 0.55), 1.5px 0 0 rgba(0, 240, 255, 0.55);
+    }
 }

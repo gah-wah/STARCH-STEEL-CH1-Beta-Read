@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Food Bio - Starch & Steel</title>
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link rel="stylesheet" href="bio.css?v=3">
+    <meta name="theme-color" content="#000000">
+</head>
+<body>
+    <div class="bio-container">
+        <div class="vhs-overlay"></div>
+        
+        <div class="header">
+            <a href="index.html" class="back-button">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                BACK
+            </a>
+            <h1 class="header-title">FOOD BIO</h1>
+        </div>
+
+        <div class="card-layout">
+            <!-- Left Panel: Sprite Preview -->
+            <div class="sprite-panel">
+                <div class="sprite-container">
+                    <img id="char-sprite" src="" alt="Character Sprite">
+                </div>
+            </div>
+
+            <!-- Right Panel: Info & Stats -->
+            <div class="info-panel">
+                <div class="char-id-tag" id="char-class">CLASS: STARCH WARRiOR</div>
+                <h2 id="char-name" class="char-name-title">CHARACTER NAME</h2>
+                
+                <div class="supporter-box">
+                    <div class="supporter-label">PATREON SUPPORTER</div>
+                    <div class="supporter-name" id="supporter-name">Supporter Name</div>
+                    <div class="supporter-tier" id="supporter-tier">Tier Name</div>
+                </div>
+
+                <div class="bio-text-box">
+                    <div class="panel-section-title">BACKGROUND</div>
+                    <p id="char-bio" class="bio-desc">Loading character biography...</p>
+                </div>
+
+                <div class="stats-box">
+                    <div class="panel-section-title">STATS</div>
+                    
+                    <div class="stat-row">
+                        <span class="stat-name">STARCH</span>
+                        <div class="stat-bar-bg">
+                            <div id="bar-starch" class="stat-bar-fill starch-color" style="width: 0%"></div>
+                        </div>
+                        <span id="val-starch" class="stat-val">0</span>
+                    </div>
+
+                    <div class="stat-row">
+                        <span class="stat-name">STEEL</span>
+                        <div class="stat-bar-bg">
+                            <div id="bar-steel" class="stat-bar-fill steel-color" style="width: 0%"></div>
+                        </div>
+                        <span id="val-steel" class="stat-val">0</span>
+                    </div>
+
+                    <div class="stat-row">
+                        <span class="stat-name">SPICINESS</span>
+                        <div class="stat-bar-bg">
+                            <div id="bar-spiciness" class="stat-bar-fill spice-color" style="width: 0%"></div>
+                        </div>
+                        <span id="val-spiciness" class="stat-val">0</span>
+                    </div>
+
+                    <div class="stat-row">
+                        <span class="stat-name">SWEETNESS</span>
+                        <div class="stat-bar-bg">
+                            <div id="bar-sweetness" class="stat-bar-fill sweet-color" style="width: 0%"></div>
+                        </div>
+                        <span id="val-sweetness" class="stat-val">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SVG Filter for real Chromatic Aberration -->
+    <svg style="display: none;">
+        <filter id="chromatic-aberration" x="-10%" y="-10%" width="120%" height="120%">
+            <!-- Split channels -->
+            <feColorMatrix type="matrix" in="SourceGraphic" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="red"/>
+            <feColorMatrix type="matrix" in="SourceGraphic" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="green"/>
+            <feColorMatrix type="matrix" in="SourceGraphic" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="blue"/>
+            <!-- Offset Red (left) and Blue (right) -->
+            <feOffset dx="-0.6" dy="0" in="red" result="red-offset"/>
+            <feOffset dx="0.6" dy="0" in="blue" result="blue-offset"/>
+            <!-- Recombine channels using screen blend mode -->
+            <feBlend mode="screen" in="red-offset" in2="green" result="rg"/>
+            <feBlend mode="screen" in="rg" in2="blue-offset" result="rgb"/>
+        </filter>
+    </svg>
+
+    <script src="bio.js?v=1"></script>
+</body>
+</html>

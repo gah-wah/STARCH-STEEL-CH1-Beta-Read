@@ -1,0 +1,142 @@
+{
+    "tato": {
+        "name": "Example Tato",
+        "supporter": "Starch Lover",
+        "tier": "Super Supporter",
+        "sprite": "https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/1_Example_Tato.png",
+        "class": "Starch Paladin",
+        "bio": "Tato is a brave little starch warrior from the underground kingdom of Spudlandia. He loves basking in warm butter and fighting against the iron grip of the evil peeling machine.",
+        "stats": {
+            "STARCH": 85,
+            "STEEL": 40,
+            "SPICINESS": 10,
+            "SWEETNESS": 30
+        }
+    },
+    "karreth": {
+        "name": "Example Karreth",
+        "supporter": "Metal Head",
+        "tier": "Steel Elite",
+        "sprite": "https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/1_Example_Karreth.png",
+        "class": "Steel Berserker",
+        "bio": "Karreth wears an armored metal helmet crafted from recycled kitchen tools. He is tough as nails, silent, and highly resistant to being mashed.",
+        "stats": {
+            "STARCH": 30,
+            "STEEL": 90,
+            "SPICINESS": 25,
+            "SWEETNESS": 10
+        }
+    },
+    "cherry-bomb": {
+        "name": "Cherry Bomb",
+        "supporter": "Salsa Queen",
+        "tier": "Spicy Fanatic",
+        "sprite": "https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/randomcharacter1.png",
+        "class": "Explosive Rogue",
+        "bio": "Cherry Bomb is explosive in personality and flavor. She has a short fuse and triggers a burst of sweet heat whenever she rolls into battle.",
+        "stats": {
+            "STARCH": 20,
+            "STEEL": 15,
+            "SPICINESS": 95,
+            "SWEETNESS": 80
+        }
+    },
+    "mr-pickle": {
+        "name": "Mr. Pickle",
+        "supporter": "Dill-ightful",
+        "tier": "Crisper Guardian",
+        "sprite": "https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/randomcharacter2.png",
+        "class": "Acid Alchemist",
+        "bio": "Mr. Pickle is seasoned, salty, and a bit sour. He spent three months fermenting in the deep jar of wisdom, acquiring unique brine magic.",
+        "stats": {
+            "STARCH": 40,
+            "STEEL": 55,
+            "SPICINESS": 65,
+            "SWEETNESS": 5
+        }
+    },
+    "sir-brocco": {
+        "name": "Sir Brocco",
+        "supporter": "Veggie Lord",
+        "tier": "Veggie King",
+        "sprite": "https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/randomcharacter3.png",
+        "class": "Forest Druid",
+        "bio": "Sir Brocco defends the green kingdom with his towering leafy canopy. He provides high fiber armor and healing vitamins to his fellow food warriors.",
+        "stats": {
+            "STARCH": 70,
+            "STEEL": 45,
+            "SPICINESS": 5,
+            "SWEETNESS": 35
+        }
+    },
+    "eggy-boy": {
+        "name": "Eggy Boy",
+        "supporter": "Shell-Shocked",
+        "tier": "Egg-cellent Patron",
+        "sprite": "https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/randomcharacter4.png",
+        "class": "Fragile Guardian",
+        "bio": "Eggy Boy is an egg with a hard shell but a soft, runny heart. He excels at shielding allies, though one hard hit can crack his defenses.",
+        "stats": {
+            "STARCH": 50,
+            "STEEL": 50,
+            "SPICINESS": 20,
+            "SWEETNESS": 25
+        }
+    },
+    "donut-dude": {
+        "name": "Donut Dude",
+        "supporter": "Sprinkles",
+        "tier": "Glazed Patron",
+        "sprite": "https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/randomcharacter5.png",
+        "class": "Sugar Cleric",
+        "bio": "Donut Dude spreads happiness and high blood sugar wherever he goes. His sugar glaze acts as a magical shield that sweetens even the grumpiest foes.",
+        "stats": {
+            "STARCH": 60,
+            "STEEL": 10,
+            "SPICINESS": 5,
+            "SWEETNESS": 99
+        }
+    },
+    "melon-head": {
+        "name": "Melon Head",
+        "supporter": "Summer Breeze",
+        "tier": "Fruit Salad Tier",
+        "sprite": "https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/randomcharacter6.png",
+        "class": "Juice Shaman",
+        "bio": "Melon Head is cool, refreshing, and full of water magic. He rolls through obstacles and uses melon-seed projectiles for ranged attacks.",
+        "stats": {
+            "STARCH": 35,
+            "STEEL": 25,
+            "SPICINESS": 10,
+            "SWEETNESS": 85
+        }
+    },
+    "shroomy": {
+        "name": "Shroomy",
+        "supporter": "Mycelium",
+        "tier": "Fungi Lord",
+        "sprite": "https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/randomcharacter7.png",
+        "class": "Spore Assassin",
+        "bio": "Shroomy operates in the shadows of the bottom shelf. He releases sleeping spores that confuse enemies, making him a stealthy and unpredictable ally.",
+        "stats": {
+            "STARCH": 45,
+            "STEEL": 30,
+            "SPICINESS": 40,
+            "SWEETNESS": 15
+        }
+    },
+    "pizza-slice": {
+        "name": "Pizza Slice",
+        "supporter": "Cheesy Pizza",
+        "tier": "Supreme Patron",
+        "sprite": "https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/randomcharacter8.png",
+        "class": "Cheese Sorcerer",
+        "bio": "Pizza Slice wields the molten power of mozzarella. He binds enemies in sticky, gooey cheese strings and delivers a hot pepperoni blast.",
+        "stats": {
+            "STARCH": 65,
+            "STEEL": 35,
+            "SPICINESS": 60,
+            "SWEETNESS": 30
+        }
+    }
+}

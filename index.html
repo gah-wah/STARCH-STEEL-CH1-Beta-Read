@@ -30,30 +30,102 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Starch & Steel">
     <meta name="theme-color" content="#000000">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <link rel="apple-touch-icon" href="https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/stst4lgoogoootrans.png">
     <link rel="icon" type="image/png" href="https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/stst4iconguy2.png">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=31">
 </head>
 
 <body>
     <!-- Intro Screen -->
     <div id="intro-screen" class="intro-screen">
-        <img id="intro-landing-image" src="https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/stst4.png"
-            alt="Starch & Steel Landing">
-        <div class="intro-text">
-            <p>Welcome to the CHAPTER 1 Beta Read for STARCH & STEEL!</p>
-            <p>Please read on PHONE.</p>
-            <p>Tap the door below to read</p>
-            <p>and plz leave feedback on the Google Form :)</p>
+        <div class="vhs-overlay"></div>
+        <div class="intro-scroll-container">
+            <img id="intro-landing-image" src="https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/stst4png.png"
+                alt="Starch & Steel Landing">
+            <div class="intro-text">
+                <p>Welcome to the CHAPTER 1 Beta Read for<br>STARCH & STEEL!</p>
+                <p>Please read on PHONE.</p>
+                <p>Tap the door below to read</p>
+                <p>and plz leave feedback on the Google Form :)</p>
+            </div>
+            <div class="door-wrapper">
+                <img id="intro-image" src="https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/fridgedoorpng.png"
+                    alt="Fridge Door Closed">
+                <img id="intro-image-hover" src="https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/fridgedoorhoverpng.png"
+                    alt="Fridge Door Hover">
+            </div>
+            <div class="patreon-fridge-container">
+                <a href="https://patreon.com" target="_blank" class="patreon-fridge-title">PATREON FRIDGE</a>
+                <div class="patreon-fridge-wrapper">
+                    <div class="patreon-fridge-stack">
+                        <img class="patreon-fridge-part" id="patreon-fridge-top" src="https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/PatreonFridge1.png?v=2" alt="Patreon Fridge Top">
+                        <img class="patreon-fridge-part" id="patreon-fridge-mid" src="https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/PatreonFridge2.png?v=2" alt="Patreon Fridge Middle">
+                        <img class="patreon-fridge-part" id="patreon-fridge-bottom" src="https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/PatreonFridge3.png?v=2" alt="Patreon Fridge Bottom">
+                    </div>
+
+                    <!-- Shelf 1 (Top Shelf) Examples -->
+                    <!-- Patreon Character 1 (Tato) -->
+                    <a href="bio.html?char=tato" class="patreon-character" id="patreon-char-tato">
+                        <span class="patreon-char-name">Example Tato</span>
+                        <img class="patreon-char-sprite" src="https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/1_Example_Tato.png" alt="Example Tato">
+                    </a>
+
+                    <!-- Patreon Character 2 (Karreth) -->
+                    <a href="bio.html?char=karreth" class="patreon-character" id="patreon-char-karreth">
+                        <span class="patreon-char-name">Example Karreth</span>
+                        <img class="patreon-char-sprite" src="https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/1_Example_Karreth.png" alt="Example Karreth">
+                    </a>
+
+                    <!-- Shelf 2 (Middle Shelf) Examples -->
+                    <a href="bio.html?char=cherry-bomb" class="patreon-character patreon-char-s2-c1">
+                        <span class="patreon-char-name">Cherry Bomb</span>
+                        <img class="patreon-char-sprite" src="https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/randomcharacter1.png" alt="Cherry Bomb">
+                    </a>
+                    <a href="bio.html?char=mr-pickle" class="patreon-character patreon-char-s2-c2">
+                        <span class="patreon-char-name">Mr. Pickle</span>
+                        <img class="patreon-char-sprite" src="https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/randomcharacter2.png" alt="Mr. Pickle">
+                    </a>
+                    <a href="bio.html?char=sir-brocco" class="patreon-character patreon-char-s2-c3">
+                        <span class="patreon-char-name">Sir Brocco</span>
+                        <img class="patreon-char-sprite" src="https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/randomcharacter3.png" alt="Sir Brocco">
+                    </a>
+                    <a href="bio.html?char=eggy-boy" class="patreon-character patreon-char-s2-c4">
+                        <span class="patreon-char-name">Eggy Boy</span>
+                        <img class="patreon-char-sprite" src="https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/randomcharacter4.png" alt="Eggy Boy">
+                    </a>
+
+                    <!-- Shelf 3 (Lower Shelf) Examples -->
+                    <a href="bio.html?char=donut-dude" class="patreon-character patreon-char-s3-c1">
+                        <span class="patreon-char-name">Donut Dude</span>
+                        <img class="patreon-char-sprite" src="https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/randomcharacter5.png" alt="Donut Dude">
+                    </a>
+                    <a href="bio.html?char=melon-head" class="patreon-character patreon-char-s3-c2">
+                        <span class="patreon-char-name">Melon Head</span>
+                        <img class="patreon-char-sprite" src="https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/randomcharacter6.png" alt="Melon Head">
+                    </a>
+                    <a href="bio.html?char=shroomy" class="patreon-character patreon-char-s3-c3">
+                        <span class="patreon-char-name">Shroomy</span>
+                        <img class="patreon-char-sprite" src="https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/randomcharacter7.png" alt="Shroomy">
+                    </a>
+                    <a href="bio.html?char=pizza-slice" class="patreon-character patreon-char-s3-c4">
+                        <span class="patreon-char-name">Pizza Slice</span>
+                        <img class="patreon-char-sprite" src="https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/randomcharacter8.png" alt="Pizza Slice">
+                    </a>
+
+                    <!-- Overlaid play button on the bottom of the fridge -->
+                    <a href="customize.html?v=14" class="customize-link">PLAY WITH YOUR FOOD.</a>
+                </div>
+            </div>
         </div>
-        <img id="intro-image" src="https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/Fridge%20Door%20Closed.png"
-            alt="Fridge Door Closed">
-        <a href="customize.html" class="customize-link">Play with your Food!</a>
     </div>
 
     <header class="top-nav">
+        <div class="vhs-overlay"></div>
         <div class="nav-content">
             <a href="index.html" aria-label="Go to Home Page">
                 <img class="comic-logo" src="https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/stst4lgoogoootrans.png"
@@ -77,17 +149,34 @@
     <div class="bottom-nav" id="bottom-nav"></div>
 
     <button class="back-to-top" id="back-to-top" aria-label="Back to top">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 2L22 18H2L12 2Z" />
         </svg>
     </button>
 
     <footer class="site-footer">
+        <div class="vhs-overlay"></div>
         <p>&copy; <span id="current-year"></span> Starch & Steel. All rights reserved.</p>
     </footer>
 
+    <!-- SVG Filter for real Chromatic Aberration -->
+    <svg style="display: none;">
+        <filter id="chromatic-aberration" x="-10%" y="-10%" width="120%" height="120%">
+            <!-- Split channels -->
+            <feColorMatrix type="matrix" in="SourceGraphic" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="red"/>
+            <feColorMatrix type="matrix" in="SourceGraphic" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="green"/>
+            <feColorMatrix type="matrix" in="SourceGraphic" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="blue"/>
+            <!-- Offset Red (left) and Blue (right) -->
+            <feOffset dx="-0.6" dy="0" in="red" result="red-offset"/>
+            <feOffset dx="0.6" dy="0" in="blue" result="blue-offset"/>
+            <!-- Recombine channels using screen blend mode -->
+            <feBlend mode="screen" in="red-offset" in2="green" result="rg"/>
+            <feBlend mode="screen" in="rg" in2="blue-offset" result="rgb"/>
+        </filter>
+    </svg>
+
     <!-- Custom JS -->
-    <script src="script.js"></script>
+    <script src="script.js?v=5"></script>
 </body>
 
 </html>

@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Cloudflare R2 bucket base URL
     const baseUrl = 'https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/';
+    // Session-level cache buster to force fresh assets on reload while caching during the session
+    const cacheBuster = Date.now();
 
     // State and configuration for all categories
     // Helper to generate options
@@ -70,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const layerImg = document.getElementById(category.layerId);
 
         if (option.file) {
-            const newSrc = baseUrl + option.file;
+            const newSrc = baseUrl + option.file + '?cb=' + cacheBuster;
 
             if (animate) {
                 // Preload image to prevent clunky animation of old image
@@ -198,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (downloadBtn) {
         downloadBtn.addEventListener('click', async () => {
             const originalText = downloadBtn.innerHTML;
-            downloadBtn.textContent = "Processing...";
+            downloadBtn.textContent = "PROCESSING...";
             downloadBtn.disabled = true;
             try {
                 const blob = await flattenCharacter();
@@ -233,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (copyBtn) {
         copyBtn.addEventListener('click', async () => {
             const originalText = copyBtn.innerHTML;
-            copyBtn.textContent = "Copying...";
+            copyBtn.textContent = "COPYING...";
             copyBtn.disabled = true;
             try {
                 const blob = await flattenCharacter();
@@ -241,9 +243,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     await navigator.clipboard.write([
                         new ClipboardItem({ 'image/png': blob })
                     ]);
-                    copyBtn.textContent = "Copied!";
+                    copyBtn.textContent = "COPIED!";
                     setTimeout(() => {
-                        if (copyBtn.textContent === "Copied!") {
+                        if (copyBtn.textContent === "COPIED!") {
                             copyBtn.innerHTML = originalText;
                             copyBtn.disabled = false;
                         }

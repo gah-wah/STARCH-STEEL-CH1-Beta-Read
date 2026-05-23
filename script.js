@@ -1,13 +1,30 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Preload opened door image
-    const openedDoorImg = new Image();
-    openedDoorImg.src = 'https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/Fridge%20Door%20Opened.png';
+    // Preload opened door animation frames
+    const openFrames = [
+        'https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/fridgedooropenpng.png',
+        'https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/fridgedooropenpng2.png',
+        'https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/fridgedooropenpng3.png',
+        'https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/fridgedooropenpng4.png'
+    ];
+    openFrames.forEach(src => {
+        const img = new Image();
+        img.src = src;
+    });
 
-    // Prevent scrolling while intro is active
-    document.body.style.overflow = 'hidden';
-
+    // Check if URL has #reader hash on load (e.g. user refreshed the page while reading)
+    const hasReaderHash = window.location.hash === '#reader';
     const introScreen = document.getElementById('intro-screen');
     const introImage = document.getElementById('intro-image');
+
+    if (hasReaderHash) {
+        if (introScreen) {
+            introScreen.style.display = 'none';
+        }
+        document.body.style.overflow = ''; // Restore scrolling
+    } else {
+        // Prevent scrolling while intro is active
+        document.body.style.overflow = 'hidden';
+    }
     
     if (introImage && introScreen) {
         // Prevent clicks on the intro screen from toggling the comic nav bars behind it
@@ -18,16 +35,33 @@ document.addEventListener('DOMContentLoaded', () => {
         introImage.addEventListener('click', () => {
             if (introImage.classList.contains('zoom-fade')) return; // Prevent multiple clicks
 
+            // Push history state so the browser back button resets to the landing screen
+            if (window.location.hash !== '#reader') {
+                history.pushState({ page: 'reader' }, '', '#reader');
+            }
+
             // Lock scrolling on intro screen while animating
             introScreen.style.overflowY = 'hidden';
+            const introScroll = document.querySelector('.intro-scroll-container');
+            if (introScroll) {
+                introScroll.style.overflowY = 'hidden';
+            }
 
             // Fade out the landing image and text
             introScreen.classList.add('animating');
 
-            // Switch image
-            introImage.src = openedDoorImg.src;
+            // Cycle through the animation frames slowly
+            let frameIndex = 0;
+            const animateFrames = () => {
+                if (frameIndex < openFrames.length) {
+                    introImage.src = openFrames[frameIndex];
+                    frameIndex++;
+                    setTimeout(animateFrames, 250); // Cycle every 250ms
+                }
+            };
+            animateFrames();
             
-            // Wait slightly for the swap to register visually, then animate
+            // Wait slightly for the animation to start, then initiate the zoom-fade CSS transition
             setTimeout(() => {
                 introImage.classList.add('zoom-fade');
                 
@@ -44,8 +78,45 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Handle browser back/forward buttons to show/hide the intro screen dynamically
+    window.addEventListener('popstate', () => {
+        if (window.location.hash !== '#reader') {
+            // Restore the intro screen to its initial state
+            if (introScreen) {
+                introScreen.style.display = '';
+                // Force layout recalculation to ensure smooth re-entry
+                void introScreen.offsetWidth;
+                introScreen.classList.remove('fade-out', 'animating');
+                introScreen.style.opacity = '';
+                introScreen.style.overflowY = '';
+                
+                const introScroll = document.querySelector('.intro-scroll-container');
+                if (introScroll) {
+                    introScroll.style.overflowY = '';
+                }
+            }
+
+            if (introImage) {
+                introImage.src = 'https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/fridgedoorpng.png';
+                introImage.classList.remove('zoom-fade');
+            }
+
+            // Relock body scrolling
+            document.body.style.overflow = 'hidden';
+        } else {
+            // Hide the intro screen immediately
+            if (introScreen) {
+                introScreen.style.display = 'none';
+            }
+            document.body.style.overflow = '';
+        }
+    });
+
     // Set current year in footer
-    document.getElementById('current-year').textContent = new Date().getFullYear();
+    const currentYearElem = document.getElementById('current-year');
+    if (currentYearElem) {
+        currentYearElem.textContent = new Date().getFullYear();
+    }
 
     const comicContainer = document.getElementById('comic-container');
     const chapterTitleElement = document.getElementById('chapter-title');

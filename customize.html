@@ -5,27 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Play with your Food! - Starch & Steel</title>
 
-    <link rel="stylesheet" href="customize.css?v=2">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link rel="stylesheet" href="customize.css?v=14">
     <meta name="theme-color" content="#000000">
 </head>
 <body>
     <div class="customizer-container">
+        <div class="vhs-overlay"></div>
         <div class="header">
             <a href="index.html" class="back-button">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M19 12H5M12 19l-7-7 7-7"/>
                 </svg>
-                Back
+                BACK
             </a>
-            <h1>Play with your Food!</h1>
+            <h1>PLAY WITH YOUR FOOD.</h1>
         </div>
 
         <div class="character-preview">
-            <img id="layer-body" class="character-layer" src="" crossorigin="anonymous">
-            <img id="layer-face" class="character-layer" src="" crossorigin="anonymous">
-            <img id="layer-acc1" class="character-layer" src="" crossorigin="anonymous">
-            <img id="layer-acc2" class="character-layer" src="" crossorigin="anonymous">
-            <img id="layer-hat" class="character-layer" src="" crossorigin="anonymous">
+            <div class="character-layers-container">
+                <img id="layer-body" class="character-layer" src="" crossorigin="anonymous">
+                <img id="layer-face" class="character-layer" src="" crossorigin="anonymous">
+                <img id="layer-acc1" class="character-layer" src="" crossorigin="anonymous">
+                <img id="layer-acc2" class="character-layer" src="" crossorigin="anonymous">
+                <img id="layer-hat" class="character-layer" src="" crossorigin="anonymous">
+            </div>
         </div>
 
         <div class="controls-container">
@@ -33,7 +39,7 @@
                 <div class="list-number" id="num-body">1</div>
                 <div class="selector-arrows">
                     <button class="arrow-btn" id="btn-body-prev" aria-label="Previous Food">&lt;</button>
-                    <span class="control-label">Food</span>
+                    <span class="control-label">FOOD</span>
                     <button class="arrow-btn" id="btn-body-next" aria-label="Next Food">&gt;</button>
                 </div>
                 <button class="refresh-btn" id="btn-body-refresh" aria-label="Bring Food to Front">
@@ -45,7 +51,7 @@
                 <div class="list-number" id="num-face">0</div>
                 <div class="selector-arrows">
                     <button class="arrow-btn" id="btn-face-prev" aria-label="Previous Face">&lt;</button>
-                    <span class="control-label">Face</span>
+                    <span class="control-label">FACE</span>
                     <button class="arrow-btn" id="btn-face-next" aria-label="Next Face">&gt;</button>
                 </div>
                 <button class="refresh-btn" id="btn-face-refresh" aria-label="Bring Face to Front">
@@ -57,7 +63,7 @@
                 <div class="list-number" id="num-hat">0</div>
                 <div class="selector-arrows">
                     <button class="arrow-btn" id="btn-hat-prev" aria-label="Previous Hat">&lt;</button>
-                    <span class="control-label">Hat</span>
+                    <span class="control-label">HAT</span>
                     <button class="arrow-btn" id="btn-hat-next" aria-label="Next Hat">&gt;</button>
                 </div>
                 <button class="refresh-btn" id="btn-hat-refresh" aria-label="Bring Hat to Front">
@@ -69,7 +75,7 @@
                 <div class="list-number" id="num-acc1">0</div>
                 <div class="selector-arrows">
                     <button class="arrow-btn" id="btn-acc1-prev" aria-label="Previous Accessory 1">&lt;</button>
-                    <span class="control-label">Accessory 1</span>
+                    <span class="control-label">ACCESSORY 1</span>
                     <button class="arrow-btn" id="btn-acc1-next" aria-label="Next Accessory 1">&gt;</button>
                 </div>
                 <button class="refresh-btn" id="btn-acc1-refresh" aria-label="Bring Accessory 1 to Front">
@@ -81,7 +87,7 @@
                 <div class="list-number" id="num-acc2">0</div>
                 <div class="selector-arrows">
                     <button class="arrow-btn" id="btn-acc2-prev" aria-label="Previous Accessory 2">&lt;</button>
-                    <span class="control-label">Accessory 2</span>
+                    <span class="control-label">ACCESSORY 2</span>
                     <button class="arrow-btn" id="btn-acc2-next" aria-label="Next Accessory 2">&gt;</button>
                 </div>
                 <button class="refresh-btn" id="btn-acc2-refresh" aria-label="Bring Accessory 2 to Front">
@@ -90,21 +96,37 @@
             </div>
             
             <button id="btn-randomize" class="randomize-btn">
-                Random!
+                RANDOM!
             </button>
             
             <div class="export-actions">
                 <button id="btn-copy" class="export-btn" title="Copy to Clipboard">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                    Copy
+                    COPY
                 </button>
                 <button id="btn-download" class="export-btn" title="Download Character Image">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    Download
+                    DOWNLOAD
                 </button>
             </div>
         </div>
     </div>
-    <script src="customize.js?v=2"></script>
+    <!-- SVG Filter for real Chromatic Aberration -->
+    <svg style="display: none;">
+        <filter id="chromatic-aberration" x="-10%" y="-10%" width="120%" height="120%">
+            <!-- Split channels -->
+            <feColorMatrix type="matrix" in="SourceGraphic" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="red"/>
+            <feColorMatrix type="matrix" in="SourceGraphic" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="green"/>
+            <feColorMatrix type="matrix" in="SourceGraphic" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="blue"/>
+            <!-- Offset Red (left) and Blue (right) -->
+            <feOffset dx="-0.6" dy="0" in="red" result="red-offset"/>
+            <feOffset dx="0.6" dy="0" in="blue" result="blue-offset"/>
+            <!-- Recombine channels using screen blend mode -->
+            <feBlend mode="screen" in="red-offset" in2="green" result="rg"/>
+            <feBlend mode="screen" in="rg" in2="blue-offset" result="rgb"/>
+        </filter>
+    </svg>
+
+    <script src="customize.js?v=14"></script>
 </body>
 </html>
