@@ -126,9 +126,16 @@ body {
 
 .character-layers-container {
     position: relative;
-    width: 70%;
-    height: 70%;
+    width: 85%;
+    height: 85%;
     filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.12)) url(#chromatic-aberration);
+}
+
+@media (max-width: 400px) {
+    .character-layers-container {
+        width: 76%;
+        height: 76%;
+    }
 }
 
 .character-layer {

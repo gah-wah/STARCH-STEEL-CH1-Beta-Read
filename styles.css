@@ -415,6 +415,7 @@ body {
 .patreon-fridge-wrapper {
     position: relative;
     width: 100%;
+    aspect-ratio: 760 / 1078;
 }
 
 .patreon-fridge-stack {
@@ -500,16 +501,16 @@ body {
 }
 
 /* Shelf 2 positions (Middle Shelf) */
-.patreon-char-s2-c1 { left: 12%; bottom: 56.8%; }
-.patreon-char-s2-c2 { left: 32%; bottom: 56.8%; }
-.patreon-char-s2-c3 { left: 52%; bottom: 56.8%; }
-.patreon-char-s2-c4 { left: 72%; bottom: 56.8%; }
+.patreon-char-s2-c1 { left: 12%; bottom: 56.1%; }
+.patreon-char-s2-c2 { left: 32%; bottom: 56.1%; }
+.patreon-char-s2-c3 { left: 52%; bottom: 56.1%; }
+.patreon-char-s2-c4 { left: 72%; bottom: 56.1%; }
 
 /* Shelf 3 positions (Lower Shelf) */
-.patreon-char-s3-c1 { left: 12%; bottom: 41.2%; }
-.patreon-char-s3-c2 { left: 32%; bottom: 41.2%; }
-.patreon-char-s3-c3 { left: 52%; bottom: 41.2%; }
-.patreon-char-s3-c4 { left: 72%; bottom: 41.2%; }
+.patreon-char-s3-c1 { left: 12%; bottom: 41.0%; }
+.patreon-char-s3-c2 { left: 32%; bottom: 41.0%; }
+.patreon-char-s3-c3 { left: 52%; bottom: 41.0%; }
+.patreon-char-s3-c4 { left: 72%; bottom: 41.0%; }
 
 .intro-screen.fade-out {
     opacity: 0;
