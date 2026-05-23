@@ -1,6 +1,6 @@
-document.addEventListener('DOMContentLoaded', () => {
+﻿document.addEventListener('DOMContentLoaded', () => {
     // Cloudflare R2 bucket base URL
-    const baseUrl = 'https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/';
+    const baseUrl = 'https://image.starchandsteel.com/';
     // Session-level cache buster to force fresh assets on reload while caching during the session
     const cacheBuster = Date.now();
 
@@ -280,3 +280,4 @@ document.addEventListener('DOMContentLoaded', () => {
         updateLayer(key, false); // Initialize without pop animation
     }
 });
+

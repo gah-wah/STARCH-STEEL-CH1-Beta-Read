@@ -1,10 +1,10 @@
-document.addEventListener('DOMContentLoaded', () => {
+﻿document.addEventListener('DOMContentLoaded', () => {
     // Preload opened door animation frames
     const openFrames = [
-        'https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/fridgedooropenpng.png',
-        'https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/fridgedooropenpng2.png',
-        'https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/fridgedooropenpng3.png',
-        'https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/fridgedooropenpng4.png'
+        'https://image.starchandsteel.com/fridgedooropenpng.png',
+        'https://image.starchandsteel.com/fridgedooropenpng2.png',
+        'https://image.starchandsteel.com/fridgedooropenpng3.png',
+        'https://image.starchandsteel.com/fridgedooropenpng4.png'
     ];
     openFrames.forEach(src => {
         const img = new Image();
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (introImage) {
-                introImage.src = 'https://pub-aa22273331a84637a8fa5617ac53d5a0.r2.dev/fridgedoorpng.png';
+                introImage.src = 'https://image.starchandsteel.com/fridgedoorpng.png';
                 introImage.classList.remove('zoom-fade');
             }
 
@@ -230,3 +230,4 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize fetching
     fetchComicData();
 });
+
