@@ -1,4 +1,4 @@
-﻿document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     // Cloudflare R2 bucket base URL
     const baseUrl = 'https://image.starchandsteel.com/';
     // Session-level cache buster to force fresh assets on reload while caching during the session
@@ -75,6 +75,7 @@
         }
 
         const layerImg = document.getElementById(category.layerId);
+        layerImg.onload = null; // Reset any previous load listener
 
         // Cancel any active animation timeout for this layer to prevent overlapping state updates
         if (category.activeTimeout) {
@@ -104,15 +105,34 @@
         category.activeTimeout = setTimeout(() => {
             category.activeTimeout = null;
             if (option.file) {
-                layerImg.src = baseUrl + option.file + '?cb=' + cacheBuster;
-                layerImg.classList.add('visible');
-                bringToFront(categoryKey);
+                // Hide old image and classes immediately so it does not overlay during load
+                layerImg.classList.remove('visible', 'pop-out', 'pop-in');
                 
-                layerImg.classList.remove('pop-out');
-                void layerImg.offsetWidth; // trigger reflow to restart animation
-                layerImg.classList.add('pop-in');
+                // Clear active listeners
+                layerImg.onload = null;
+                layerImg.onerror = null;
+                
+                // Animate ONLY after the new image asset has successfully loaded
+                layerImg.onload = () => {
+                    layerImg.onload = null;
+                    layerImg.onerror = null;
+                    
+                    layerImg.classList.add('visible');
+                    bringToFront(categoryKey);
+                    
+                    void layerImg.offsetWidth; // trigger reflow to restart animation
+                    layerImg.classList.add('pop-in');
+                };
+                
+                layerImg.onerror = () => {
+                    layerImg.onload = null;
+                    layerImg.onerror = null;
+                    layerImg.src = transparentPixel;
+                };
+                
+                layerImg.src = baseUrl + option.file + '?cb=' + cacheBuster;
             } else {
-                layerImg.classList.remove('visible', 'pop-out');
+                layerImg.classList.remove('visible', 'pop-out', 'pop-in');
                 layerImg.src = transparentPixel;
             }
         }, 200);
@@ -154,7 +174,7 @@
             const category = categories[key];
             const max = category.options.length;
             category.currentIndex = Math.floor(Math.random() * max);
-            updateLayer(key, false);
+            updateLayer(key, true); // Enable bounce animations on randomize
         }
     }
 

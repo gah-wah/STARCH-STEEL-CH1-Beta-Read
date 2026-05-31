@@ -263,7 +263,7 @@ body {
     background-color: #000;
     z-index: 2000;
     overflow: hidden;
-    transition: opacity 0.8s ease-out;
+    transition: opacity 0.4s ease-in-out;
     animation: crt-brightness 10s infinite;
 }
 
@@ -287,15 +287,18 @@ body {
 
 #intro-landing-image {
     width: 100%;
-    height: 90vh;
+    max-width: 480px;
+    height: auto;
     object-fit: contain;
     flex-shrink: 0;
+    margin-top: 2rem;
     margin-bottom: 1rem;
+    padding: 0 1rem;
     transition: opacity 1s ease-in-out;
     filter: 
         drop-shadow(-1.5px 0 0 rgba(255, 0, 80, 0.4)) 
         drop-shadow(1.5px 0 0 rgba(0, 240, 255, 0.4)) 
-        drop-shadow(0 0 8px rgba(255, 255, 255, 0.25));
+        drop-shadow(0 0 10px rgba(255, 255, 255, 0.35));
     position: relative;
     z-index: 1;
 }
@@ -332,10 +335,10 @@ body {
 
 #intro-image {
     display: block;
-    height: 85vh;
-    width: auto;
-    max-width: 100%;
-    transition: transform 2s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease;
+    width: 100%;
+    max-width: 420px;
+    height: auto;
+    transition: transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.4s ease;
     filter: 
         drop-shadow(-1.5px 0 0 rgba(255, 0, 80, 0.4)) 
         drop-shadow(1.5px 0 0 rgba(0, 240, 255, 0.4)) 
@@ -466,15 +469,20 @@ body {
     width: max-content;
     text-align: center;
     font-family: 'RetroNumbers', 'Georgia', 'Times New Roman', Times, serif;
-    font-size: 0.6rem;
+    font-size: 0.72rem;
     font-weight: bold;
     color: #ffcc00;
     text-transform: uppercase;
     text-shadow: 
         -1px -1px 0 #000,  1px -1px 0 #000, -1px  1px 0 #000,  1px  1px 0 #000,
         -2px -2px 0 #000,  2px -2px 0 #000, -2px  2px 0 #000,  2px  2px 0 #000,
-        -2px  0px 0 #000,  2px  0px 0 #000,  0px -2px 0 #000,  0px  2px 0 #000,
-         0 0 5px rgba(0, 0, 0, 0.9);
+        -3px -3px 0 #000,  3px -3px 0 #000, -3px  3px 0 #000,  3px  3px 0 #000,
+        -3px  0px 0 #000,  3px  0px 0 #000,  0px -3px 0 #000,  0px  3px 0 #000,
+        -1px -3px 0 #000,  1px -3px 0 #000, -3px -1px 0 #000,  3px -1px 0 #000,
+        -1px  3px 0 #000,  1px  3px 0 #000, -3px  1px 0 #000,  3px  1px 0 #000,
+        -2px -3px 0 #000,  2px -3px 0 #000, -3px -2px 0 #000,  3px -2px 0 #000,
+        -2px  3px 0 #000,  2px  3px 0 #000, -3px  2px 0 #000,  3px  2px 0 #000,
+         0 0 6px rgba(0, 0, 0, 1), 0 0 10px rgba(0, 0, 0, 1);
     margin-bottom: 2px;
     white-space: nowrap;
     transition: transform 0.2s ease;
@@ -515,6 +523,7 @@ body {
 .intro-screen.fade-out {
     opacity: 0;
     pointer-events: none;
+    transition: opacity 6s cubic-bezier(0.75, 0, 1, 1);
 }
 
 .customize-link {
@@ -600,7 +609,7 @@ body {
 /* Animations */
 @keyframes scanlines-scroll {
     from { background-position: 0 0; }
-    to { background-position: 0 100%; }
+    to { background-position: 0 120px; }
 }
 
 @keyframes tracking-roll {

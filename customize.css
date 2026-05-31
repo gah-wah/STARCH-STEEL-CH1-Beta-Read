@@ -398,7 +398,7 @@ body {
 /* Animations */
 @keyframes scanlines-scroll {
     from { background-position: 0 0; }
-    to { background-position: 0 100%; }
+    to { background-position: 0 120px; }
 }
 
 @keyframes tracking-roll {

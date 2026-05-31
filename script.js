@@ -1,4 +1,4 @@
-﻿document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     // Preload opened door animation frames
     const openFrames = [
         'https://image.starchandsteel.com/fridgedooropenpng.png',
@@ -72,21 +72,32 @@
                     
                     setTimeout(() => {
                         introScreen.style.display = 'none';
-                    }, 800); // Matches the opacity transition on .intro-screen
+                    }, 6000); // Matches the opacity transition on .intro-screen (6s)
                 }, 1500); // Wait for the zoom-fade animation
             }, 100);
         });
     }
 
-    // Handle browser back/forward buttons to show/hide the intro screen dynamically
-    window.addEventListener('popstate', () => {
-        if (window.location.hash !== '#reader') {
-            // Restore the intro screen to its initial state
+    function showIntro() {
+        // 1. Swap the image source back to the closed door while the screen is still hidden.
+        // Keep the 'zoom-fade' class on it so it remains at scale 3 / opacity 0 in the background.
+        if (introImage) {
+            introImage.src = 'https://image.starchandsteel.com/fridgedoorpng.png';
+        }
+
+        // 2. Scroll the main window back to the top
+        window.scrollTo(0, 0);
+
+        // 3. Wait a tiny bit (50ms) for the browser to register the image swap and scroll position
+        setTimeout(() => {
             if (introScreen) {
                 introScreen.style.display = '';
-                // Force layout recalculation to ensure smooth re-entry
+                
+                // Force layout reflow while the elements are visible but in their starting transition states
                 void introScreen.offsetWidth;
-                introScreen.classList.remove('fade-out', 'animating');
+                
+                // Remove 'fade-out' to start the screen fade-in, but KEEP 'animating' to block hover!
+                introScreen.classList.remove('fade-out');
                 introScreen.style.opacity = '';
                 introScreen.style.overflowY = '';
                 
@@ -97,20 +108,49 @@
             }
 
             if (introImage) {
-                introImage.src = 'https://image.starchandsteel.com/fridgedoorpng.png';
                 introImage.classList.remove('zoom-fade');
             }
+        }, 50);
 
-            // Relock body scrolling
-            document.body.style.overflow = 'hidden';
-        } else {
-            // Hide the intro screen immediately
+        // 4. Remove 'animating' class only after the 1-second zoom transition completes
+        setTimeout(() => {
             if (introScreen) {
-                introScreen.style.display = 'none';
+                introScreen.classList.remove('animating');
             }
-            document.body.style.overflow = '';
+        }, 1100);
+
+        // Relock body scrolling
+        document.body.style.overflow = 'hidden';
+    }
+
+    function hideIntro() {
+        if (introScreen) {
+            introScreen.style.display = 'none';
+        }
+        document.body.style.overflow = '';
+    }
+
+    // Handle browser back/forward buttons to show/hide the intro screen dynamically
+    window.addEventListener('popstate', () => {
+        if (window.location.hash !== '#reader') {
+            showIntro();
+        } else {
+            hideIntro();
         }
     });
+
+    // Handle logo link click to transition back to the intro screen animate-in
+    const logoLink = document.querySelector('.top-nav a[href="index.html"]');
+    if (logoLink) {
+        logoLink.addEventListener('click', (e) => {
+            if (window.location.hash === '#reader') {
+                e.preventDefault();
+                // Replace URL state to clean hash, then transition instantly and synchronously
+                history.replaceState(null, '', 'index.html');
+                showIntro();
+            }
+        });
+    }
 
     // Set current year in footer
     const currentYearElem = document.getElementById('current-year');
