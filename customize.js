@@ -24,13 +24,13 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         face: {
             layerId: 'layer-face',
-            options: generateOptions('Face', 34, true),
+            options: generateOptions('Face', 40, true),
             currentIndex: 0,
             activeTimeout: null
         },
         hat: {
             layerId: 'layer-hat',
-            options: generateOptions('Hat', 24, true),
+            options: generateOptions('Hat', 30, true),
             currentIndex: 0,
             activeTimeout: null
         },
