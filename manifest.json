@@ -1,4 +1,4 @@
-﻿{
+{
     "name": "Starch & Steel",
     "short_name": "Starch & Steel",
     "display": "standalone",
@@ -7,7 +7,7 @@
     "theme_color": "#0f1115",
     "icons": [
         {
-            "src": "https://image.starchandsteel.com/stst4lgoogoootrans.png",
+            "src": "https://image.starchandsteel.com/stst4lgoogoootrans.png?v=2",
             "sizes": "512x512",
             "type": "image/png"
         }
