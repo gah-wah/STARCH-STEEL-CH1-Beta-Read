@@ -199,18 +199,18 @@ body::-webkit-scrollbar {
     width: 100%;
     margin: 0;
     padding: 0;
-    padding-bottom: 300px; /* Deceleration buffer */
     display: flex;
     flex-direction: column;
 }
 
 .parallax-sticky-bg {
-    position: relative;
+    position: sticky;
+    bottom: 0;
     width: 100%;
     z-index: 1;
     margin: 0;
     padding: 0;
-    will-change: transform;
+    overflow: hidden;
 }
 
 .parallax-scrolling-fg {
