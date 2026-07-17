@@ -227,11 +227,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function resizeParallax() {
         const containers = document.querySelectorAll('.parallax-container');
         containers.forEach(container => {
-            const bgImg1 = container.querySelector('.parallax-sticky-bg img:first-child');
-            if (bgImg1) {
-                const H1 = bgImg1.offsetHeight;
-                if (H1 > 0) {
-                    container.style.paddingTop = H1 + 'px';
+            const bgContainer = container.querySelector('.parallax-sticky-bg');
+            if (bgContainer) {
+                const bgH = bgContainer.offsetHeight;
+                const viewportH = document.documentElement.clientHeight;
+                if (bgH > 0) {
+                    // Set sticky top offset to viewportH - bgH
+                    bgContainer.style.top = (viewportH - bgH) + 'px';
                 }
             }
         });
@@ -317,10 +319,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     bgImg2.alt = `Comic Panel ${i + 2} (Background Part 2)`;
                     bgImg2.loading = 'lazy';
                     bgImg2.className = 'comic-panel';
-                    bgImg2.onload = () => bgImg2.classList.add('loaded');
+                    bgImg2.onload = () => {
+                        bgImg2.classList.add('loaded');
+                        resizeParallax();
+                    };
                     bgImg2.onerror = () => {
                         console.error(`Failed to load background image: ${bg2Url}`);
                         bgImg2.classList.add('loaded');
+                        resizeParallax();
                     };
                     stickyBg.appendChild(bgImg2);
                     container.appendChild(stickyBg);
@@ -361,8 +367,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     container.appendChild(scrollingFg);
                     comicContainer.appendChild(container);
                     
-                    // Call resizeParallax immediately if the image is cached to set container padding-top
-                    if (bgImg1.complete) {
+                    // Call resizeParallax immediately if the images are already cached
+                    if (bgImg1.complete || bgImg2.complete) {
                         resizeParallax();
                     }
                     

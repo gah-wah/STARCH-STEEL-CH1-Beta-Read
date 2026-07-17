@@ -165,10 +165,7 @@ body::-webkit-scrollbar {
     margin: 0 auto;
     padding-top: 0; /* Remove padding so comic hits the top of screen */
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    /* Ensure no spaces between flex items just in case */
-    gap: 0;
+    display: block; /* Native block layout for Safari Mobile compatibility */
 }
 
 /* 
@@ -205,29 +202,11 @@ body::-webkit-scrollbar {
 .parallax-sticky-bg {
     position: -webkit-sticky;
     position: sticky;
-    bottom: 0;
+    /* top is calculated dynamically in JS: viewportH - bgH */
     width: 100%;
-    height: 100vh; /* Fits viewport bounds exactly to support iOS Safari */
     z-index: 1;
     margin: 0;
     padding: 0;
-    overflow: visible; /* Let top panel overflow upwards */
-}
-
-.parallax-sticky-bg img:last-child {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: auto;
-}
-
-.parallax-sticky-bg img:first-child {
-    position: absolute;
-    bottom: 100%; /* Sits precisely above the bottom panel */
-    left: 0;
-    width: 100%;
-    height: auto;
 }
 
 .parallax-scrolling-fg {
