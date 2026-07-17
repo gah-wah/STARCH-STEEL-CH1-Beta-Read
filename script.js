@@ -223,7 +223,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Parallax Transition Sizing
+    function resizeParallax() {
+        const containers = document.querySelectorAll('.parallax-container');
+        containers.forEach(container => {
+            const bgImg1 = container.querySelector('.parallax-sticky-bg img:first-child');
+            if (bgImg1) {
+                const H1 = bgImg1.offsetHeight;
+                if (H1 > 0) {
+                    container.style.paddingTop = H1 + 'px';
+                }
+            }
+        });
+    }
 
+    window.addEventListener('resize', resizeParallax);
 
     // Function to fetch the comic data
     async function fetchComicData() {
@@ -286,10 +300,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     bgImg1.alt = `Comic Panel ${i + 1} (Background Part 1)`;
                     bgImg1.loading = 'lazy';
                     bgImg1.className = 'comic-panel';
-                    bgImg1.onload = () => bgImg1.classList.add('loaded');
+                    bgImg1.onload = () => {
+                        bgImg1.classList.add('loaded');
+                        resizeParallax();
+                    };
                     bgImg1.onerror = () => {
                         console.error(`Failed to load background image: ${bg1Url}`);
                         bgImg1.classList.add('loaded');
+                        resizeParallax();
                     };
                     stickyBg.appendChild(bgImg1);
                     
@@ -307,7 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     stickyBg.appendChild(bgImg2);
                     container.appendChild(stickyBg);
                     
-                    // Scrolling foreground wrapper containing 1.2.1 Draft2-0.png
+                    // Scrolling foreground wrapper containing 1.2.1 Draft2-0.png AND all remaining panels
                     const scrollingFg = document.createElement('div');
                     scrollingFg.className = 'parallax-scrolling-fg';
                     
@@ -322,12 +340,33 @@ document.addEventListener('DOMContentLoaded', () => {
                         fgImg.classList.add('loaded');
                     };
                     scrollingFg.appendChild(fgImg);
-                    container.appendChild(scrollingFg);
                     
+                    // Append all remaining images of Chapter 1 directly into the scrolling foreground
+                    // wrapper so that they scroll up with zero gap and keep the background frozen.
+                    for (let j = i + 3; j < data.images.length; j++) {
+                        const nextUrl = data.images[j];
+                        const nextImg = document.createElement('img');
+                        nextImg.src = nextUrl;
+                        nextImg.alt = `Comic Panel ${j + 1}`;
+                        nextImg.loading = 'lazy';
+                        nextImg.className = 'comic-panel';
+                        nextImg.onload = () => nextImg.classList.add('loaded');
+                        nextImg.onerror = () => {
+                            console.error(`Failed to load image: ${nextUrl}`);
+                            nextImg.classList.add('loaded');
+                        };
+                        scrollingFg.appendChild(nextImg);
+                    }
+                    
+                    container.appendChild(scrollingFg);
                     comicContainer.appendChild(container);
                     
-                    i += 2; // Skip the second background and foreground images in future iterations
-                    continue;
+                    // Call resizeParallax immediately if the image is cached to set container padding-top
+                    if (bgImg1.complete) {
+                        resizeParallax();
+                    }
+                    
+                    break; // Exit the main loop since we processed the rest of the chapter inside the container
                 }
                 
                 const img = document.createElement('img');
