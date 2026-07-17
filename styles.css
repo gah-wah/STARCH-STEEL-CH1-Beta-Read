@@ -460,6 +460,14 @@ body {
     color: #ffcc00;
 }
 
+.patreon-fridge-description .donor-description-sub {
+    font-size: 0.8rem;
+}
+
+.nowrap-link {
+    white-space: nowrap;
+}
+
 .patreon-fridge-wrapper {
     position: relative;
     width: 100%;
