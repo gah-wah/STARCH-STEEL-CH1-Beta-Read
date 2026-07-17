@@ -230,40 +230,60 @@ document.addEventListener('DOMContentLoaded', () => {
         const containers = document.querySelectorAll('.parallax-container');
         containers.forEach(container => {
             const bgContainer = container.querySelector('.parallax-sticky-bg');
-            const fgImg = container.querySelector('.parallax-scrolling-fg img');
-            if (!bgContainer || !fgImg) return;
+            const fgContainer = container.querySelector('.parallax-scrolling-fg');
+            if (!bgContainer || !fgContainer) return;
+            
+            const bgH = bgContainer.offsetHeight;
+            const fgH = fgContainer.offsetHeight;
+            if (bgH === 0 || fgH === 0) return; // Images not fully loaded yet
             
             const containerRect = container.getBoundingClientRect();
-            const H = fgImg.offsetHeight || 500; // Height of one panel
             const viewportH = window.innerHeight;
             
             // Container top relative to the viewport
             const containerTop = containerRect.top;
             
-            // The freeze point starts when the bottom of the background block (offset 2*H in container)
-            // reaches viewportH.
-            const startContainerTop = viewportH - 2 * H;
+            // The freeze point starts when the bottom of the background block reaches viewportH.
+            const startContainerTop = viewportH - bgH;
             
             // Scroll distance y past the freeze point
             const y = startContainerTop - containerTop;
             
-            let offset = 0;
             if (y > 0) {
-                if (y < H) {
-                    // Pinned phase (y from 0 to H)
-                    // The background is completely stationary relative to the viewport
-                    offset = y;
+                if (y < fgH) {
+                    // Pinned phase (y from 0 to fgH)
+                    // Use position: fixed during active pin to eliminate mobile scroll jitter
+                    bgContainer.style.position = 'fixed';
+                    bgContainer.style.bottom = '0';
+                    bgContainer.style.top = 'auto';
+                    bgContainer.style.left = '50%';
+                    bgContainer.style.transform = 'translateX(-50%)';
+                    bgContainer.style.width = '100%';
+                    bgContainer.style.maxWidth = '400px';
+                    bgContainer.style.margin = '0 auto';
                 } else {
-                    // Scrolled past phase (y >= H)
-                    // Locks the background relative to the container so they scroll away together
-                    offset = H;
+                    // Scrolled past phase (y >= fgH)
+                    // Lock the background at its final offset (fgH) relative to the container
+                    bgContainer.style.position = 'absolute';
+                    bgContainer.style.top = fgH + 'px';
+                    bgContainer.style.bottom = 'auto';
+                    bgContainer.style.left = '0';
+                    bgContainer.style.transform = '';
+                    bgContainer.style.width = '100%';
+                    bgContainer.style.maxWidth = 'none';
+                    bgContainer.style.margin = '0';
                 }
             } else {
-                // Before freeze: normal document flow position
-                offset = 0;
+                // Before freeze: normal absolute position at the top of the container
+                bgContainer.style.position = 'absolute';
+                bgContainer.style.top = '0';
+                bgContainer.style.bottom = 'auto';
+                bgContainer.style.left = '0';
+                bgContainer.style.transform = '';
+                bgContainer.style.width = '100%';
+                bgContainer.style.maxWidth = 'none';
+                bgContainer.style.margin = '0';
             }
-            
-            bgContainer.style.transform = `translateY(${offset}px)`;
         });
         ticked = false;
     }
@@ -272,16 +292,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const containers = document.querySelectorAll('.parallax-container');
         containers.forEach(container => {
             const bgContainer = container.querySelector('.parallax-sticky-bg');
-            const fgImg = container.querySelector('.parallax-scrolling-fg img');
-            if (!bgContainer || !fgImg) return;
+            const fgContainer = container.querySelector('.parallax-scrolling-fg');
+            if (!bgContainer || !fgContainer) return;
             
-            const H = fgImg.offsetHeight;
-            if (H > 0) {
-                container.style.height = (3 * H) + 'px';
-                const scrollingFg = container.querySelector('.parallax-scrolling-fg');
-                if (scrollingFg) {
-                    scrollingFg.style.top = (2 * H) + 'px';
-                }
+            const bgH = bgContainer.offsetHeight;
+            const fgH = fgContainer.offsetHeight;
+            
+            if (bgH > 0 && fgH > 0) {
+                container.style.height = (bgH + fgH) + 'px';
+                fgContainer.style.top = bgH + 'px';
             }
         });
         updateParallax();
@@ -408,6 +427,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     container.appendChild(scrollingFg);
                     
                     comicContainer.appendChild(container);
+                    
+                    // Immediately check if the images are already cached/complete
+                    const checkParallaxCache = () => {
+                        if (bgImg1.complete && bgImg2.complete && fgImg.complete) {
+                            bgImg1.classList.add('loaded');
+                            bgImg2.classList.add('loaded');
+                            fgImg.classList.add('loaded');
+                            resizeParallax();
+                        }
+                    };
+                    checkParallaxCache();
                     
                     i += 2; // Skip the second background and foreground images in future iterations
                     continue;
