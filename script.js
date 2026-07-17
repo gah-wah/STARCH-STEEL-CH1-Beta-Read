@@ -16,6 +16,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const introScreen = document.getElementById('intro-screen');
     const introImage = document.getElementById('intro-image');
 
+    // Keep track of active timeouts for the door animation and screen transition
+    let doorOpenTimeout1 = null;
+    let doorOpenTimeout2 = null;
+    let doorOpenTimeout3 = null;
+    let doorFrameTimeout = null;
+    let showIntroTimeout1 = null;
+    let showIntroTimeout2 = null;
+
+    function clearAllIntroTimeouts() {
+        if (doorOpenTimeout1) { clearTimeout(doorOpenTimeout1); doorOpenTimeout1 = null; }
+        if (doorOpenTimeout2) { clearTimeout(doorOpenTimeout2); doorOpenTimeout2 = null; }
+        if (doorOpenTimeout3) { clearTimeout(doorOpenTimeout3); doorOpenTimeout3 = null; }
+        if (doorFrameTimeout) { clearTimeout(doorFrameTimeout); doorFrameTimeout = null; }
+        if (showIntroTimeout1) { clearTimeout(showIntroTimeout1); showIntroTimeout1 = null; }
+        if (showIntroTimeout2) { clearTimeout(showIntroTimeout2); showIntroTimeout2 = null; }
+    }
+
     if (hasReaderHash) {
         if (introScreen) {
             introScreen.style.display = 'none';
@@ -34,6 +51,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         introImage.addEventListener('click', () => {
             if (introImage.classList.contains('zoom-fade')) return; // Prevent multiple clicks
+
+            // Clear any active timeouts before starting a new transition
+            clearAllIntroTimeouts();
 
             // Push history state so the browser back button resets to the landing screen
             if (window.location.hash !== '#reader') {
@@ -56,21 +76,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (frameIndex < openFrames.length) {
                     introImage.src = openFrames[frameIndex];
                     frameIndex++;
-                    setTimeout(animateFrames, 250); // Cycle every 250ms
+                    doorFrameTimeout = setTimeout(animateFrames, 250); // Cycle every 250ms
                 }
             };
             animateFrames();
             
             // Wait slightly for the animation to start, then initiate the zoom-fade CSS transition
-            setTimeout(() => {
+            doorOpenTimeout1 = setTimeout(() => {
                 introImage.classList.add('zoom-fade');
                 
                 // After animation, hide intro screen and restore scrolling
-                setTimeout(() => {
+                doorOpenTimeout2 = setTimeout(() => {
                     introScreen.classList.add('fade-out');
                     document.body.style.overflow = ''; // Restore scrolling
                     
-                    setTimeout(() => {
+                    doorOpenTimeout3 = setTimeout(() => {
                         introScreen.style.display = 'none';
                     }, 6000); // Matches the opacity transition on .intro-screen (6s)
                 }, 1500); // Wait for the zoom-fade animation
@@ -79,6 +99,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showIntro() {
+        // Clear all active timeouts so they don't overwrite the intro screen state
+        clearAllIntroTimeouts();
+
         // 1. Swap the image source back to the closed door while the screen is still hidden.
         // Keep the 'zoom-fade' class on it so it remains at scale 3 / opacity 0 in the background.
         if (introImage) {
@@ -89,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
         window.scrollTo(0, 0);
 
         // 3. Wait a tiny bit (50ms) for the browser to register the image swap and scroll position
-        setTimeout(() => {
+        showIntroTimeout1 = setTimeout(() => {
             if (introScreen) {
                 introScreen.style.display = '';
                 
@@ -113,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 50);
 
         // 4. Remove 'animating' class only after the 1-second zoom transition completes
-        setTimeout(() => {
+        showIntroTimeout2 = setTimeout(() => {
             if (introScreen) {
                 introScreen.classList.remove('animating');
             }
@@ -124,6 +147,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function hideIntro() {
+        // Clear all active timeouts when forcing hide
+        clearAllIntroTimeouts();
         if (introScreen) {
             introScreen.style.display = 'none';
         }
