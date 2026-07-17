@@ -223,7 +223,78 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Parallax Transition Calculations (Instant Freeze-Frame & Precise Overlay Alignment)
+    let ticked = false;
 
+    function updateParallax() {
+        const containers = document.querySelectorAll('.parallax-container');
+        containers.forEach(container => {
+            const bgContainer = container.querySelector('.parallax-sticky-bg');
+            const fgImg = container.querySelector('.parallax-scrolling-fg img');
+            if (!bgContainer || !fgImg) return;
+            
+            const containerRect = container.getBoundingClientRect();
+            const H = fgImg.offsetHeight || 500; // Height of one panel
+            const viewportH = window.innerHeight;
+            
+            // Container top relative to the viewport
+            const containerTop = containerRect.top;
+            
+            // The freeze point starts when the bottom of the background block (offset 2*H in container)
+            // reaches viewportH.
+            const startContainerTop = viewportH - 2 * H;
+            
+            // Scroll distance y past the freeze point
+            const y = startContainerTop - containerTop;
+            
+            let offset = 0;
+            if (y > 0) {
+                if (y < H) {
+                    // Pinned phase (y from 0 to H)
+                    // The background is completely stationary relative to the viewport
+                    offset = y;
+                } else {
+                    // Scrolled past phase (y >= H)
+                    // Locks the background relative to the container so they scroll away together
+                    offset = H;
+                }
+            } else {
+                // Before freeze: normal document flow position
+                offset = 0;
+            }
+            
+            bgContainer.style.transform = `translateY(${offset}px)`;
+        });
+        ticked = false;
+    }
+
+    function resizeParallax() {
+        const containers = document.querySelectorAll('.parallax-container');
+        containers.forEach(container => {
+            const bgContainer = container.querySelector('.parallax-sticky-bg');
+            const fgImg = container.querySelector('.parallax-scrolling-fg img');
+            if (!bgContainer || !fgImg) return;
+            
+            const H = fgImg.offsetHeight;
+            if (H > 0) {
+                container.style.height = (3 * H) + 'px';
+                const scrollingFg = container.querySelector('.parallax-scrolling-fg');
+                if (scrollingFg) {
+                    scrollingFg.style.top = (2 * H) + 'px';
+                }
+            }
+        });
+        updateParallax();
+    }
+
+    window.addEventListener('scroll', () => {
+        if (!ticked) {
+            requestAnimationFrame(updateParallax);
+            ticked = true;
+        }
+    });
+
+    window.addEventListener('resize', resizeParallax);
 
     // Function to fetch the comic data
     async function fetchComicData() {
@@ -286,10 +357,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     bgImg1.alt = `Comic Panel ${i + 1} (Background Part 1)`;
                     bgImg1.loading = 'lazy';
                     bgImg1.className = 'comic-panel';
-                    bgImg1.onload = () => bgImg1.classList.add('loaded');
+                    bgImg1.onload = () => {
+                        bgImg1.classList.add('loaded');
+                        resizeParallax();
+                    };
                     bgImg1.onerror = () => {
                         console.error(`Failed to load background image: ${bg1Url}`);
                         bgImg1.classList.add('loaded');
+                        resizeParallax();
                     };
                     stickyBg.appendChild(bgImg1);
                     
@@ -299,10 +374,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     bgImg2.alt = `Comic Panel ${i + 2} (Background Part 2)`;
                     bgImg2.loading = 'lazy';
                     bgImg2.className = 'comic-panel';
-                    bgImg2.onload = () => bgImg2.classList.add('loaded');
+                    bgImg2.onload = () => {
+                        bgImg2.classList.add('loaded');
+                        resizeParallax();
+                    };
                     bgImg2.onerror = () => {
                         console.error(`Failed to load background image: ${bg2Url}`);
                         bgImg2.classList.add('loaded');
+                        resizeParallax();
                     };
                     stickyBg.appendChild(bgImg2);
                     container.appendChild(stickyBg);
@@ -316,10 +395,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     fgImg.alt = `Comic Panel ${i + 3} (Foreground)`;
                     fgImg.loading = 'lazy';
                     fgImg.className = 'comic-panel';
-                    fgImg.onload = () => fgImg.classList.add('loaded');
+                    fgImg.onload = () => {
+                        fgImg.classList.add('loaded');
+                        resizeParallax();
+                    };
                     fgImg.onerror = () => {
                         console.error(`Failed to load foreground image: ${fgUrl}`);
                         fgImg.classList.add('loaded');
+                        resizeParallax();
                     };
                     scrollingFg.appendChild(fgImg);
                     container.appendChild(scrollingFg);
@@ -358,7 +441,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Append to container
                 comicContainer.appendChild(img);
             }
-
+            // Trigger initial parallax sizing and positioning call
+            resizeParallax();
         } else {
             console.error('Invalid data format: Expected an array of images.');
             comicContainer.innerHTML = '<p style="text-align:center; padding: 2rem;">No comic panels found.</p>';
