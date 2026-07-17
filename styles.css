@@ -837,3 +837,31 @@ body {
         text-shadow: -1px 0 0 rgba(255, 0, 80, 0.55), 1px 0 0 rgba(0, 240, 255, 0.55);
     }
 }
+
+.chapter-end-message {
+    font-family: 'RetroNumbers', 'Georgia', 'Times New Roman', Times, serif;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #ffffff;
+    font-weight: bold;
+    max-width: 400px;
+    text-align: center;
+    margin: 3rem auto;
+    padding: 0 1.5rem;
+    z-index: 2;
+    text-shadow: 
+        -1px 0 0 rgba(255, 0, 80, 0.55), 
+        1px 0 0 rgba(0, 240, 255, 0.55),
+        0 0 8px rgba(255, 255, 255, 0.35);
+}
+
+.chapter-end-message a {
+    color: #ffffff;
+    text-decoration: underline;
+    font-weight: bold;
+    transition: color 0.2s ease;
+}
+
+.chapter-end-message a:hover {
+    color: #ffcc00;
+}

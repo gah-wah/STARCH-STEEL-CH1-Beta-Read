@@ -102,6 +102,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // Clear all active timeouts so they don't overwrite the intro screen state
         clearAllIntroTimeouts();
 
+        // Hide ending message when returning to landing page
+        const endMessage = document.getElementById('chapter-end-message');
+        if (endMessage) {
+            endMessage.style.display = 'none';
+        }
+
         // 1. Swap the image source back to the closed door while the screen is still hidden.
         // Keep the 'zoom-fade' class on it so it remains at scale 3 / opacity 0 in the background.
         if (introImage) {
@@ -171,6 +177,18 @@ document.addEventListener('DOMContentLoaded', () => {
             if (window.location.hash === '#reader') {
                 e.preventDefault();
                 // Replace URL state to clean hash, then transition instantly and synchronously
+                history.replaceState(null, '', 'index.html');
+                showIntro();
+            }
+        });
+    }
+
+    // Handle the end-of-chapter "leave... the fridge" link click
+    const leaveLink = document.querySelector('.chapter-end-message a[href="index.html"]');
+    if (leaveLink) {
+        leaveLink.addEventListener('click', (e) => {
+            if (window.location.hash === '#reader') {
+                e.preventDefault();
                 history.replaceState(null, '', 'index.html');
                 showIntro();
             }
@@ -343,6 +361,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Remove loading indicator
         loadingIndicator.style.display = 'none';
+
+        // Show ending message
+        const endMessage = document.getElementById('chapter-end-message');
+        if (endMessage) {
+            endMessage.style.display = 'block';
+        }
 
         // Iterate through the image URLs and create img elements
         if (data.images && Array.isArray(data.images)) {
