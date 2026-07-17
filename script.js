@@ -238,7 +238,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (bgH === 0 || fgH === 0) return; // Images not fully loaded yet
             
             const containerRect = container.getBoundingClientRect();
-            const viewportH = window.innerHeight;
+            // CRITICAL: clientHeight excludes mobile navigation bars for exact CSS bottom:0 alignment
+            const viewportH = document.documentElement.clientHeight;
             
             // Container top relative to the viewport
             const containerTop = containerRect.top;
@@ -249,9 +250,13 @@ document.addEventListener('DOMContentLoaded', () => {
             // Scroll distance y past the freeze point
             const y = startContainerTop - containerTop;
             
+            // Keep frozen for the height of the foreground plus a 300px safety buffer to ensure it
+            // remains frozen until completely hidden behind the foreground panel.
+            const freezeDuration = fgH + 300;
+            
             if (y > 0) {
-                if (y < fgH) {
-                    // Pinned phase (y from 0 to fgH)
+                if (y < freezeDuration) {
+                    // Pinned phase (y from 0 to freezeDuration)
                     // Use position: fixed during active pin to eliminate mobile scroll jitter
                     bgContainer.style.position = 'fixed';
                     bgContainer.style.bottom = '0';
@@ -262,10 +267,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     bgContainer.style.maxWidth = '400px';
                     bgContainer.style.margin = '0 auto';
                 } else {
-                    // Scrolled past phase (y >= fgH)
-                    // Lock the background at its final offset (fgH) relative to the container
+                    // Scrolled past phase (y >= freezeDuration)
+                    // Lock the background at its final offset (freezeDuration) relative to the container
                     bgContainer.style.position = 'absolute';
-                    bgContainer.style.top = fgH + 'px';
+                    bgContainer.style.top = freezeDuration + 'px';
                     bgContainer.style.bottom = 'auto';
                     bgContainer.style.left = '0';
                     bgContainer.style.transform = '';
@@ -299,7 +304,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const fgH = fgContainer.offsetHeight;
             
             if (bgH > 0 && fgH > 0) {
-                container.style.height = (bgH + fgH) + 'px';
+                // Add the 300px buffer to the container height to support the longer freeze duration
+                container.style.height = (bgH + fgH + 300) + 'px';
                 fgContainer.style.top = bgH + 'px';
             }
         });
