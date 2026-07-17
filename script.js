@@ -210,6 +210,68 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Character Selector dropdown toggle and selection logic
+    const charTrigger = document.getElementById('char-selector-trigger');
+    const charDropdown = document.getElementById('bottom-char-dropdown');
+    const charContainer = document.querySelector('.char-selector-container');
+    const bottomCharSprite = document.getElementById('bottom-char-sprite');
+
+    if (charTrigger && charDropdown && charContainer) {
+        charTrigger.addEventListener('click', (e) => {
+            e.stopPropagation(); // prevent document click listener from hiding nav bar
+            charContainer.classList.toggle('open');
+        });
+
+        // Close dropdown when clicking anywhere else on document
+        document.addEventListener('click', () => {
+            charContainer.classList.remove('open');
+        });
+
+        // Handle item selection
+        const dropdownItems = charDropdown.querySelectorAll('.dropdown-item');
+        dropdownItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.stopPropagation(); // prevent document click listener from hiding nav bar
+                
+                const charId = item.getAttribute('data-char');
+                const charSprite = item.querySelector('img').src;
+                const charName = item.querySelector('span').textContent;
+
+                // Update trigger image
+                if (bottomCharSprite) {
+                    bottomCharSprite.src = charSprite;
+                    bottomCharSprite.alt = charName;
+                }
+
+                // Update active state in list
+                dropdownItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+
+                // Save choice in localStorage
+                localStorage.setItem('selectedBottomChar', charId);
+
+                // Close dropdown
+                charContainer.classList.remove('open');
+            });
+        });
+
+        // Load saved selection from localStorage on load
+        const savedChar = localStorage.getItem('selectedBottomChar');
+        if (savedChar) {
+            const activeItem = charDropdown.querySelector(`.dropdown-item[data-char="${savedChar}"]`);
+            if (activeItem) {
+                const charSprite = activeItem.querySelector('img').src;
+                const charName = activeItem.querySelector('span').textContent;
+                if (bottomCharSprite) {
+                    bottomCharSprite.src = charSprite;
+                    bottomCharSprite.alt = charName;
+                }
+                dropdownItems.forEach(i => i.classList.remove('active'));
+                activeItem.classList.add('active');
+            }
+        }
+    }
+
     // Handle back to top click
     backToTopBtn.addEventListener('click', (e) => {
         e.stopPropagation(); // Prevent the document click listener from hiding it immediately

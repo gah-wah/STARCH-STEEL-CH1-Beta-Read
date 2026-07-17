@@ -169,8 +169,104 @@ body::-webkit-scrollbar {
     position: relative;
     z-index: 20;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
+}
+
+.char-selector-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding-bottom: 10px;
+}
+
+.char-selector-trigger {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    cursor: pointer;
+    padding: 0.35rem 0.6rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.char-selector-trigger:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+#bottom-char-sprite {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    image-rendering: pixelated;
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.25));
+}
+
+.dropdown-arrow {
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    transition: transform 0.2s ease;
+}
+
+.char-selector-container.open .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.char-selector-dropdown {
+    position: absolute;
+    bottom: calc(100% + 4px);
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.95);
+    border: 1px solid var(--header-border);
+    border-radius: 12px;
+    padding: 0.4rem;
+    display: none;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 165px;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.8), inset 0 0 10px rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 100;
+}
+
+.char-selector-container.open .char-selector-dropdown {
+    display: flex;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.4rem 0.6rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'RetroNumbers', 'Georgia', 'Times New Roman', Times, serif;
+    font-size: 0.8rem;
+    color: var(--text-primary);
+    transition: background 0.2s ease, color 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.dropdown-item img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+}
+
+.dropdown-item.active {
+    background-color: rgba(255, 204, 0, 0.15);
+    color: var(--arcade-gold);
+    border: 1px solid rgba(255, 204, 0, 0.2);
 }
 
 .socials-container {
