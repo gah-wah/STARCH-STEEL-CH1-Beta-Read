@@ -223,6 +223,38 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Scroll listener for parallax transition effects (scroll dampening & bottom-pinning)
+    window.addEventListener('scroll', () => {
+        const containers = document.querySelectorAll('.parallax-container');
+        containers.forEach(container => {
+            const bgImg = container.querySelector('.parallax-sticky-bg img');
+            if (!bgImg) return;
+            
+            const containerRect = container.getBoundingClientRect();
+            const H = bgImg.offsetHeight || 500;
+            const viewportH = window.innerHeight;
+            
+            // Calculate distance of the bottom of the image from the bottom of the viewport
+            // (assuming no active transforms).
+            const diff = containerRect.top + H - viewportH;
+            
+            // Slowing range in pixels (approaching 1.1 Draft3-19.jpg)
+            const D = 700;
+            
+            if (diff > 0 && diff < D) {
+                // Deceleration range: apply smooth translation to slow it down
+                const t = diff / D;
+                // Easing power: 1.3 gives a gentle deceleration with minimal initial speedup
+                const easedDiff = D * Math.pow(t, 1.3);
+                const offset = easedDiff - diff;
+                bgImg.style.transform = `translateY(${offset}px)`;
+            } else {
+                // Pinned state (or scrolled past / too far down): reset transform
+                bgImg.style.transform = '';
+            }
+        });
+    });
+
     // Function to fetch the comic data
     async function fetchComicData() {
         try {
