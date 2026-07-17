@@ -232,8 +232,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const bgH = bgContainer.offsetHeight;
                 const viewportH = document.documentElement.clientHeight;
                 if (bgH > 0) {
-                    // Set sticky top offset to viewportH - bgH
-                    bgContainer.style.top = (viewportH - bgH) + 'px';
+                    // STICKY_OFFSET pushes the freeze position lower down the screen (closer to the bottom)
+                    // This accounts for browser toolbars and safe-area nav indicators
+                    const STICKY_OFFSET = 40; // in pixels
+                    bgContainer.style.top = (viewportH - bgH + STICKY_OFFSET) + 'px';
                 }
             }
         });
