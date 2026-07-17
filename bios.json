@@ -1,11 +1,11 @@
-﻿{
+{
     "tato": {
         "name": "Example Tato",
         "supporter": "Starch Lover",
         "tier": "Super Supporter",
         "sprite": "https://image.starchandsteel.com/1_Example_Tato.png",
         "class": "Starch Paladin",
-        "bio": "Tato is a brave little starch warrior from the underground kingdom of Spudlandia. He loves basking in warm butter and fighting against the iron grip of the evil peeling machine.",
+        "bio": "Mysterious fella seen briefly at the start of chapter 1",
         "stats": {
             "STARCH": 85,
             "STEEL": 40,
@@ -19,7 +19,7 @@
         "tier": "Steel Elite",
         "sprite": "https://image.starchandsteel.com/1_Example_Karreth.png",
         "class": "Steel Berserker",
-        "bio": "Karreth wears an armored metal helmet crafted from recycled kitchen tools. He is tough as nails, silent, and highly resistant to being mashed.",
+        "bio": "Carrot Captain who seems to know a thing or 2",
         "stats": {
             "STARCH": 30,
             "STEEL": 90,
