@@ -38,16 +38,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function populateCharacterCard(data) {
     // Set basic text details
-    document.getElementById('char-name').textContent = data.name;
-    document.getElementById('supporter-name').textContent = data.supporter;
-    document.getElementById('supporter-tier').textContent = data.tier;
-    document.getElementById('char-class').textContent = `CLASS: ${data.class.toUpperCase()}`;
-    document.getElementById('char-bio').textContent = data.bio;
+    const charName = document.getElementById('char-name');
+    if (charName) charName.textContent = data.name;
+
+    const supporterName = document.getElementById('supporter-name');
+    if (supporterName) supporterName.textContent = data.supporter;
+
+    const supporterTier = document.getElementById('supporter-tier');
+    if (supporterTier) supporterTier.textContent = data.tier;
+
+    const charClass = document.getElementById('char-class');
+    if (charClass) charClass.textContent = `CLASS: ${data.class ? data.class.toUpperCase() : ''}`;
+
+    const charBio = document.getElementById('char-bio');
+    if (charBio) charBio.textContent = data.bio;
 
     // Set sprite image
     const spriteImg = document.getElementById('char-sprite');
-    spriteImg.src = data.sprite;
-    spriteImg.alt = data.name;
+    if (spriteImg) {
+        spriteImg.src = data.sprite;
+        spriteImg.alt = data.name;
+    }
 
     // Animate stats progress bars
     if (data.stats) {
