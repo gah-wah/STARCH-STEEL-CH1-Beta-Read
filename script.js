@@ -223,103 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Parallax Transition Calculations (Instant Freeze-Frame & Precise Overlay Alignment)
-    let ticked = false;
 
-    function updateParallax() {
-        const containers = document.querySelectorAll('.parallax-container');
-        containers.forEach(container => {
-            const bgContainer = container.querySelector('.parallax-sticky-bg');
-            const fgContainer = container.querySelector('.parallax-scrolling-fg');
-            if (!bgContainer || !fgContainer) return;
-            
-            const bgH = bgContainer.offsetHeight;
-            const fgH = fgContainer.offsetHeight;
-            if (bgH === 0 || fgH === 0) return; // Images not fully loaded yet
-            
-            const containerRect = container.getBoundingClientRect();
-            // CRITICAL: clientHeight excludes mobile navigation bars for exact CSS bottom:0 alignment
-            const viewportH = document.documentElement.clientHeight;
-            
-            // Container top relative to the viewport
-            const containerTop = containerRect.top;
-            
-            // The freeze point starts when the bottom of the background block reaches viewportH.
-            const startContainerTop = viewportH - bgH;
-            
-            // Scroll distance y past the freeze point
-            const y = startContainerTop - containerTop;
-            
-            // Keep frozen for the height of the foreground plus a 300px safety buffer to ensure it
-            // remains frozen until completely hidden behind the foreground panel.
-            const freezeDuration = fgH + 300;
-            
-            if (y > 0) {
-                if (y < freezeDuration) {
-                    // Pinned phase (y from 0 to freezeDuration)
-                    // Use position: fixed during active pin to eliminate mobile scroll jitter
-                    bgContainer.style.position = 'fixed';
-                    bgContainer.style.bottom = '0';
-                    bgContainer.style.top = 'auto';
-                    bgContainer.style.left = '50%';
-                    bgContainer.style.transform = 'translateX(-50%)';
-                    bgContainer.style.width = '100%';
-                    bgContainer.style.maxWidth = '400px';
-                    bgContainer.style.margin = '0 auto';
-                } else {
-                    // Scrolled past phase (y >= freezeDuration)
-                    // Lock the background at its final offset (freezeDuration) relative to the container
-                    bgContainer.style.position = 'absolute';
-                    bgContainer.style.top = freezeDuration + 'px';
-                    bgContainer.style.bottom = 'auto';
-                    bgContainer.style.left = '0';
-                    bgContainer.style.transform = '';
-                    bgContainer.style.width = '100%';
-                    bgContainer.style.maxWidth = 'none';
-                    bgContainer.style.margin = '0';
-                }
-            } else {
-                // Before freeze: normal absolute position at the top of the container
-                bgContainer.style.position = 'absolute';
-                bgContainer.style.top = '0';
-                bgContainer.style.bottom = 'auto';
-                bgContainer.style.left = '0';
-                bgContainer.style.transform = '';
-                bgContainer.style.width = '100%';
-                bgContainer.style.maxWidth = 'none';
-                bgContainer.style.margin = '0';
-            }
-        });
-        ticked = false;
-    }
-
-    function resizeParallax() {
-        const containers = document.querySelectorAll('.parallax-container');
-        containers.forEach(container => {
-            const bgContainer = container.querySelector('.parallax-sticky-bg');
-            const fgContainer = container.querySelector('.parallax-scrolling-fg');
-            if (!bgContainer || !fgContainer) return;
-            
-            const bgH = bgContainer.offsetHeight;
-            const fgH = fgContainer.offsetHeight;
-            
-            if (bgH > 0 && fgH > 0) {
-                // Add the 300px buffer to the container height to support the longer freeze duration
-                container.style.height = (bgH + fgH + 300) + 'px';
-                fgContainer.style.top = bgH + 'px';
-            }
-        });
-        updateParallax();
-    }
-
-    window.addEventListener('scroll', () => {
-        if (!ticked) {
-            requestAnimationFrame(updateParallax);
-            ticked = true;
-        }
-    });
-
-    window.addEventListener('resize', resizeParallax);
 
     // Function to fetch the comic data
     async function fetchComicData() {
@@ -382,14 +286,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     bgImg1.alt = `Comic Panel ${i + 1} (Background Part 1)`;
                     bgImg1.loading = 'lazy';
                     bgImg1.className = 'comic-panel';
-                    bgImg1.onload = () => {
-                        bgImg1.classList.add('loaded');
-                        resizeParallax();
-                    };
+                    bgImg1.onload = () => bgImg1.classList.add('loaded');
                     bgImg1.onerror = () => {
                         console.error(`Failed to load background image: ${bg1Url}`);
                         bgImg1.classList.add('loaded');
-                        resizeParallax();
                     };
                     stickyBg.appendChild(bgImg1);
                     
@@ -399,14 +299,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     bgImg2.alt = `Comic Panel ${i + 2} (Background Part 2)`;
                     bgImg2.loading = 'lazy';
                     bgImg2.className = 'comic-panel';
-                    bgImg2.onload = () => {
-                        bgImg2.classList.add('loaded');
-                        resizeParallax();
-                    };
+                    bgImg2.onload = () => bgImg2.classList.add('loaded');
                     bgImg2.onerror = () => {
                         console.error(`Failed to load background image: ${bg2Url}`);
                         bgImg2.classList.add('loaded');
-                        resizeParallax();
                     };
                     stickyBg.appendChild(bgImg2);
                     container.appendChild(stickyBg);
@@ -420,30 +316,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     fgImg.alt = `Comic Panel ${i + 3} (Foreground)`;
                     fgImg.loading = 'lazy';
                     fgImg.className = 'comic-panel';
-                    fgImg.onload = () => {
-                        fgImg.classList.add('loaded');
-                        resizeParallax();
-                    };
+                    fgImg.onload = () => fgImg.classList.add('loaded');
                     fgImg.onerror = () => {
                         console.error(`Failed to load foreground image: ${fgUrl}`);
                         fgImg.classList.add('loaded');
-                        resizeParallax();
                     };
                     scrollingFg.appendChild(fgImg);
                     container.appendChild(scrollingFg);
                     
                     comicContainer.appendChild(container);
-                    
-                    // Immediately check if the images are already cached/complete
-                    const checkParallaxCache = () => {
-                        if (bgImg1.complete && bgImg2.complete && fgImg.complete) {
-                            bgImg1.classList.add('loaded');
-                            bgImg2.classList.add('loaded');
-                            fgImg.classList.add('loaded');
-                            resizeParallax();
-                        }
-                    };
-                    checkParallaxCache();
                     
                     i += 2; // Skip the second background and foreground images in future iterations
                     continue;
@@ -477,8 +358,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Append to container
                 comicContainer.appendChild(img);
             }
-            // Trigger initial parallax sizing and positioning call
-            resizeParallax();
+
         } else {
             console.error('Invalid data format: Expected an array of images.');
             comicContainer.innerHTML = '<p style="text-align:center; padding: 2rem;">No comic panels found.</p>';

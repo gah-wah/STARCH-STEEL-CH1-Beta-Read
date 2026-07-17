@@ -27,8 +27,8 @@ body {
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* Hide horizontal scrollbar if it ever occurs, though max-width should prevent it */
-    overflow-x: hidden;
+    /* Hide horizontal scrollbar if it ever occurs, using clip to preserve sticky positioning */
+    overflow-x: clip;
 
     /* Hide the vertical scrollbar but keep scrolling functionality */
     -ms-overflow-style: none; /* IE and Edge */
@@ -199,23 +199,21 @@ body::-webkit-scrollbar {
     width: 100%;
     margin: 0;
     padding: 0;
-    overflow: visible;
+    display: block; /* Standard block layout */
 }
 
 .parallax-sticky-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
+    position: sticky;
+    bottom: 0;
     width: 100%;
     z-index: 1;
     margin: 0;
     padding: 0;
-    will-change: transform;
+    overflow: hidden;
 }
 
 .parallax-scrolling-fg {
-    position: absolute;
-    left: 0;
+    position: relative;
     width: 100%;
     z-index: 2;
     margin: 0;
