@@ -227,14 +227,14 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('scroll', () => {
         const containers = document.querySelectorAll('.parallax-container');
         containers.forEach(container => {
-            const bgImg = container.querySelector('.parallax-sticky-bg img');
-            if (!bgImg) return;
+            const bgContainer = container.querySelector('.parallax-sticky-bg');
+            if (!bgContainer) return;
             
             const containerRect = container.getBoundingClientRect();
-            const H = bgImg.offsetHeight || 500;
+            const H = bgContainer.offsetHeight || 1000;
             const viewportH = window.innerHeight;
             
-            // Calculate distance of the bottom of the image from the bottom of the viewport
+            // Calculate distance of the bottom of the sticky container from the bottom of the viewport
             // (assuming no active transforms).
             const diff = containerRect.top + H - viewportH;
             
@@ -247,10 +247,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Easing power: 1.3 gives a gentle deceleration with minimal initial speedup
                 const easedDiff = D * Math.pow(t, 1.3);
                 const offset = easedDiff - diff;
-                bgImg.style.transform = `translateY(${offset}px)`;
+                bgContainer.style.transform = `translateY(${offset}px)`;
             } else {
                 // Pinned state (or scrolled past / too far down): reset transform
-                bgImg.style.transform = '';
+                bgContainer.style.transform = '';
             }
         });
     });
@@ -292,43 +292,63 @@ document.addEventListener('DOMContentLoaded', () => {
             for (let i = 0; i < data.images.length; i++) {
                 const imageUrl = data.images[i];
                 
-                // Special check: Parallax transition between 1.1 Draft3-19.jpg and 1.2.1 Draft2-0.png
-                if (imageUrl.includes('1.1 Draft3-19.jpg') && i + 1 < data.images.length && data.images[i + 1].includes('1.2.1 Draft2-0.png')) {
-                    const nextImageUrl = data.images[i + 1];
+                // Special check: Parallax transition between (1.1 Draft3-18.jpg + 1.1 Draft3-19.jpg) and 1.2.1 Draft2-0.png
+                if (imageUrl.includes('1.1 Draft3-18.jpg') && 
+                    i + 2 < data.images.length && 
+                    data.images[i + 1].includes('1.1 Draft3-19.jpg') && 
+                    data.images[i + 2].includes('1.2.1 Draft2-0.png')) {
+                    
+                    const bg1Url = imageUrl;
+                    const bg2Url = data.images[i + 1];
+                    const fgUrl = data.images[i + 2];
                     
                     // Create parallax container
                     const container = document.createElement('div');
                     container.className = 'parallax-container';
                     
-                    // Sticky background wrapper
+                    // Sticky background wrapper containing BOTH 1.1 Draft3-18.jpg and 1.1 Draft3-19.jpg
                     const stickyBg = document.createElement('div');
                     stickyBg.className = 'parallax-sticky-bg';
                     
-                    const bgImg = document.createElement('img');
-                    bgImg.src = imageUrl;
-                    bgImg.alt = `Comic Panel ${i + 1} (Background)`;
-                    bgImg.loading = 'lazy';
-                    bgImg.className = 'comic-panel';
-                    bgImg.onload = () => bgImg.classList.add('loaded');
-                    bgImg.onerror = () => {
-                        console.error(`Failed to load background image: ${imageUrl}`);
-                        bgImg.classList.add('loaded');
+                    // First background image (1.1 Draft3-18.jpg)
+                    const bgImg1 = document.createElement('img');
+                    bgImg1.src = bg1Url;
+                    bgImg1.alt = `Comic Panel ${i + 1} (Background Part 1)`;
+                    bgImg1.loading = 'lazy';
+                    bgImg1.className = 'comic-panel';
+                    bgImg1.onload = () => bgImg1.classList.add('loaded');
+                    bgImg1.onerror = () => {
+                        console.error(`Failed to load background image: ${bg1Url}`);
+                        bgImg1.classList.add('loaded');
                     };
-                    stickyBg.appendChild(bgImg);
+                    stickyBg.appendChild(bgImg1);
+                    
+                    // Second background image (1.1 Draft3-19.jpg)
+                    const bgImg2 = document.createElement('img');
+                    bgImg2.src = bg2Url;
+                    bgImg2.alt = `Comic Panel ${i + 2} (Background Part 2)`;
+                    bgImg2.loading = 'lazy';
+                    bgImg2.className = 'comic-panel';
+                    bgImg2.onload = () => bgImg2.classList.add('loaded');
+                    bgImg2.onerror = () => {
+                        console.error(`Failed to load background image: ${bg2Url}`);
+                        bgImg2.classList.add('loaded');
+                    };
+                    stickyBg.appendChild(bgImg2);
                     container.appendChild(stickyBg);
                     
-                    // Scrolling foreground wrapper
+                    // Scrolling foreground wrapper containing 1.2.1 Draft2-0.png
                     const scrollingFg = document.createElement('div');
                     scrollingFg.className = 'parallax-scrolling-fg';
                     
                     const fgImg = document.createElement('img');
-                    fgImg.src = nextImageUrl;
-                    fgImg.alt = `Comic Panel ${i + 2} (Foreground)`;
+                    fgImg.src = fgUrl;
+                    fgImg.alt = `Comic Panel ${i + 3} (Foreground)`;
                     fgImg.loading = 'lazy';
                     fgImg.className = 'comic-panel';
                     fgImg.onload = () => fgImg.classList.add('loaded');
                     fgImg.onerror = () => {
-                        console.error(`Failed to load foreground image: ${nextImageUrl}`);
+                        console.error(`Failed to load foreground image: ${fgUrl}`);
                         fgImg.classList.add('loaded');
                     };
                     scrollingFg.appendChild(fgImg);
@@ -336,7 +356,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     comicContainer.appendChild(container);
                     
-                    i++; // Skip the foreground image in the next iteration
+                    i += 2; // Skip the second background and foreground images in future iterations
                     continue;
                 }
                 
