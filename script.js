@@ -203,6 +203,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Prevent clicks on bottom-nav from bubbling up and toggling the panels
+    if (bottomNav) {
+        bottomNav.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+    }
+
     // Handle back to top click
     backToTopBtn.addEventListener('click', (e) => {
         e.stopPropagation(); // Prevent the document click listener from hiding it immediately

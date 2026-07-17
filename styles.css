@@ -159,6 +159,56 @@ body::-webkit-scrollbar {
     transform: translateY(0);
 }
 
+.bottom-nav-content {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.socials-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+    padding-bottom: 10px;
+}
+
+.socials-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.socials-icons {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.socials-icons a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.socials-icons a:hover {
+    opacity: 0.85;
+    transform: scale(1.08);
+}
+
+.socials-icons img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.25));
+}
+
 /* Comic Container */
 .comic-container {
     max-width: 400px; /* Constrained width to maintain phone ratio on desktop */
