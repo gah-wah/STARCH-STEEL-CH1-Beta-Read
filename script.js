@@ -257,10 +257,60 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Iterate through the image URLs and create img elements
         if (data.images && Array.isArray(data.images)) {
-            data.images.forEach((imageUrl, index) => {
+            for (let i = 0; i < data.images.length; i++) {
+                const imageUrl = data.images[i];
+                
+                // Special check: Parallax transition between 1.1 Draft3-19.jpg and 1.2.1 Draft2-0.png
+                if (imageUrl.includes('1.1 Draft3-19.jpg') && i + 1 < data.images.length && data.images[i + 1].includes('1.2.1 Draft2-0.png')) {
+                    const nextImageUrl = data.images[i + 1];
+                    
+                    // Create parallax container
+                    const container = document.createElement('div');
+                    container.className = 'parallax-container';
+                    
+                    // Sticky background wrapper
+                    const stickyBg = document.createElement('div');
+                    stickyBg.className = 'parallax-sticky-bg';
+                    
+                    const bgImg = document.createElement('img');
+                    bgImg.src = imageUrl;
+                    bgImg.alt = `Comic Panel ${i + 1} (Background)`;
+                    bgImg.loading = 'lazy';
+                    bgImg.className = 'comic-panel';
+                    bgImg.onload = () => bgImg.classList.add('loaded');
+                    bgImg.onerror = () => {
+                        console.error(`Failed to load background image: ${imageUrl}`);
+                        bgImg.classList.add('loaded');
+                    };
+                    stickyBg.appendChild(bgImg);
+                    container.appendChild(stickyBg);
+                    
+                    // Scrolling foreground wrapper
+                    const scrollingFg = document.createElement('div');
+                    scrollingFg.className = 'parallax-scrolling-fg';
+                    
+                    const fgImg = document.createElement('img');
+                    fgImg.src = nextImageUrl;
+                    fgImg.alt = `Comic Panel ${i + 2} (Foreground)`;
+                    fgImg.loading = 'lazy';
+                    fgImg.className = 'comic-panel';
+                    fgImg.onload = () => fgImg.classList.add('loaded');
+                    fgImg.onerror = () => {
+                        console.error(`Failed to load foreground image: ${nextImageUrl}`);
+                        fgImg.classList.add('loaded');
+                    };
+                    scrollingFg.appendChild(fgImg);
+                    container.appendChild(scrollingFg);
+                    
+                    comicContainer.appendChild(container);
+                    
+                    i++; // Skip the foreground image in the next iteration
+                    continue;
+                }
+                
                 const img = document.createElement('img');
                 img.src = imageUrl;
-                img.alt = `Comic Panel ${index + 1}`;
+                img.alt = `Comic Panel ${i + 1}`;
                 
                 // CRITICAL: Native lazy loading
                 img.loading = 'lazy';
@@ -279,13 +329,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Optionally set a fallback image or styling
                     img.style.minHeight = '200px';
                     img.style.backgroundColor = 'rgba(255,0,0,0.1)';
-                    img.alt = `Failed to load Panel ${index + 1}`;
+                    img.alt = `Failed to load Panel ${i + 1}`;
                     img.classList.add('loaded'); // Still fade it in to show the error alt text
                 };
 
                 // Append to container
                 comicContainer.appendChild(img);
-            });
+            }
         } else {
             console.error('Invalid data format: Expected an array of images.');
             comicContainer.innerHTML = '<p style="text-align:center; padding: 2rem;">No comic panels found.</p>';

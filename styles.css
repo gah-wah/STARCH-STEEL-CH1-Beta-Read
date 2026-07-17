@@ -193,6 +193,34 @@ body::-webkit-scrollbar {
     opacity: 1;
 }
 
+/* Scroll-Controlled Parallax Transition */
+.parallax-container {
+    position: relative;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.parallax-sticky-bg {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.parallax-scrolling-fg {
+    position: relative;
+    width: 100%;
+    z-index: 2;
+    margin: 0;
+    padding: 0;
+}
+
 /* Loading State */
 .loading-spinner {
     display: flex;
