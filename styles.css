@@ -710,10 +710,10 @@ body {
 }
 
 /* Shelf 2 positions (Middle Shelf) */
-.patreon-char-s2-c1 { left: 12%; bottom: 58.5%; }
-.patreon-char-s2-c2 { left: 32%; bottom: 58.5%; }
-.patreon-char-s2-c3 { left: 52%; bottom: 58.5%; }
-.patreon-char-s2-c4 { left: 72%; bottom: 58.5%; }
+.patreon-char-s2-c1 { left: 12%; bottom: 57.0%; }
+.patreon-char-s2-c2 { left: 32%; bottom: 57.0%; }
+.patreon-char-s2-c3 { left: 52%; bottom: 57.0%; }
+.patreon-char-s2-c4 { left: 72%; bottom: 57.0%; }
 
 /* Shelf 3 positions (Lower Shelf) */
 .patreon-char-s3-c1 { left: 12%; bottom: 41.0%; }
