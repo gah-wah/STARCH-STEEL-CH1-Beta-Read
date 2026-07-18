@@ -655,6 +655,22 @@ body {
     transform: scale(1.5);
 }
 
+.patreon-character.non-clickable {
+    cursor: default;
+}
+
+.patreon-character.non-clickable:hover {
+    transform: none;
+}
+
+.patreon-character.non-clickable:hover .patreon-char-name {
+    transform: none;
+}
+
+.dono-name-white {
+    color: #ffffff !important;
+}
+
 .patreon-char-name {
     display: block;
     width: max-content;
