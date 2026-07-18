@@ -659,14 +659,6 @@ body {
     cursor: default;
 }
 
-.patreon-character.non-clickable:hover {
-    transform: none;
-}
-
-.patreon-character.non-clickable:hover .patreon-char-name {
-    transform: none;
-}
-
 .dono-name-white {
     color: #ffffff !important;
 }
