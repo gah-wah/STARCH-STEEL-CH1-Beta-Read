@@ -613,6 +613,8 @@ body {
 }
 
 .patreon-fridge-stack {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -643,7 +645,7 @@ body {
     transform-origin: bottom center;
     transition: transform 0.2s ease;
     cursor: pointer;
-    z-index: 5;
+    z-index: 10;
     text-decoration: none;
 }
 
