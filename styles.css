@@ -748,7 +748,7 @@ body {
 }
 
 .patreon-character:hover .patreon-char-name {
-    transform: translateY(9px) scale(1.4);
+    transform: translateY(4px) scale(1.4); /* Move names up a tad more on hover */
 }
 
 /* Override hover behavior specifically for Tato and Karreth (First shelf, no dates) */
@@ -801,7 +801,7 @@ body {
     display: block;
     width: max-content;
     text-align: center;
-    font-family: 'Roboto', 'RetroNumbers', 'Georgia', 'Times New Roman', Times, serif;
+    font-family: 'Impact', 'Roboto', 'RetroNumbers', 'Georgia', 'Times New Roman', Times, serif;
     font-size: 0.50rem; /* Increased from 0.42rem */
     font-weight: bold !important;
     color: #000000; /* Black text */
@@ -890,8 +890,8 @@ body {
 
 .customize-link:hover {
     transform: translateX(-50%) scale(1.08); /* Stay zoomed in slightly */
-    box-shadow: 0 6px 20px rgba(255, 204, 0, 0.45); /* Gold glowing shadow */
-    background-color: #ffcc00; /* Gold background */
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4); /* Reverted to white shadow */
+    background-color: #ffffff; /* Reverted to white background */
     animation: button-chromatic-jitter 0.15s infinite linear; /* Stay static scale and jitter */
 }
 
@@ -1099,4 +1099,21 @@ body {
     margin: 0;
     letter-spacing: 0.5px;
     white-space: nowrap;
+}
+
+/* Ending Message GIF container styling */
+.timelapse-gif-container {
+    text-align: center;
+    margin: 1.5rem auto;
+    width: 100%;
+    max-width: 320px;
+}
+
+.timelapse-gif {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    image-rendering: pixelated;
 }

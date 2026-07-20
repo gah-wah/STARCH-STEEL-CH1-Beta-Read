@@ -131,6 +131,7 @@ body {
     margin-bottom: 0.5rem;
     font-style: italic;
     text-shadow: 0 0 6px rgba(255, 204, 0, 0.55), 0 0 12px rgba(255, 204, 0, 0.35);
+    filter: url(#chromatic-aberration);
 }
 
 .faq-intro-p {
@@ -157,6 +158,7 @@ body {
     color: #ffffff;
     font-style: italic;
     text-shadow: 0 0 6px rgba(255, 204, 0, 0.55), 0 0 12px rgba(255, 204, 0, 0.35);
+    filter: url(#chromatic-aberration);
 }
 
 .faq-answer {
@@ -312,8 +314,8 @@ body {
     100% { top: 100%; opacity: 0; }
 }
 
-/* Instagram Reel Embed block styles */
-.instagram-reel-prompt {
+/* YouTube Short Embed block styles */
+.youtube-short-prompt {
     font-size: 0.85rem;
     color: #ffffff;
     font-weight: bold;
@@ -321,17 +323,17 @@ body {
     margin-top: 1.2rem;
 }
 
-.instagram-reel-wrapper {
+.youtube-short-wrapper {
     width: 100%;
-    max-width: 328px;
+    max-width: 220px; /* Small layout width */
     margin: 0.8rem auto 0 auto;
     aspect-ratio: 9/16;
-    height: 520px;
+    height: 390px; /* Pretty small height */
     z-index: 10001; /* Lift above scanline overlays */
     position: relative;
 }
 
-.instagram-reel-iframe {
+.youtube-short-iframe {
     width: 100%;
     height: 100%;
     border: none;
