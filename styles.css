@@ -93,50 +93,49 @@ body::-webkit-scrollbar {
 /* Progress Bar */
 .progress-bar-container {
     width: 100%;
-    height: 4px;
+    height: 16px; /* Expanded hit area for timeline scrubbing */
     background-color: transparent;
     position: absolute;
-    bottom: 0;
+    bottom: -6px; /* Center the track at the bottom edge */
     left: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+}
+
+.progress-bar-track {
+    width: 100%;
+    height: 4px; /* Visual thickness */
+    background-color: rgba(255, 255, 255, 0.2);
+    position: relative;
 }
 
 .progress-bar {
     height: 100%;
     width: 0%;
     background-color: #ffffff;
-    transition: width 0.1s ease-out;
+    position: relative;
+    transition: width 0.05s ease-out;
 }
 
-/* Back to Top Button */
-.back-to-top {
-    position: fixed;
-    bottom: 120px;
-    right: 2rem;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
+/* Disable width transition while scrubbing to ensure instant response */
+.progress-bar-container.scrubbing .progress-bar {
+    transition: none !important;
+}
+
+.progress-scrubber {
+    position: absolute;
+    right: -6px; /* Center circle on progress bar edge */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
     background-color: #ffffff;
-    color: #000000;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    z-index: 90;
-    transform: translateY(150px);
-    opacity: 0;
-    transition: all 0.3s ease;
-}
-
-.back-to-top.visible {
-    transform: translateY(0);
-    opacity: 1;
-}
-
-.back-to-top:hover {
-    background-color: #e2e8f0;
-    transform: translateY(-3px);
+    border-radius: 50%;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
+    pointer-events: none; /* Let container capture pointer drag */
+    z-index: 10;
 }
 
 /* Bottom Nav Background */

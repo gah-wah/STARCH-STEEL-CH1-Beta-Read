@@ -108,9 +108,7 @@ body {
 }
 
 .back-button,
-.header-title,
-.faq-question,
-.faq-intro-title {
+.header-title {
     filter: url(#chromatic-aberration);
 }
 

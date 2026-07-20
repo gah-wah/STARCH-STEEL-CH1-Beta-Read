@@ -205,20 +205,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const chapterTitleElement = document.getElementById('chapter-title');
     const loadingIndicator = document.getElementById('loading-indicator');
 
-    // Toggle header and back to top visibility on click/tap
+    // Toggle header and bottom nav visibility on click/tap
     const topNav = document.querySelector('.top-nav');
-    const backToTopBtn = document.getElementById('back-to-top');
     const bottomNav = document.getElementById('bottom-nav');
     const progressBar = document.getElementById('progress-bar');
     document.addEventListener('click', () => {
-        const isNowVisible = topNav.classList.toggle('visible');
+        topNav.classList.toggle('visible');
         if (bottomNav) bottomNav.classList.toggle('visible');
-        
-        if (isNowVisible && window.scrollY > 500) {
-            backToTopBtn.classList.add('visible');
-        } else {
-            backToTopBtn.classList.remove('visible');
-        }
     });
 
     // Prevent clicks on bottom-nav from bubbling up and toggling the panels
@@ -290,25 +283,78 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Handle back to top click
-    backToTopBtn.addEventListener('click', (e) => {
-        e.stopPropagation(); // Prevent the document click listener from hiding it immediately
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
     // Update reading progress bar on scroll
     window.addEventListener('scroll', () => {
         const scrollTop = window.scrollY;
         const docHeight = document.documentElement.scrollHeight - window.innerHeight;
         const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
         progressBar.style.width = scrollPercent + '%';
-
-        if (scrollTop < 500) {
-            backToTopBtn.classList.remove('visible');
-        } else if (topNav.classList.contains('visible')) {
-            backToTopBtn.classList.add('visible');
-        }
     });
+
+    // Timeline scrubbing logic
+    const scrubContainer = document.getElementById('progress-bar-container');
+    if (scrubContainer && progressBar) {
+        let isDragging = false;
+
+        const scrub = (e) => {
+            const rect = scrubContainer.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            let pct = (clientX - rect.left) / rect.width;
+            pct = Math.max(0, Math.min(1, pct));
+            
+            // Instantly update bar width visually
+            progressBar.style.width = (pct * 100) + '%';
+            
+            // Instantly scroll the page to match
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            if (docHeight > 0) {
+                window.scrollTo(0, pct * docHeight);
+            }
+        };
+
+        scrubContainer.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            scrubContainer.classList.add('scrubbing');
+            scrub(e);
+            document.body.style.userSelect = 'none';
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                scrub(e);
+            }
+        });
+
+        window.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                scrubContainer.classList.remove('scrubbing');
+                document.body.style.userSelect = '';
+            }
+        });
+
+        scrubContainer.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            scrubContainer.classList.add('scrubbing');
+            scrub(e);
+            // Don't trigger browser side-swiping/scrolling while scrubbing
+            e.preventDefault();
+        }, { passive: false });
+
+        window.addEventListener('touchmove', (e) => {
+            if (isDragging) {
+                scrub(e);
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        window.addEventListener('touchend', () => {
+            if (isDragging) {
+                isDragging = false;
+                scrubContainer.classList.remove('scrubbing');
+            }
+        });
+    }
 
     // Parallax Transition Sizing
     function resizeParallax() {
