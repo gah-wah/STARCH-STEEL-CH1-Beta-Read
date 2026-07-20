@@ -1153,7 +1153,7 @@ body {
 }
 
 .landing-gif-wrapper {
-    max-width: 440px; /* Expanded to fill the container layout width completely */
+    max-width: 480px; /* Expanded even more to align with the fridge layout */
     width: 100%;
 }
 

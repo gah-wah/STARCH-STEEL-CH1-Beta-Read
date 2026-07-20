@@ -92,8 +92,8 @@ body {
 }
 
 .back-button:hover {
-    color: #ffcc00;
-    text-shadow: 0 0 8px rgba(255, 204, 0, 0.55);
+    color: #ffffff;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.55);
 }
 
 .header-title {
