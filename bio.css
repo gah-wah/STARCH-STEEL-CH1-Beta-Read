@@ -68,7 +68,7 @@ body {
     border-bottom: 1px solid var(--border-color);
     position: sticky;
     top: 0;
-    z-index: 9999;
+    z-index: 10010;
 }
 
 .header::after {

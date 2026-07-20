@@ -750,7 +750,7 @@ body {
 }
 
 .patreon-character:hover .patreon-char-name {
-    transform: translateY(3px) scale(1.4); /* Move names up a tad more on hover */
+    transform: translateY(-1px) scale(1.4); /* Move names up a tad more on hover */
 }
 
 /* Override hover behavior specifically for Tato and Karreth (First shelf, no dates) */
@@ -790,7 +790,7 @@ body {
     white-space: nowrap;
     transition: transform 0.2s ease;
     transform-origin: bottom center;
-    transform: translateY(9px); /* Move names lower closer to the sprite by default */
+    transform: translateY(4px); /* Move names lower closer to the sprite by default */
 }
 
 /* Override position specifically for Tato and Karreth (First shelf, no dates) */
@@ -803,12 +803,12 @@ body {
     position: absolute;
     bottom: -15px; /* Render under the character sprite */
     left: 50%;
-    transform: translateX(-50%) translateY(4px); /* Pushed lower default */
+    transform: translateX(-50%); /* Fixed horizontal center position with no vertical shift */
     display: block;
     width: max-content;
     text-align: center;
     font-family: 'Georgia', 'Times New Roman', Times, serif; /* Times New Roman fallback */
-    font-size: 0.60rem; /* Increased size */
+    font-size: 0.70rem; /* Increased size */
     font-weight: bold !important;
     color: #000000; /* Black text */
     text-shadow: 
@@ -816,7 +816,7 @@ body {
         -1px  1px 0 #fff,  1px  1px 0 #fff,
          0 0 4px rgba(255, 255, 255, 0.85); /* Black with white glow */
     opacity: 0;
-    transition: opacity 0.2s ease, transform 0.2s ease;
+    transition: opacity 0.2s ease; /* Fade-in only transition */
     margin-top: 0;
     margin-bottom: 0;
     white-space: nowrap;
@@ -826,7 +826,6 @@ body {
 
 .patreon-character:hover .patreon-char-date {
     opacity: 1;
-    transform: translateX(-50%) translateY(0); /* Fade in and translate to correct spot under feet */
 }
 
 .patreon-char-sprite {
@@ -1029,11 +1028,13 @@ body {
     color: #ffffff;
     text-decoration: underline;
     font-weight: bold;
-    transition: color 0.2s ease;
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+    text-shadow: 0 0 5px rgba(255, 204, 0, 0.45); /* Subtle gold glow */
 }
 
 .chapter-end-message a:hover {
     color: #ffcc00;
+    text-shadow: 0 0 10px rgba(255, 204, 0, 0.85); /* Stronger gold glow on hover */
 }
 
 /* Landing Page FAQ Link */
@@ -1048,13 +1049,15 @@ body {
     font-weight: bold;
     color: #ffffff;
     text-decoration: underline;
-    transition: color 0.2s ease;
+    transition: color 0.2s ease, text-shadow 0.2s ease;
     display: inline-block;
     filter: url(#chromatic-aberration);
+    text-shadow: 0 0 5px rgba(255, 204, 0, 0.45); /* Subtle gold glow */
 }
 
 .landing-faq-link:hover {
     color: #ffcc00;
+    text-shadow: 0 0 10px rgba(255, 204, 0, 0.85); /* Stronger gold glow on hover */
 }
 
 /* Clipboard Toast Notification styling */
@@ -1122,5 +1125,43 @@ body {
     border-radius: 8px;
     border: 1px solid var(--border-color);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    image-rendering: pixelated;
+}
+
+/* Landing Page Extra GIF Section styling */
+.landing-extra-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 2rem;
+}
+
+.landing-extra-text {
+    font-family: 'RetroNumbers', 'Georgia', 'Times New Roman', Times, serif;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: #ffffff;
+    font-weight: bold;
+    text-align: center;
+    margin: 0 auto;
+    max-width: 440px;
+    text-shadow: 
+        -1px 0 0 rgba(255, 0, 80, 0.55), 
+        1px 0 0 rgba(0, 240, 255, 0.55),
+        0 0 8px rgba(255, 255, 255, 0.35);
+}
+
+.landing-gif-wrapper {
+    max-width: 140px; /* Pretty small! */
+    width: 100%;
+}
+
+.landing-extra-gif {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
     image-rendering: pixelated;
 }
