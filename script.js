@@ -336,6 +336,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
+        placedGuy.draggable = false;
+        placedGuy.addEventListener('dragstart', (e) => e.preventDefault());
         placedGuy.addEventListener('mousedown', startDrag);
         placedGuy.addEventListener('touchstart', startDrag, { passive: false });
     }
@@ -375,6 +377,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     activeCharClone = document.createElement('img');
                     activeCharClone.src = bottomCharSprite.src;
                     activeCharClone.className = 'placed-food-guy';
+                    activeCharClone.draggable = false;
+                    activeCharClone.addEventListener('dragstart', (e) => e.preventDefault());
                     activeCharClone.style.position = 'absolute';
                     activeCharClone.style.width = '64px';
                     activeCharClone.style.height = 'auto';
@@ -417,6 +421,8 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             // Register handlers
+            bottomCharSprite.draggable = false;
+            bottomCharSprite.addEventListener('dragstart', (e) => e.preventDefault());
             bottomCharSprite.addEventListener('mousedown', startDrag);
             bottomCharSprite.addEventListener('touchstart', startDrag, { passive: false });
 

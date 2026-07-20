@@ -966,7 +966,6 @@ body {
     font-weight: bold;
     color: var(--text-secondary);
     margin: 0;
-    text-transform: uppercase;
     letter-spacing: 0.5px;
     white-space: nowrap;
 }
