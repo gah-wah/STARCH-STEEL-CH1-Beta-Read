@@ -713,7 +713,7 @@ body {
     width: max-content;
     text-align: center;
     font-family: 'RetroNumbers', 'Georgia', 'Times New Roman', Times, serif;
-    font-size: 0.72rem;
+    font-size: 0.55rem; /* Shrunk from 0.72rem */
     font-weight: bold;
     color: #ffcc00;
     text-transform: uppercase;
@@ -731,6 +731,31 @@ body {
     white-space: nowrap;
     transition: transform 0.2s ease;
     transform-origin: bottom center;
+}
+
+.patreon-char-date {
+    display: block;
+    width: max-content;
+    text-align: center;
+    font-family: 'RetroNumbers', 'Georgia', 'Times New Roman', Times, serif;
+    font-size: 0.42rem; /* Really small! */
+    font-weight: normal;
+    color: rgba(255, 255, 255, 0.7);
+    text-shadow: 
+        -1px -1px 0 #000,  1px -1px 0 #000, -1px  1px 0 #000,  1px  1px 0 #000,
+        0 0 4px rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    transform: translateY(2px);
+    margin-top: -1px;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    pointer-events: none; /* Ignore pointer hits */
+}
+
+.patreon-character:hover .patreon-char-date {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .patreon-char-sprite {
