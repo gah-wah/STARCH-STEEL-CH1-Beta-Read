@@ -466,20 +466,30 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        // Load saved selection from localStorage on load
+        // Stop propagation on dropdown header link
+        const headerLink = charDropdown.querySelector('.dropdown-header-link');
+        if (headerLink) {
+            headerLink.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+        }
+
+        // Load saved selection from localStorage on load, or pick random default between Broco Loco & Growby Fun
         const savedChar = localStorage.getItem('selectedBottomChar');
-        if (savedChar) {
-            const activeItem = charDropdown.querySelector(`.dropdown-item[data-char="${savedChar}"]`);
-            if (activeItem) {
-                const charSprite = activeItem.querySelector('img').src;
-                const charName = activeItem.querySelector('span').textContent;
-                if (bottomCharSprite) {
-                    bottomCharSprite.src = charSprite;
-                    bottomCharSprite.alt = charName;
-                }
-                dropdownItems.forEach(i => i.classList.remove('active'));
-                activeItem.classList.add('active');
+        let initialChar = savedChar;
+        if (!initialChar) {
+            initialChar = Math.random() < 0.5 ? 'brocoloco' : 'growbyfun';
+        }
+        const activeItem = charDropdown.querySelector(`.dropdown-item[data-char="${initialChar}"]`);
+        if (activeItem) {
+            const charSprite = activeItem.querySelector('img').src;
+            const charName = activeItem.querySelector('span').textContent;
+            if (bottomCharSprite) {
+                bottomCharSprite.src = charSprite;
+                bottomCharSprite.alt = charName;
             }
+            dropdownItems.forEach(i => i.classList.remove('active'));
+            activeItem.classList.add('active');
         }
     }
 
