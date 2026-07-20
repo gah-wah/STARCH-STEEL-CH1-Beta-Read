@@ -1040,7 +1040,7 @@ body {
 /* Landing Page FAQ Link */
 .landing-faq-wrapper {
     text-align: center;
-    margin-top: 2.8rem; /* Moved down a bit */
+    margin-top: 5rem; /* Pushed significantly lower below the large gif */
 }
 
 .landing-faq-link {
@@ -1153,7 +1153,7 @@ body {
 }
 
 .landing-gif-wrapper {
-    max-width: 320px; /* Made a lot bigger! */
+    max-width: 440px; /* Expanded to fill the container layout width completely */
     width: 100%;
 }
 
