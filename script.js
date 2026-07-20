@@ -838,5 +838,30 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         document.body.removeChild(textArea);
     }
+
+    // Zaraz click tracking helpers
+    const trackZaraz = (eventName) => {
+        if (typeof zaraz !== 'undefined' && typeof zaraz.track === 'function') {
+            try {
+                zaraz.track(eventName);
+            } catch (err) {
+                console.error('Zaraz tracking error:', err);
+            }
+        }
+    };
+
+    // Track PLAY WITH YOUR FOOD clicks
+    document.querySelectorAll('a[href^="customize.html"]').forEach(link => {
+        link.addEventListener('click', () => {
+            trackZaraz('play_with_your_food_clicked');
+        });
+    });
+
+    // Track FAQ PAGE clicks
+    document.querySelectorAll('a[href^="faq.html"]').forEach(link => {
+        link.addEventListener('click', () => {
+            trackZaraz('faq_page_clicked');
+        });
+    });
 });
 
