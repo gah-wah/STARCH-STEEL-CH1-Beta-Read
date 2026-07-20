@@ -96,7 +96,7 @@ body::-webkit-scrollbar {
     height: 16px; /* Expanded hit area for timeline scrubbing */
     background-color: transparent;
     position: absolute;
-    bottom: -6px; /* Center the track at the bottom edge */
+    top: -8px; /* Center the track at the top edge */
     left: 0;
     cursor: pointer;
     display: flex;
@@ -932,4 +932,17 @@ body {
 .clipboard-toast.visible {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
+}
+
+/* Draggable placed character overlays */
+.placed-food-guy {
+    image-rendering: pixelated;
+    filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.5));
+    transition: transform 0.2s ease;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.placed-food-guy:hover {
+    transform: scale(1.15);
 }

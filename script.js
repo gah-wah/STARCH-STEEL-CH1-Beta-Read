@@ -227,11 +227,106 @@ document.addEventListener('DOMContentLoaded', () => {
     const charContainer = document.querySelector('.char-selector-container');
     const bottomCharSprite = document.getElementById('bottom-char-sprite');
 
+    let justDraggedChar = false;
+    let isDraggingChar = false;
+    let dragInitiated = false;
+    let activeCharClone = null;
+    let startX = 0;
+    let startY = 0;
+
     if (charTrigger && charDropdown && charContainer) {
         charTrigger.addEventListener('click', (e) => {
             e.stopPropagation(); // prevent document click listener from hiding nav bar
+            if (justDraggedChar) return;
             charContainer.classList.toggle('open');
         });
+
+        // Drag to copy character overlays onto the screen
+        if (bottomCharSprite) {
+            const startDrag = (e) => {
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                startX = clientX;
+                startY = clientY;
+                isDraggingChar = true;
+                dragInitiated = false;
+                
+                if (e.touches) {
+                    e.stopPropagation();
+                }
+            };
+
+            const dragMove = (e) => {
+                if (!isDraggingChar) return;
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+                const dist = Math.hypot(clientX - startX, clientY - startY);
+                if (dist > 5 && !dragInitiated) {
+                    dragInitiated = true;
+                    
+                    // Create clone
+                    activeCharClone = document.createElement('img');
+                    activeCharClone.src = bottomCharSprite.src;
+                    activeCharClone.className = 'placed-food-guy';
+                    activeCharClone.style.position = 'absolute';
+                    activeCharClone.style.width = '64px';
+                    activeCharClone.style.height = 'auto';
+                    activeCharClone.style.zIndex = '999'; // Stay below navs but float on comic
+                    activeCharClone.style.cursor = 'pointer';
+                    activeCharClone.style.pointerEvents = 'none'; // Ignore event hit during drag
+                    
+                    document.body.appendChild(activeCharClone);
+                }
+
+                if (dragInitiated && activeCharClone) {
+                    activeCharClone.style.left = (clientX - 32) + 'px';
+                    activeCharClone.style.top = (clientY + window.scrollY - 32) + 'px';
+                    if (e.cancelable) {
+                        e.preventDefault();
+                    }
+                    e.stopPropagation();
+                }
+            };
+
+            const dragEnd = (e) => {
+                if (!isDraggingChar) return;
+                isDraggingChar = false;
+
+                if (dragInitiated && activeCharClone) {
+                    activeCharClone.style.pointerEvents = 'auto';
+                    
+                    const localClone = activeCharClone;
+                    const removeHandler = (evt) => {
+                        evt.stopPropagation();
+                        evt.preventDefault();
+                        localClone.remove();
+                    };
+                    
+                    localClone.addEventListener('click', removeHandler);
+                    localClone.addEventListener('touchstart', removeHandler, { passive: false });
+                    
+                    activeCharClone = null;
+                    justDraggedChar = true;
+                    setTimeout(() => { justDraggedChar = false; }, 100);
+                    
+                    e.stopPropagation();
+                    if (e.cancelable) {
+                        e.preventDefault();
+                    }
+                }
+            };
+
+            // Register handlers
+            bottomCharSprite.addEventListener('mousedown', startDrag);
+            bottomCharSprite.addEventListener('touchstart', startDrag, { passive: false });
+
+            window.addEventListener('mousemove', dragMove, { passive: false });
+            window.addEventListener('touchmove', dragMove, { passive: false });
+
+            window.addEventListener('mouseup', dragEnd, { passive: false });
+            window.addEventListener('touchend', dragEnd, { passive: false });
+        }
 
         // Close dropdown when clicking anywhere else on document
         document.addEventListener('click', () => {
