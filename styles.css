@@ -1153,7 +1153,7 @@ body {
 }
 
 .landing-gif-wrapper {
-    max-width: 140px; /* Pretty small! */
+    max-width: 320px; /* Made a lot bigger! */
     width: 100%;
 }
 

@@ -52,6 +52,15 @@ document.addEventListener('DOMContentLoaded', () => {
         introImage.addEventListener('click', () => {
             if (introImage.classList.contains('zoom-fade')) return; // Prevent multiple clicks
 
+            // Trigger Zaraz Cloudflare tracking if available right before routing
+            if (typeof zaraz !== 'undefined' && typeof zaraz.track === 'function') {
+                try {
+                    zaraz.track('fridge_door_clicked');
+                } catch (err) {
+                    console.error('Zaraz tracking error:', err);
+                }
+            }
+
             // Clear any active timeouts before starting a new transition
             clearAllIntroTimeouts();
 
