@@ -2,54 +2,100 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>FAQ - Starch & Steel</title>
-    <link rel="stylesheet" href="styles.css?v=45">
-    <style>
-        .faq-container {
-            max-width: 400px;
-            margin: 4rem auto;
-            padding: 0 1.5rem;
-            text-align: center;
-            font-family: 'RetroNumbers', 'Georgia', 'Times New Roman', Times, serif;
-        }
-        .faq-title {
-            font-size: 1.8rem;
-            color: #ffcc00;
-            margin-bottom: 2rem;
-            text-transform: uppercase;
-            text-shadow: 0 0 8px rgba(255, 204, 0, 0.3);
-        }
-        .faq-content {
-            line-height: 1.6;
-            color: #cbd5e1;
-        }
-        .faq-back {
-            display: inline-block;
-            margin-top: 3rem;
-            padding: 0.6rem 1.2rem;
-            color: #fff;
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.2s ease;
-        }
-        .faq-back:hover {
-            background: rgba(255,255,255,0.1);
-            border-color: rgba(255,255,255,0.4);
-            color: #ffcc00;
-        }
-    </style>
+    
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link rel="stylesheet" href="faq.css?v=1">
+    <meta name="theme-color" content="#000000">
 </head>
 <body>
-    <div class="vhs-overlay"></div>
     <div class="faq-container">
-        <h1 class="faq-title">FAQ</h1>
-        <div class="faq-content">
-            <p>Placeholder FAQ page. Content coming soon!</p>
+        <!-- CRT scanline overlay -->
+        <div class="vhs-overlay"></div>
+        
+        <!-- Header with BACK button -->
+        <div class="header">
+            <a href="index.html#reader" class="back-button">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                BACK
+            </a>
+            <h1 class="header-title">FAQ</h1>
         </div>
-        <a href="index.html#reader" class="faq-back">BACK TO READER</a>
+
+        <!-- FAQ Contents -->
+        <div class="faq-content">
+            <!-- Intro message -->
+            <div class="faq-intro">
+                <h2 class="faq-intro-title">Hello, hi.</h2>
+                <p class="faq-intro-p">This is a page where I just wanted to drop any extra info that people may be curious about.</p>
+            </div>
+
+            <!-- Question: How you make?? -->
+            <div class="faq-item">
+                <h3 class="faq-question">How you make??</h3>
+                <div class="faq-row-layout">
+                    <div class="faq-row-text">
+                        <p class="faq-answer">Basically, I mainly use Clip Studio Paint and for some of the more "painted" looking panels I use a software thing called Heavy Paint. It's really sick I highly recommend. And then for the dithering, for now I'm just using this website called Image to Pixel. Ya I think that's about it. I don't use AI at all in the art process but this website was indeed vibe coded so ya. It's just me makin all this, writing, drawing, marketing, so apologies if it takes a while lol</p>
+                    </div>
+                    <div class="faq-row-media">
+                        <div class="video-wrapper">
+                            <iframe src="https://www.youtube.com/embed/nyc2SMzH-KA" title="Timelapse Video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question: Who are you? -->
+            <div class="faq-item">
+                <h3 class="faq-question">Who are you?</h3>
+                <div class="who-layout">
+                    <span class="who-text">gahwah</span>
+                    <div class="who-images">
+                        <div class="who-image-container">
+                            <img src="https://image.starchandsteel.com/GahwahGiraffePixel2_bwCombo.png" alt="Gahwah Giraffe Pixel">
+                        </div>
+                        <div class="who-image-container">
+                            <img src="https://image.starchandsteel.com/ereeekditherrrr.png?v=2" alt="Ereeek Dither">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question: When is chapter 2? -->
+            <div class="faq-item">
+                <h3 class="faq-question">When is chapter 2?</h3>
+                <p class="faq-answer">In the fall hopefully lol. Tho the dream is to eventually have monthly chapter releases.</p>
+            </div>
+
+            <!-- Question: How long is the story gonna be? -->
+            <div class="faq-item">
+                <h3 class="faq-question">How long is the story gonna be?</h3>
+                <p class="faq-answer">Yeah this is hard to answer for sure. I have a lot of plans, and chapter 1 is of course only scratching the surface of the surface. But uhh I have a few arcs planned! That's all I will say. Yes.</p>
+            </div>
+        </div>
+
+        <!-- FAQ Footer -->
+        <div class="faq-footer">
+            <p>Thx for reading!! Eventually I'd like to do some behind the scenes videos where I can answer some of these questions more in depth.</p>
+        </div>
     </div>
+
+    <!-- SVG Filter for Chromatic Aberration -->
+    <svg style="display: none;">
+        <filter id="chromatic-aberration" x="-10%" y="-10%" width="120%" height="120%">
+            <feColorMatrix type="matrix" in="SourceGraphic" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="red"/>
+            <feColorMatrix type="matrix" in="SourceGraphic" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="green"/>
+            <feColorMatrix type="matrix" in="SourceGraphic" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="blue"/>
+            <feOffset dx="-0.6" dy="0" in="red" result="red-offset"/>
+            <feOffset dx="0.6" dy="0" in="blue" result="blue-offset"/>
+            <feBlend mode="screen" in="red-offset" in2="green" result="rg"/>
+            <feBlend mode="screen" in="rg" in2="blue-offset" result="rgb"/>
+        </filter>
+    </svg>
 </body>
 </html>
