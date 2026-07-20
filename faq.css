@@ -131,6 +131,7 @@ body {
     font-size: 1.4rem;
     color: #ffffff;
     margin-bottom: 0.5rem;
+    font-style: italic;
 }
 
 .faq-intro-p {
@@ -155,6 +156,7 @@ body {
     font-size: 1.1rem;
     font-weight: bold;
     color: #ffffff;
+    font-style: italic;
 }
 
 .faq-answer {
@@ -203,13 +205,13 @@ body {
 /* Layout for Who are you? */
 .who-layout {
     display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.8rem;
 }
 
 .who-text {
-    font-size: 1.2rem;
+    font-size: 0.85rem;
     font-weight: bold;
     color: #ffffff;
 }
@@ -220,8 +222,8 @@ body {
 }
 
 .who-image-container {
-    width: 120px;
-    height: 120px;
+    width: 150px;
+    height: 150px;
     display: flex;
     justify-content: center;
     align-items: center;
