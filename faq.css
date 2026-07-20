@@ -13,13 +13,13 @@
 
 :root {
     --bg-color: #000000;
-    --text-primary: #e2e8f0;
-    --text-secondary: #94a3b8;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
     --accent-color: #3b82f6;
     --panel-bg: rgba(255, 255, 255, 0.04);
     --header-bg: rgba(0, 0, 0, 0.75);
     --border-color: rgba(255, 255, 255, 0.1);
-    --arcade-gold: #ffcc00;
+    --arcade-gold: #ffffff;
 }
 
 body {
@@ -92,7 +92,7 @@ body {
 }
 
 .back-button:hover {
-    color: var(--arcade-gold);
+    color: #ffcc00;
 }
 
 .header-title {
@@ -129,15 +129,14 @@ body {
 
 .faq-intro-title {
     font-size: 1.4rem;
-    color: var(--arcade-gold);
-    text-transform: uppercase;
+    color: #ffffff;
     margin-bottom: 0.5rem;
-    text-shadow: 0 0 6px rgba(255, 204, 0, 0.3);
 }
 
 .faq-intro-p {
     font-size: 0.9rem;
-    color: var(--text-secondary);
+    color: #ffffff;
+    font-weight: bold;
 }
 
 /* FAQ Item Blocks */
@@ -145,24 +144,23 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.8rem;
-    background: var(--panel-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    background: none;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
 }
 
 .faq-question {
     font-size: 1.1rem;
     font-weight: bold;
-    color: var(--arcade-gold);
-    text-transform: uppercase;
-    text-shadow: 0 0 5px rgba(255, 204, 0, 0.35);
+    color: #ffffff;
 }
 
 .faq-answer {
     font-size: 0.85rem;
-    color: #cbd5e1;
+    color: #ffffff;
+    font-weight: bold;
     line-height: 1.6;
 }
 
@@ -191,6 +189,7 @@ body {
     border-radius: 8px;
     overflow: hidden;
     border: 1px solid var(--border-color);
+    z-index: 10001; /* Lift above VHS overlay to remove scanlines filter */
 }
 
 .video-wrapper iframe {
@@ -213,8 +212,6 @@ body {
     font-size: 1.2rem;
     font-weight: bold;
     color: #ffffff;
-    text-transform: uppercase;
-    text-shadow: 0 0 4px rgba(255, 255, 255, 0.25);
 }
 
 .who-images {
@@ -223,15 +220,14 @@ body {
 }
 
 .who-image-container {
-    width: 64px;
-    height: 64px;
+    width: 120px;
+    height: 120px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: rgba(0, 0, 0, 0.5);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 4px;
+    background: none;
+    border: none;
+    padding: 0;
 }
 
 .who-image-container img {
@@ -239,7 +235,6 @@ body {
     max-height: 100%;
     object-fit: contain;
     image-rendering: pixelated;
-    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.35));
 }
 
 /* Footer Close styling */
@@ -252,7 +247,8 @@ body {
 
 .faq-footer p {
     font-size: 0.85rem;
-    color: var(--text-secondary);
+    color: #ffffff;
+    font-weight: bold;
     line-height: 1.6;
 }
 
