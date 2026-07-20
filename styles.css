@@ -875,3 +875,24 @@ body {
 .chapter-end-message a:hover {
     color: #ffcc00;
 }
+
+/* Landing Page FAQ Link */
+.landing-faq-wrapper {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.landing-faq-link {
+    font-family: 'RetroNumbers', 'Georgia', 'Times New Roman', Times, serif;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #ffffff;
+    text-decoration: underline;
+    transition: color 0.2s ease;
+    display: inline-block;
+    filter: url(#chromatic-aberration);
+}
+
+.landing-faq-link:hover {
+    color: #ffcc00;
+}
