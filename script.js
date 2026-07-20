@@ -209,6 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const topNav = document.querySelector('.top-nav');
     const bottomNav = document.getElementById('bottom-nav');
     const progressBar = document.getElementById('progress-bar');
+    let justPlacedChar = false;
     
     // Start with timeline hidden
     const timelineContainer = document.getElementById('progress-bar-container');
@@ -218,6 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     document.addEventListener('click', () => {
+        if (justPlacedChar) return;
         const isVisible = topNav.classList.toggle('visible');
         if (bottomNav) bottomNav.classList.toggle('visible');
         
@@ -323,6 +325,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (dragInitiatedPlaced) {
                 dragInitiatedPlaced = false;
+                justPlacedChar = true;
+                setTimeout(() => { justPlacedChar = false; }, 150);
                 e.stopPropagation();
                 if (e.cancelable) {
                     e.preventDefault();
@@ -412,6 +416,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     activeCharClone = null;
                     justDraggedChar = true;
                     setTimeout(() => { justDraggedChar = false; }, 100);
+                    
+                    justPlacedChar = true;
+                    setTimeout(() => { justPlacedChar = false; }, 150);
                     
                     e.stopPropagation();
                     if (e.cancelable) {

@@ -284,9 +284,9 @@ body::-webkit-scrollbar {
 }
 
 .dropdown-item.active {
-    background-color: rgba(255, 204, 0, 0.15);
-    color: var(--arcade-gold);
-    border: 1px solid rgba(255, 204, 0, 0.2);
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 .socials-container {
@@ -603,6 +603,9 @@ body {
 .patreon-fridge-title-link {
     text-decoration: none;
     cursor: pointer;
+    display: inline-block;
+    width: 280px;
+    text-align: center;
 }
 
 .patreon-fridge-title {
@@ -621,11 +624,11 @@ body {
 
 .patreon-fridge-title .title-hover {
     display: none;
-    color: var(--arcade-gold);
+    color: #ffcc00;
     text-shadow: 
-        -1px 0 0 rgba(255, 204, 0, 0.55), 
-        1px 0 0 rgba(255, 204, 0, 0.55),
-        0 0 12px rgba(255, 204, 0, 0.65);
+        -1px 0 0 rgba(255, 0, 80, 0.55), 
+        1px 0 0 rgba(0, 240, 255, 0.55),
+        0 0 10px rgba(255, 204, 0, 0.7);
 }
 
 .patreon-fridge-title-link:hover .title-default {
@@ -726,7 +729,7 @@ body {
 /* Override hover behavior specifically for Tato and Karreth (First shelf, no dates) */
 #patreon-char-tato:hover .patreon-char-name,
 #patreon-char-karreth:hover .patreon-char-name {
-    transform: scale(1.5) !important;
+    transform: translateY(0) scale(1.5) !important;
 }
 
 .patreon-character.non-clickable {
@@ -778,9 +781,9 @@ body {
     font-weight: bold;
     color: #000000; /* Black text */
     text-shadow: 
-        -1px -1px 0 #fff,  1px -1px 0 #fff, -1px  1px 0 #fff,  1px  1px 0 #fff,
-        -2px -2px 0 #fff,  2px -2px 0 #fff, -2px  2px 0 #fff,  2px  2px 0 #fff,
-         0 0 3px rgba(255, 255, 255, 0.8); /* Thick white outline */
+        -1px -1px 0 #fff,  1px -1px 0 #fff, 
+        -1px  1px 0 #fff,  1px  1px 0 #fff,
+         0 0 3px rgba(255, 255, 255, 0.8); /* Thin crisp white outline */
     opacity: 0;
     transition: opacity 0.2s ease, transform 0.2s ease;
     transform: translateY(8px); /* Pushed lower close to the sprite */
@@ -858,12 +861,18 @@ body {
         drop-shadow(-1.5px 0 0 rgba(255, 0, 80, 0.45)) 
         drop-shadow(1.5px 0 0 rgba(0, 240, 255, 0.45));
     white-space: nowrap;
+    animation: button-subtle-blink 2s infinite ease-in-out; /* Subtle blinking */
 }
 
 .customize-link:hover {
     transform: translateX(-50%) scale(1.05);
     box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
-    animation: button-chromatic-jitter 0.15s infinite linear;
+    animation: button-subtle-blink 2s infinite ease-in-out, button-chromatic-jitter 0.15s infinite linear;
+}
+
+@keyframes button-subtle-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
 }
 
 /* --- VHS & CRT Retro Effects --- */
@@ -885,6 +894,16 @@ body {
     pointer-events: none;
     z-index: 10;
     overflow: hidden;
+}
+
+/* Desynchronize bottom nav VHS overlay from top header */
+.bottom-nav .vhs-overlay {
+    animation-duration: 14s;
+}
+
+.bottom-nav .vhs-overlay::before {
+    animation-duration: 7.5s;
+    animation-delay: -3.2s;
 }
 
 .vhs-overlay::before {
