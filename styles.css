@@ -88,6 +88,7 @@ body::-webkit-scrollbar {
     font-weight: 600;
     color: var(--text-secondary);
     margin: 0;
+    transform: translateX(-15px); /* Move left a bit */
 }
 
 /* Progress Bar */
@@ -183,11 +184,12 @@ body::-webkit-scrollbar {
 
 .char-selector-container {
     position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.25rem;
-    padding-bottom: 10px;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 2px !important;
+    padding-bottom: 5px;
 }
 
 .char-selector-trigger {
@@ -956,4 +958,15 @@ body {
 
 .placed-food-guy:hover {
     transform: scale(1.15);
+}
+
+/* Shrunk label for bottom selector */
+.donor-fridge-label {
+    font-size: 0.65rem; /* Shrunk a lot! */
+    font-weight: bold;
+    color: var(--text-secondary);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
 }

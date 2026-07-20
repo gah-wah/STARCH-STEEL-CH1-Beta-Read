@@ -209,9 +209,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const topNav = document.querySelector('.top-nav');
     const bottomNav = document.getElementById('bottom-nav');
     const progressBar = document.getElementById('progress-bar');
+    
+    // Start with timeline hidden
+    const timelineContainer = document.getElementById('progress-bar-container');
+    if (timelineContainer) {
+        timelineContainer.style.opacity = '0';
+        timelineContainer.style.pointerEvents = 'none';
+    }
+
     document.addEventListener('click', () => {
-        topNav.classList.toggle('visible');
+        const isVisible = topNav.classList.toggle('visible');
         if (bottomNav) bottomNav.classList.toggle('visible');
+        
+        // Inline visibility/opacity toggling for the timeline container
+        if (timelineContainer) {
+            if (isVisible) {
+                timelineContainer.style.opacity = '1';
+                timelineContainer.style.pointerEvents = 'auto';
+            } else {
+                timelineContainer.style.opacity = '0';
+                timelineContainer.style.pointerEvents = 'none';
+            }
+        }
     });
 
     // Prevent clicks on bottom-nav from bubbling up and toggling the panels
@@ -762,7 +781,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = 'gahwah.gahwah@gmail.com';
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(email).then(() => {
-                    showToast('email address was added to clipboard');
+                    showToast('email added to clipboard');
                 }).catch(err => {
                     fallbackCopyText(email);
                 });
@@ -781,7 +800,7 @@ document.addEventListener('DOMContentLoaded', () => {
         textArea.select();
         try {
             document.execCommand('copy');
-            showToast('email address was added to clipboard');
+            showToast('email added to clipboard');
         } catch (err) {
             console.error('Fallback copy failed', err);
         }
