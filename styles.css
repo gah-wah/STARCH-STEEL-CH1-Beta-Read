@@ -697,7 +697,7 @@ body {
 }
 
 .patreon-character:hover .patreon-char-name {
-    transform: scale(1.5);
+    transform: translateY(3px) scale(1.4);
 }
 
 .patreon-character.non-clickable {
@@ -731,6 +731,7 @@ body {
     white-space: nowrap;
     transition: transform 0.2s ease;
     transform-origin: bottom center;
+    transform: translateY(3px); /* Move names lower closer to the sprite */
 }
 
 .patreon-char-date {
@@ -738,15 +739,16 @@ body {
     width: max-content;
     text-align: center;
     font-family: 'RetroNumbers', 'Georgia', 'Times New Roman', Times, serif;
-    font-size: 0.42rem; /* Really small! */
-    font-weight: normal;
-    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.50rem; /* Increased from 0.42rem */
+    font-weight: bold;
+    color: #ffffff;
     text-shadow: 
         -1px -1px 0 #000,  1px -1px 0 #000, -1px  1px 0 #000,  1px  1px 0 #000,
-        0 0 4px rgba(0, 0, 0, 0.8);
+        -2px -2px 0 #000,  2px -2px 0 #000, -2px  2px 0 #000,  2px  2px 0 #000,
+         0 0 6px rgba(0, 0, 0, 0.9); /* Thick outline */
     opacity: 0;
     transition: opacity 0.2s ease, transform 0.2s ease;
-    transform: translateY(2px);
+    transform: translateY(4px); /* Pushed lower close to the sprite */
     margin-top: -1px;
     margin-bottom: 2px;
     white-space: nowrap;
@@ -755,7 +757,7 @@ body {
 
 .patreon-character:hover .patreon-char-date {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(2px);
 }
 
 .patreon-char-sprite {
