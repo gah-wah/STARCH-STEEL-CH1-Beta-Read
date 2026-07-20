@@ -5,7 +5,7 @@
         "tier": "Super Supporter",
         "sprite": "https://image.starchandsteel.com/1_Example_Tato.png",
         "class": "Starch Paladin",
-        "bio": "Mysterious fella seen briefly at the start of chapter 1",
+        "bio": "Mysterious potato guy seen briefly at the start of chapter 1. He carries a large sword and looks sort of stoic and wrinkly. Could this be the protagonist of our story?",
         "stats": {
             "STARCH": 85,
             "STEEL": 40,
@@ -19,7 +19,7 @@
         "tier": "Steel Elite",
         "sprite": "https://image.starchandsteel.com/1_Example_Karreth.png",
         "class": "Steel Berserker",
-        "bio": "Carrot Captain who seems to know a thing or 2",
+        "bio": "High ranking Captain of the Carrot people who seems like a skilled flavor mage. Does he... know something he shouldn't?",
         "stats": {
             "STARCH": 30,
             "STEEL": 90,

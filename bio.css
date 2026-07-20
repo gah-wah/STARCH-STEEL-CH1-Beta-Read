@@ -97,7 +97,8 @@ body {
 }
 
 .back-button:hover {
-    color: var(--text-secondary);
+    color: #ffcc00;
+    text-shadow: 0 0 8px rgba(255, 204, 0, 0.55);
 }
 
 .header-title {
@@ -108,7 +109,7 @@ body {
     font-family: 'RetroNumbers', 'Georgia', 'Times New Roman', Times, serif;
     font-weight: bold;
     text-transform: uppercase;
-    text-shadow: 0 0 8px rgba(255, 255, 255, 0.35);
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.7);
     justify-self: center;
 }
 

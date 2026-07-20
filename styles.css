@@ -685,11 +685,13 @@ body {
     color: #ffffff;
     text-decoration: underline;
     font-weight: bold;
-    transition: color 0.2s ease;
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+    text-shadow: 0 0 5px rgba(255, 204, 0, 0.45); /* Subtle gold glow */
 }
 
 .patreon-fridge-description a:hover {
     color: #ffcc00;
+    text-shadow: 0 0 10px rgba(255, 204, 0, 0.85); /* Stronger gold glow on hover */
 }
 
 .patreon-fridge-description .donor-description-sub {
@@ -748,7 +750,7 @@ body {
 }
 
 .patreon-character:hover .patreon-char-name {
-    transform: translateY(4px) scale(1.4); /* Move names up a tad more on hover */
+    transform: translateY(3px) scale(1.4); /* Move names up a tad more on hover */
 }
 
 /* Override hover behavior specifically for Tato and Karreth (First shelf, no dates) */
@@ -798,28 +800,33 @@ body {
 }
 
 .patreon-char-date {
+    position: absolute;
+    bottom: -15px; /* Render under the character sprite */
+    left: 50%;
+    transform: translateX(-50%) translateY(4px); /* Pushed lower default */
     display: block;
     width: max-content;
     text-align: center;
-    font-family: 'Impact', 'Roboto', 'RetroNumbers', 'Georgia', 'Times New Roman', Times, serif;
-    font-size: 0.50rem; /* Increased from 0.42rem */
+    font-family: 'Georgia', 'Times New Roman', Times, serif; /* Times New Roman fallback */
+    font-size: 0.60rem; /* Increased size */
     font-weight: bold !important;
     color: #000000; /* Black text */
     text-shadow: 
-        -1px -1px 0 rgba(255, 255, 255, 0.65),  1px -1px 0 rgba(255, 255, 255, 0.65), 
-        -1px  1px 0 rgba(255, 255, 255, 0.65),  1px  1px 0 rgba(255, 255, 255, 0.65); /* Softened thin outline */
+        -1px -1px 0 #fff,  1px -1px 0 #fff, 
+        -1px  1px 0 #fff,  1px  1px 0 #fff,
+         0 0 4px rgba(255, 255, 255, 0.85); /* Black with white glow */
     opacity: 0;
     transition: opacity 0.2s ease, transform 0.2s ease;
-    transform: translateY(4px); /* Shifted up closer to the name */
-    margin-top: -1px;
-    margin-bottom: 2px;
+    margin-top: 0;
+    margin-bottom: 0;
     white-space: nowrap;
     pointer-events: none; /* Ignore pointer hits */
+    z-index: 15; /* Render above shelf */
 }
 
 .patreon-character:hover .patreon-char-date {
     opacity: 1;
-    transform: translateY(2px);
+    transform: translateX(-50%) translateY(0); /* Fade in and translate to correct spot under feet */
 }
 
 .patreon-char-sprite {
