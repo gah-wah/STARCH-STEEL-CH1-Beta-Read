@@ -83,7 +83,7 @@ body {
 }
 
 .back-button:hover {
-    color: var(--text-secondary);
+    color: #ffcc00;
 }
 
 .header h1 {

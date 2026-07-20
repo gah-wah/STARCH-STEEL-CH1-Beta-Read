@@ -69,7 +69,7 @@ body {
     border-bottom: 1px solid var(--border-color);
     position: sticky;
     top: 0;
-    z-index: 9999;
+    z-index: 10010;
 }
 
 .back-button {
@@ -130,7 +130,7 @@ body {
     color: #ffffff;
     margin-bottom: 0.5rem;
     font-style: italic;
-    text-shadow: 0 0 6px rgba(255, 255, 255, 0.45), 0 0 12px rgba(255, 255, 255, 0.25);
+    text-shadow: 0 0 6px rgba(255, 204, 0, 0.55), 0 0 12px rgba(255, 204, 0, 0.35);
 }
 
 .faq-intro-p {
@@ -156,7 +156,7 @@ body {
     font-weight: bold;
     color: #ffffff;
     font-style: italic;
-    text-shadow: 0 0 6px rgba(255, 255, 255, 0.45), 0 0 12px rgba(255, 255, 255, 0.25);
+    text-shadow: 0 0 6px rgba(255, 204, 0, 0.55), 0 0 12px rgba(255, 204, 0, 0.35);
 }
 
 .faq-answer {
@@ -310,4 +310,31 @@ body {
     33% { top: 100%; opacity: 0.5; }
     34% { opacity: 0; }
     100% { top: 100%; opacity: 0; }
+}
+
+/* Instagram Reel Embed block styles */
+.instagram-reel-prompt {
+    font-size: 0.85rem;
+    color: #ffffff;
+    font-weight: bold;
+    line-height: 1.6;
+    margin-top: 1.2rem;
+}
+
+.instagram-reel-wrapper {
+    width: 100%;
+    max-width: 328px;
+    margin: 0.8rem auto 0 auto;
+    aspect-ratio: 9/16;
+    height: 520px;
+    z-index: 10001; /* Lift above scanline overlays */
+    position: relative;
+}
+
+.instagram-reel-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 12px;
+    background: #000;
 }
