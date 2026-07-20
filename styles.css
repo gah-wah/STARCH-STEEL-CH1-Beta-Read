@@ -103,6 +103,14 @@ body::-webkit-scrollbar {
     align-items: center;
     z-index: 1000;
     touch-action: none; /* Disable native history-swipe gestures on swipe scrubbing */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.bottom-nav.visible .progress-bar-container {
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .progress-bar-track {
@@ -176,7 +184,9 @@ body::-webkit-scrollbar {
 .char-selector-container {
     position: relative;
     display: flex;
+    flex-direction: column;
     align-items: center;
+    gap: 0.25rem;
     padding-bottom: 10px;
 }
 
@@ -941,6 +951,7 @@ body {
     transition: transform 0.2s ease;
     user-select: none;
     -webkit-user-drag: none;
+    z-index: 80; /* Render behind top panel (z-index 100) and bottom panel (z-index 85) */
 }
 
 .placed-food-guy:hover {

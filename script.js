@@ -234,6 +234,93 @@ document.addEventListener('DOMContentLoaded', () => {
     let startX = 0;
     let startY = 0;
 
+    // Drag-to-move for already-placed characters, tap/click to delete
+    function makePlacedGuyDraggable(placedGuy) {
+        let isDraggingPlaced = false;
+        let dragInitiatedPlaced = false;
+        let startXPlaced = 0;
+        let startYPlaced = 0;
+        let initialLeft = 0;
+        let initialTop = 0;
+
+        const startDrag = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            
+            startXPlaced = clientX;
+            startYPlaced = clientY;
+            isDraggingPlaced = true;
+            dragInitiatedPlaced = false;
+            
+            initialLeft = parseFloat(placedGuy.style.left) || 0;
+            initialTop = parseFloat(placedGuy.style.top) || 0;
+
+            placedGuy.style.zIndex = '999'; // Float on top of panels while dragging
+
+            window.addEventListener('mousemove', dragMove, { passive: false });
+            window.addEventListener('touchmove', dragMove, { passive: false });
+            window.addEventListener('mouseup', dragEnd, { passive: false });
+            window.addEventListener('touchend', dragEnd, { passive: false });
+        };
+
+        const dragMove = (e) => {
+            if (!isDraggingPlaced) return;
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            
+            const deltaX = clientX - startXPlaced;
+            const deltaY = clientY - startYPlaced;
+            const dist = Math.hypot(deltaX, deltaY);
+            
+            if (dist > 5 && !dragInitiatedPlaced) {
+                dragInitiatedPlaced = true;
+                placedGuy.style.pointerEvents = 'none'; // ignore hits while dragging
+            }
+            
+            if (dragInitiatedPlaced) {
+                placedGuy.style.left = (initialLeft + deltaX) + 'px';
+                placedGuy.style.top = (initialTop + deltaY) + 'px';
+                if (e.cancelable) {
+                    e.preventDefault();
+                }
+                e.stopPropagation();
+            }
+        };
+
+        const dragEnd = (e) => {
+            if (!isDraggingPlaced) return;
+            isDraggingPlaced = false;
+            
+            placedGuy.style.pointerEvents = 'auto';
+            placedGuy.style.zIndex = ''; // Drop back to z-index: 80 when placed
+
+            window.removeEventListener('mousemove', dragMove);
+            window.removeEventListener('touchmove', dragMove);
+            window.removeEventListener('mouseup', dragEnd);
+            window.removeEventListener('touchend', dragEnd);
+
+            if (dragInitiatedPlaced) {
+                dragInitiatedPlaced = false;
+                e.stopPropagation();
+                if (e.cancelable) {
+                    e.preventDefault();
+                }
+            } else {
+                placedGuy.remove();
+                e.stopPropagation();
+                if (e.cancelable) {
+                    e.preventDefault();
+                }
+            }
+        };
+
+        placedGuy.addEventListener('mousedown', startDrag);
+        placedGuy.addEventListener('touchstart', startDrag, { passive: false });
+    }
+
     if (charTrigger && charDropdown && charContainer) {
         charTrigger.addEventListener('click', (e) => {
             e.stopPropagation(); // prevent document click listener from hiding nav bar
@@ -295,16 +382,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (dragInitiated && activeCharClone) {
                     activeCharClone.style.pointerEvents = 'auto';
+                    activeCharClone.style.zIndex = ''; // Let stylesheet z-index: 80 apply when placed
                     
-                    const localClone = activeCharClone;
-                    const removeHandler = (evt) => {
-                        evt.stopPropagation();
-                        evt.preventDefault();
-                        localClone.remove();
-                    };
-                    
-                    localClone.addEventListener('click', removeHandler);
-                    localClone.addEventListener('touchstart', removeHandler, { passive: false });
+                    makePlacedGuyDraggable(activeCharClone);
                     
                     activeCharClone = null;
                     justDraggedChar = true;
