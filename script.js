@@ -490,11 +490,18 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Load saved selection from localStorage on load, or pick random default between Broco Loco & Growby Fun
+        // Load saved selection from localStorage on load, or pick random default between Broco Loco, Growby Fun, and Nadica Monika
         const savedChar = localStorage.getItem('selectedBottomChar');
         let initialChar = savedChar;
         if (!initialChar) {
-            initialChar = Math.random() < 0.5 ? 'brocoloco' : 'growbyfun';
+            const randVal = Math.random();
+            if (randVal < 0.33) {
+                initialChar = 'brocoloco';
+            } else if (randVal < 0.66) {
+                initialChar = 'growbyfun';
+            } else {
+                initialChar = 'nadicamonika';
+            }
         }
         const activeItem = charDropdown.querySelector(`.dropdown-item[data-char="${initialChar}"]`);
         if (activeItem) {
