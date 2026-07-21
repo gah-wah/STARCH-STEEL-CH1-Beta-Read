@@ -837,13 +837,18 @@ body {
 }
 
 /* Shelf 1 positions (Top Shelf) */
+#patreon-char-jagle {
+    left: 15%;
+    bottom: 76.5%;
+}
+
 #patreon-char-tato {
-    left: 25%;
+    left: 45%;
     bottom: 76.5%;
 }
 
 #patreon-char-karreth {
-    left: 59%;
+    left: 75%;
     bottom: 76.5%;
 }
 

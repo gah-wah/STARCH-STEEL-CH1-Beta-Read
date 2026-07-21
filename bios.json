@@ -1,4 +1,18 @@
 {
+    "jagle": {
+        "name": "jagle",
+        "supporter": "jagle",
+        "tier": "Jagle Tier",
+        "sprite": "https://image.starchandsteel.com/jagle.png",
+        "class": "Jagle",
+        "bio": "jagle jagle jagle jagle jagle, jagle jagle jagle. jagle jagle jagle jagle jagle, jagle, jagle jagle. jagle jagle jagle jagle jagle jagle jagle. jagle jagle. jagle jagle jagle, jagle jagle jagle jagle jagle jagle. jagle jagle jagle, jagle jagle, jagle jagle jagle jagle. jagle jagle jagle. jagle jagle jagle jagle jagle, jagle jagle jagle jagle jagle. jagle jagle jagle jagle. jagle jagle jagle jagle, jagle jagle jagle jagle. jagle jagle jagle jagle jagle jagle. jagle jagle jagle jagle jagle jagle, jagle jagle jagle jagle jagle. jagle jagle jagle jagle. jagle jagle jagle jagle jagle jagle, jagle.",
+        "stats": {
+            "STARCH": 77,
+            "STEEL": 77,
+            "SPICINESS": 77,
+            "SWEETNESS": 77
+        }
+    },
     "tato": {
         "name": "Example Tato",
         "supporter": "Starch Lover",
