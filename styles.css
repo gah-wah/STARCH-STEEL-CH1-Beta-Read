@@ -1181,3 +1181,150 @@ body {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
     image-rendering: pixelated;
 }
+
+/* Bio Popup Modal Styles */
+.bio-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 15000;
+    padding: 1.5rem;
+}
+
+.bio-modal.open {
+    display: flex;
+}
+
+.bio-modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.bio-modal-content {
+    position: relative;
+    background-color: #0b0b0c;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 440px;
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.8),
+        0 0 15px rgba(255, 204, 0, 0.15);
+    padding: 1.75rem;
+    z-index: 2;
+    animation: modal-zoom-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: transform;
+}
+
+@keyframes modal-zoom-in {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.bio-modal-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background: transparent;
+    border: none;
+    font-size: 1.75rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s ease, transform 0.2s ease;
+    padding: 0 4px;
+}
+
+.bio-modal-close:hover {
+    color: var(--arcade-gold);
+    transform: scale(1.1);
+}
+
+.modal-card-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    text-align: center;
+}
+
+.modal-sprite-panel {
+    background-color: #121214;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    width: 130px;
+    height: 130px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.6);
+    padding: 0.75rem;
+}
+
+.modal-char-sprite {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+
+.modal-info-panel {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.modal-char-name-title {
+    font-family: 'RetroNumbers', 'Georgia', 'Times New Roman', Times, serif;
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: var(--arcade-gold);
+    text-transform: uppercase;
+    margin: 0;
+    text-shadow: 0 0 8px rgba(255, 204, 0, 0.25);
+    filter: url(#chromatic-aberration);
+}
+
+.modal-donation-badge {
+    font-family: 'RetroNumbers', 'Georgia', 'Times New Roman', Times, serif;
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    padding: 4px 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.modal-bio-text-box {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    margin-top: 0.25rem;
+}
+
+.modal-bio-desc {
+    font-size: 0.8rem;
+    color: #cbd5e1;
+    line-height: 1.5;
+    margin: 0;
+}

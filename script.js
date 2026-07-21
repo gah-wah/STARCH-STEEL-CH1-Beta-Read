@@ -874,5 +874,87 @@ document.addEventListener('DOMContentLoaded', () => {
             trackZaraz('faq_page_clicked');
         });
     });
+
+    // Bio Modal popup controller
+    const bioModal = document.getElementById('bio-modal');
+    const bioModalClose = document.getElementById('bio-modal-close');
+    const bioModalBackdrop = document.getElementById('bio-modal-backdrop');
+    const bioModalBody = document.getElementById('bio-modal-body');
+    let biosCache = null;
+
+    const openBioModal = (charId) => {
+        if (!bioModal || !bioModalBody) return;
+
+        const showModal = (data) => {
+            const charData = data[charId.toLowerCase()];
+            if (!charData) return;
+
+            // Populate body content
+            bioModalBody.innerHTML = `
+                <div class="modal-card-layout">
+                    <div class="modal-sprite-panel">
+                        <img class="modal-char-sprite" src="${charData.sprite}" alt="${charData.name}">
+                    </div>
+                    <div class="modal-info-panel">
+                        <h2 class="modal-char-name-title">${charData.name}</h2>
+                        <div class="modal-donation-badge">Donated: ${charData.donation || '$10'}</div>
+                        <div class="modal-bio-text-box">
+                            <p class="modal-bio-desc">${charData.bio}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Open modal
+            bioModal.classList.add('open');
+            bioModal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden'; // Lock background scrolling
+        };
+
+        if (biosCache) {
+            showModal(biosCache);
+        } else {
+            fetch('bios.json')
+                .then(r => r.json())
+                .then(data => {
+                    biosCache = data;
+                    showModal(data);
+                })
+                .catch(err => console.error('Failed to load bio data:', err));
+        }
+    };
+
+    const closeBioModal = () => {
+        if (!bioModal) return;
+        bioModal.classList.remove('open');
+        bioModal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = ''; // Unlock background scrolling
+    };
+
+    // Attach listeners to all bio links
+    document.querySelectorAll('a[href^="bio.html?char="]').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const url = new URL(link.href, window.location.origin);
+            const charId = url.searchParams.get('char');
+            if (charId) {
+                openBioModal(charId);
+            }
+        });
+    });
+
+    if (bioModalClose) {
+        bioModalClose.addEventListener('click', closeBioModal);
+    }
+    if (bioModalBackdrop) {
+        bioModalBackdrop.addEventListener('click', closeBioModal);
+    }
+    // Close on Escape key press
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && bioModal && bioModal.classList.contains('open')) {
+            closeBioModal();
+        }
+    });
 });
 
