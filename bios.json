@@ -1,4 +1,18 @@
 {
+    "wiggle": {
+        "name": "Wiggle",
+        "supporter": "Wiggle",
+        "tier": "Super Supporter",
+        "sprite": "https://image.starchandsteel.com/Wiggle.png",
+        "class": "Capyburrr Hunter",
+        "bio": "Killer of the Capyburrr",
+        "stats": {
+            "STARCH": 30,
+            "STEEL": 85,
+            "SPICINESS": 80,
+            "SWEETNESS": 15
+        }
+    },
     "jagle": {
         "name": "jagle",
         "supporter": "jagle",
