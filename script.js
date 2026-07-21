@@ -897,7 +897,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="modal-info-panel">
                         <h2 class="modal-char-name-title">${charData.name}</h2>
-                        <div class="modal-donation-badge">Donated: ${charData.donation || '$10'}</div>
+                        <div class="modal-donation-badge">${charData.donation || '$10'}</div>
                         <div class="modal-bio-text-box">
                             <p class="modal-bio-desc">${charData.bio}</p>
                         </div>
