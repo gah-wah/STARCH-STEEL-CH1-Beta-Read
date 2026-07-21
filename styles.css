@@ -1095,6 +1095,7 @@ body {
     user-select: none;
     -webkit-user-drag: none;
     z-index: 80; /* Render behind top panel (z-index 100) and bottom panel (z-index 85) */
+    will-change: transform, left, top; /* Fix Chromium ghost drop-shadow repainting bug */
 }
 
 .placed-food-guy:hover {
