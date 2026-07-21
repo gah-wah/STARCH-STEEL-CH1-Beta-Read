@@ -20,6 +20,7 @@
     --accent-color: #3b82f6; /* Subtle blue accent for loading/links */
     --header-bg: rgba(0, 0, 0, 0.75); /* Semi-transparent for glassmorphism */
     --header-border: rgba(255, 255, 255, 0.08);
+    --arcade-gold: #ffcc00;
 }
 
 body {
