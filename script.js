@@ -950,6 +950,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const charData = data[charId.toLowerCase()];
             if (!charData) return;
 
+            const formattedBio = charData.bio ? charData.bio.replace(/\n/g, '<br>') : '';
+
             // Populate body content
             bioModalBody.innerHTML = `
                 <div class="modal-card-layout">
@@ -960,7 +962,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <h2 class="modal-char-name-title">${charData.name}</h2>
                         <div class="modal-donation-badge">${charData.donation || '$10'}</div>
                         <div class="modal-bio-text-box">
-                            <p class="modal-bio-desc">${charData.bio}</p>
+                            <p class="modal-bio-desc">${formattedBio}</p>
                         </div>
                     </div>
                 </div>
