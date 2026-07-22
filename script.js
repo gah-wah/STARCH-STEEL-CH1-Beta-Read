@@ -33,7 +33,27 @@ document.addEventListener('DOMContentLoaded', () => {
         if (showIntroTimeout2) { clearTimeout(showIntroTimeout2); showIntroTimeout2 = null; }
     }
 
-    if (hasReaderHash) {
+    // Scroll position restoration when returning from Play With Your Food customizer
+    const savedScroll = sessionStorage.getItem('homeScrollPos');
+    if (savedScroll !== null) {
+        sessionStorage.removeItem('homeScrollPos');
+        const targetY = parseInt(savedScroll, 10);
+        if (introScreen) {
+            introScreen.style.display = 'none';
+        }
+        document.body.style.overflow = '';
+        if (window.location.hash !== '#reader') {
+            history.replaceState({ page: 'reader' }, '', '#reader');
+        }
+        const restoreScroll = () => {
+            window.scrollTo({ top: targetY, behavior: 'instant' });
+        };
+        requestAnimationFrame(() => {
+            restoreScroll();
+            setTimeout(restoreScroll, 50);
+            setTimeout(restoreScroll, 150);
+        });
+    } else if (hasReaderHash) {
         if (introScreen) {
             introScreen.style.display = 'none';
         }
@@ -922,16 +942,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Track PLAY WITH YOUR FOOD clicks
+    // Track PLAY WITH YOUR FOOD clicks and save scroll position
     document.querySelectorAll('a[href^="customize.html"]').forEach(link => {
         link.addEventListener('click', () => {
+            sessionStorage.setItem('homeScrollPos', window.scrollY);
             trackZaraz('play_with_your_food_clicked');
         });
     });
 
-    // Track FAQ PAGE clicks
+    // Track FAQ PAGE clicks and save scroll position
     document.querySelectorAll('a[href^="faq.html"]').forEach(link => {
         link.addEventListener('click', () => {
+            sessionStorage.setItem('homeScrollPos', window.scrollY);
             trackZaraz('faq_page_clicked');
         });
     });

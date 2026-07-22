@@ -339,32 +339,61 @@ body {
     color: #ffcc00;
 }
 
-.control-label[data-tooltip]::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    bottom: 125%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #0b0b0c;
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 3px 7px;
-    border-radius: 6px;
-    font-size: 0.65rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    z-index: 1000;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
-}
+/* Tooltips ONLY for real mouse hover devices (prevents sticky tooltips on mobile touch screens) */
+@media (hover: hover) and (pointer: fine) {
+    .control-label[data-tooltip]::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 125%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #0b0b0c;
+        color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 3px 7px;
+        border-radius: 6px;
+        font-size: 0.65rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+        z-index: 1000;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+    }
 
-.control-label[data-tooltip]:hover::after {
-    opacity: 1;
-    transform: translateX(-50%) translateY(-2px);
+    .control-label[data-tooltip]:hover::after {
+        opacity: 1;
+        transform: translateX(-50%) translateY(-2px);
+    }
+
+    .refresh-btn[data-tooltip]::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 125%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #0b0b0c;
+        color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 3px 7px;
+        border-radius: 6px;
+        font-size: 0.65rem;
+        font-weight: bold;
+        white-space: nowrap;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+        z-index: 1000;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+    }
+
+    .refresh-btn[data-tooltip]:hover::after {
+        opacity: 1;
+        transform: translateX(-50%) translateY(-2px);
+    }
 }
 
 .refresh-btn {
@@ -390,33 +419,6 @@ body {
 
 .refresh-btn:active {
     transform: translateY(0) scale(0.9);
-}
-
-/* Tooltip on hover for up-arrow buttons */
-.refresh-btn[data-tooltip]::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    bottom: 125%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #0b0b0c;
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 3px 7px;
-    border-radius: 6px;
-    font-size: 0.65rem;
-    font-weight: bold;
-    white-space: nowrap;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    z-index: 1000;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
-}
-
-.refresh-btn[data-tooltip]:hover::after {
-    opacity: 1;
-    transform: translateX(-50%) translateY(-2px);
 }
 
 .arrow-btn {

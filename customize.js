@@ -225,15 +225,40 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Helper to flash button gold on click
+    // Helper to flash button gold on click (uses inline style burst to override any filters or active states)
     function triggerGoldFlash(el) {
         if (!el) return;
+        
+        // Remove class & clear inline style first to ensure clean state
         el.classList.remove('gold-flash');
-        void el.offsetWidth; // Reflow to restart animation
+        el.style.backgroundColor = '#ffcc00';
+        el.style.color = '#000000';
+        el.style.borderColor = '#ffcc00';
+        el.style.boxShadow = '0 0 30px #ffcc00';
+
+        void el.offsetWidth; // Reflow
         el.classList.add('gold-flash');
+
         setTimeout(() => {
+            el.style.backgroundColor = '';
+            el.style.color = '';
+            el.style.borderColor = '';
+            el.style.boxShadow = '';
             el.classList.remove('gold-flash');
-        }, 600);
+        }, 500);
+    }
+
+    // Back button handling: return to previous scroll position on index page
+    const backBtn = document.querySelector('.back-button');
+    if (backBtn) {
+        backBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (document.referrer && document.referrer.includes(window.location.hostname)) {
+                window.history.back();
+            } else {
+                window.location.href = 'index.html#reader';
+            }
+        });
     }
 
     const randomBtn = document.getElementById('btn-randomize');
