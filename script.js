@@ -951,6 +951,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!charData) return;
 
             const formattedBio = charData.bio ? charData.bio.replace(/\n/g, '<br>') : '';
+            const dateHTML = charData.date ? `<div class="modal-bio-date">${charData.date}</div>` : '';
 
             // Populate body content
             bioModalBody.innerHTML = `
@@ -963,6 +964,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="modal-donation-badge">${charData.donation || '$10'}</div>
                         <div class="modal-bio-text-box">
                             <p class="modal-bio-desc">${formattedBio}</p>
+                            ${dateHTML}
                         </div>
                     </div>
                 </div>
