@@ -225,9 +225,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Helper to flash button gold on click
+    function triggerGoldFlash(el) {
+        if (!el) return;
+        el.classList.remove('gold-flash');
+        void el.offsetWidth; // Reflow to restart animation
+        el.classList.add('gold-flash');
+        setTimeout(() => {
+            el.classList.remove('gold-flash');
+        }, 600);
+    }
+
     const randomBtn = document.getElementById('btn-randomize');
     if (randomBtn) {
-        randomBtn.addEventListener('click', randomizeAll);
+        randomBtn.addEventListener('click', () => {
+            triggerGoldFlash(randomBtn);
+            randomizeAll();
+        });
     }
 
     // --- Export Functionality ---
@@ -279,6 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const downloadBtn = document.getElementById('btn-download');
     if (downloadBtn) {
         downloadBtn.addEventListener('click', async () => {
+            triggerGoldFlash(downloadBtn);
             const originalText = downloadBtn.innerHTML;
             downloadBtn.textContent = "PROCESSING...";
             downloadBtn.disabled = true;
@@ -314,6 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const copyBtn = document.getElementById('btn-copy');
     if (copyBtn) {
         copyBtn.addEventListener('click', async () => {
+            triggerGoldFlash(copyBtn);
             const originalText = copyBtn.innerHTML;
             copyBtn.textContent = "COPYING...";
             copyBtn.disabled = true;

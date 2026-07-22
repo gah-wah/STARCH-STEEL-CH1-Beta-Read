@@ -196,6 +196,7 @@ body::-webkit-scrollbar {
 }
 
 .char-selector-trigger {
+    position: relative;
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -209,12 +210,43 @@ body::-webkit-scrollbar {
     transform: scale(1.08);
 }
 
+.dropdown-chevron {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: rgba(11, 11, 12, 0.9);
+    color: #ffcc00;
+    border: 1px solid rgba(255, 204, 0, 0.6);
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: transform 0.3s ease, background 0.2s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+    pointer-events: none;
+}
+
+.char-selector-container.open .dropdown-chevron {
+    transform: rotate(180deg);
+}
+
 #bottom-char-sprite {
     width: 72px;
     height: 72px;
     object-fit: contain;
     image-rendering: pixelated;
     filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.25));
+    animation: char-sprite-pulse 2.4s ease-in-out infinite;
+    will-change: transform;
+}
+
+@keyframes char-sprite-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.12); }
 }
 
 .char-selector-dropdown {
@@ -821,7 +853,7 @@ body {
     display: block;
     width: max-content;
     text-align: center;
-    font-family: 'Georgia', 'Times New Roman', Times, serif; /* Times New Roman fallback */
+    font-family: 'Times New Roman', Times, serif; /* Times New Roman */
     font-size: 0.70rem; /* Increased size */
     font-weight: bold !important;
     color: #000000; /* Black text */
@@ -1120,10 +1152,11 @@ body {
 .donor-fridge-label {
     font-size: 0.65rem; /* Shrunk a lot! */
     font-weight: bold;
-    color: var(--text-secondary);
+    color: #ffcc00; /* Gold */
     margin: 0;
     letter-spacing: 0.5px;
     white-space: nowrap;
+    text-shadow: 0 0 6px rgba(255, 204, 0, 0.4);
 }
 
 /* Ending Message GIF container styling */
@@ -1332,7 +1365,7 @@ body {
 }
 
 .modal-bio-date {
-    font-family: 'Georgia', 'Times New Roman', Times, serif;
+    font-family: 'Times New Roman', Times, serif;
     font-size: 0.78rem;
     font-weight: bold;
     color: var(--text-secondary);
