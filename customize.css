@@ -101,7 +101,9 @@ body {
 /* Chromatic aberration filter applied to all text, labels, and buttons */
 .back-button,
 .header h1,
-.list-number,
+.list-number-container,
+.num-input,
+.denom-slash,
 .control-label,
 .arrow-btn,
 .refresh-btn,
@@ -207,9 +209,9 @@ body {
 
 .control-group {
     display: grid;
-    grid-template-columns: 28px 1fr 28px;
+    grid-template-columns: 56px 1fr 28px;
     align-items: center;
-    gap: 1rem;
+    gap: 0.5rem;
     padding: 0.75rem 0;
     border-bottom: 1px solid var(--border-color);
 }
@@ -218,26 +220,64 @@ body {
     border-bottom: none;
 }
 
-.list-number {
-    width: 28px;
-    height: 28px;
+.list-number-container {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1rem;
+    gap: 2px;
+    font-family: 'RetroNumbers', 'Georgia', 'Times New Roman', Times, serif;
     font-weight: bold;
+}
+
+.num-input {
+    width: 28px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    color: #ffffff;
+    font-family: 'RetroNumbers', 'Georgia', 'Times New Roman', Times, serif;
+    font-size: 0.85rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 2px 0;
+    outline: none;
+    -moz-appearance: textfield;
+    transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+
+.num-input::-webkit-outer-spin-button,
+.num-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.num-input:focus {
+    border-color: #ffcc00;
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffcc00;
+}
+
+.denom-slash {
+    font-size: 0.8rem;
     color: var(--text-secondary);
+    user-select: none;
+}
+
+.btn-spacer {
+    width: 28px;
+    height: 28px;
 }
 
 .selector-arrows {
     display: grid;
-    grid-template-columns: 28px 150px 28px;
+    grid-template-columns: 28px 130px 28px;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
 }
 
 .refresh-btn {
+    position: relative;
     background: transparent;
     border: none;
     color: var(--text-secondary);
@@ -252,13 +292,40 @@ body {
 }
 
 .refresh-btn:hover {
-    color: var(--text-primary);
-    background: rgba(255, 255, 255, 0.1);
-    transform: rotate(90deg);
+    color: #ffcc00;
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-2px);
 }
 
 .refresh-btn:active {
-    transform: rotate(90deg) scale(0.9);
+    transform: translateY(0) scale(0.9);
+}
+
+/* Tooltip on hover */
+.refresh-btn[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #0b0b0c;
+    color: #ffcc00;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 3px 7px;
+    border-radius: 6px;
+    font-size: 0.65rem;
+    font-weight: bold;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+}
+
+.refresh-btn[data-tooltip]:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-2px);
 }
 
 

@@ -8,7 +8,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <link rel="stylesheet" href="customize.css?v=19">
+    <link rel="stylesheet" href="customize.css?v=20">
     <meta name="theme-color" content="#000000">
 </head>
 <body>
@@ -36,62 +36,75 @@
 
         <div class="controls-container">
             <div class="control-group">
-                <div class="list-number" id="num-body">1</div>
+                <div class="list-number-container">
+                    <input type="number" inputmode="numeric" pattern="[0-9]*" class="num-input" id="input-body" value="1" min="1" max="5" aria-label="Food number">
+                    <span class="denom-slash">/5</span>
+                </div>
                 <div class="selector-arrows">
                     <button class="arrow-btn" id="btn-body-prev" aria-label="Previous Food">&lt;</button>
                     <span class="control-label">FOOD</span>
                     <button class="arrow-btn" id="btn-body-next" aria-label="Next Food">&gt;</button>
                 </div>
-                <button class="refresh-btn" id="btn-body-refresh" aria-label="Bring Food to Front">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.92-10.26l5.08 5.08"/></svg>
-                </button>
+                <div class="btn-spacer"></div>
             </div>
 
             <div class="control-group">
-                <div class="list-number" id="num-face">0</div>
+                <div class="list-number-container">
+                    <input type="number" inputmode="numeric" pattern="[0-9]*" class="num-input" id="input-face" value="0" min="0" max="40" aria-label="Face number">
+                    <span class="denom-slash">/40</span>
+                </div>
                 <div class="selector-arrows">
                     <button class="arrow-btn" id="btn-face-prev" aria-label="Previous Face">&lt;</button>
                     <span class="control-label">FACE</span>
                     <button class="arrow-btn" id="btn-face-next" aria-label="Next Face">&gt;</button>
                 </div>
-                <button class="refresh-btn" id="btn-face-refresh" aria-label="Bring Face to Front">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.92-10.26l5.08 5.08"/></svg>
+                <button class="refresh-btn" id="btn-face-refresh" aria-label="Move to Top" data-tooltip="Move to Top" title="Move to Top">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
                 </button>
             </div>
 
             <div class="control-group">
-                <div class="list-number" id="num-hat">0</div>
+                <div class="list-number-container">
+                    <input type="number" inputmode="numeric" pattern="[0-9]*" class="num-input" id="input-hat" value="0" min="0" max="30" aria-label="Hat number">
+                    <span class="denom-slash">/30</span>
+                </div>
                 <div class="selector-arrows">
                     <button class="arrow-btn" id="btn-hat-prev" aria-label="Previous Hat">&lt;</button>
                     <span class="control-label">HAT</span>
                     <button class="arrow-btn" id="btn-hat-next" aria-label="Next Hat">&gt;</button>
                 </div>
-                <button class="refresh-btn" id="btn-hat-refresh" aria-label="Bring Hat to Front">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.92-10.26l5.08 5.08"/></svg>
+                <button class="refresh-btn" id="btn-hat-refresh" aria-label="Move to Top" data-tooltip="Move to Top" title="Move to Top">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
                 </button>
             </div>
 
             <div class="control-group">
-                <div class="list-number" id="num-acc1">0</div>
+                <div class="list-number-container">
+                    <input type="number" inputmode="numeric" pattern="[0-9]*" class="num-input" id="input-acc1" value="0" min="0" max="31" aria-label="Accessory 1 number">
+                    <span class="denom-slash">/31</span>
+                </div>
                 <div class="selector-arrows">
                     <button class="arrow-btn" id="btn-acc1-prev" aria-label="Previous Accessory 1">&lt;</button>
                     <span class="control-label">ACCESSORY 1</span>
                     <button class="arrow-btn" id="btn-acc1-next" aria-label="Next Accessory 1">&gt;</button>
                 </div>
-                <button class="refresh-btn" id="btn-acc1-refresh" aria-label="Bring Accessory 1 to Front">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.92-10.26l5.08 5.08"/></svg>
+                <button class="refresh-btn" id="btn-acc1-refresh" aria-label="Move to Top" data-tooltip="Move to Top" title="Move to Top">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
                 </button>
             </div>
 
             <div class="control-group">
-                <div class="list-number" id="num-acc2">0</div>
+                <div class="list-number-container">
+                    <input type="number" inputmode="numeric" pattern="[0-9]*" class="num-input" id="input-acc2" value="0" min="0" max="31" aria-label="Accessory 2 number">
+                    <span class="denom-slash">/31</span>
+                </div>
                 <div class="selector-arrows">
                     <button class="arrow-btn" id="btn-acc2-prev" aria-label="Previous Accessory 2">&lt;</button>
                     <span class="control-label">ACCESSORY 2</span>
                     <button class="arrow-btn" id="btn-acc2-next" aria-label="Next Accessory 2">&gt;</button>
                 </div>
-                <button class="refresh-btn" id="btn-acc2-refresh" aria-label="Bring Accessory 2 to Front">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.92-10.26l5.08 5.08"/></svg>
+                <button class="refresh-btn" id="btn-acc2-refresh" aria-label="Move to Top" data-tooltip="Move to Top" title="Move to Top">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
                 </button>
             </div>
             
@@ -127,6 +140,6 @@
         </filter>
     </svg>
 
-    <script src="customize.js?v=20"></script>
+    <script src="customize.js?v=21"></script>
 </body>
 </html>

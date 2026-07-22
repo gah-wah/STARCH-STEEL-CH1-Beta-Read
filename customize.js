@@ -66,12 +66,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const category = categories[categoryKey];
         const option = category.options[category.currentIndex];
         
-        // Update the list number display
-        const numDisplay = document.getElementById(`num-${categoryKey}`);
-        if (numDisplay) {
+        // Update the list number input display
+        const numInput = document.getElementById(`input-${categoryKey}`);
+        if (numInput && document.activeElement !== numInput) {
             // If the first option is 'None', currentIndex 0 is 0. Otherwise it's 1-based.
             const hasNone = category.options[0].name === 'None';
-            numDisplay.textContent = hasNone ? category.currentIndex : category.currentIndex + 1;
+            numInput.value = hasNone ? category.currentIndex : category.currentIndex + 1;
         }
 
         const layerImg = document.getElementById(category.layerId);
@@ -142,10 +142,44 @@ document.addEventListener('DOMContentLoaded', () => {
         const prevBtn = document.getElementById(`btn-${categoryKey}-prev`);
         const nextBtn = document.getElementById(`btn-${categoryKey}-next`);
         const refreshBtn = document.getElementById(`btn-${categoryKey}-refresh`);
+        const numInput = document.getElementById(`input-${categoryKey}`);
 
         if (refreshBtn) {
             refreshBtn.addEventListener('click', () => {
                 updateLayer(categoryKey);
+            });
+        }
+
+        if (numInput) {
+            const handleInputChange = () => {
+                const category = categories[categoryKey];
+                const hasNone = category.options[0].name === 'None';
+                const minVal = hasNone ? 0 : 1;
+                const maxVal = hasNone ? category.options.length - 1 : category.options.length;
+
+                let val = parseInt(numInput.value, 10);
+
+                // If invalid or out of range, reset to 0 (or 1 for food/body)
+                if (isNaN(val) || val < minVal || val > maxVal) {
+                    val = 0; // Return to 0 as requested if no corresponding art exists
+                    if (!hasNone && val < minVal) {
+                        val = minVal; // Body starts at 1 minimum
+                    }
+                }
+
+                category.currentIndex = hasNone ? val : val - 1;
+                numInput.value = val;
+                updateLayer(categoryKey, true);
+            };
+
+            numInput.addEventListener('change', handleInputChange);
+            numInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    numInput.blur();
+                }
+            });
+            numInput.addEventListener('focus', () => {
+                numInput.select();
             });
         }
 
