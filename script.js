@@ -549,18 +549,20 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Load saved selection from localStorage on load, or pick random default between Wiggle, jagle, Broco Loco, Growby Fun, and Nadica Monika
+        // Load saved selection from localStorage on load, or pick random default between Wiggle, jagle, Carrotjak, Broco Loco, Growby Fun, and Nadica Monika
         const savedChar = localStorage.getItem('selectedBottomChar');
         let initialChar = savedChar;
         if (!initialChar) {
             const randVal = Math.random();
-            if (randVal < 0.2) {
+            if (randVal < 0.166) {
                 initialChar = 'wiggle';
-            } else if (randVal < 0.4) {
+            } else if (randVal < 0.333) {
                 initialChar = 'jagle';
-            } else if (randVal < 0.6) {
+            } else if (randVal < 0.5) {
+                initialChar = 'carrotjak';
+            } else if (randVal < 0.666) {
                 initialChar = 'brocoloco';
-            } else if (randVal < 0.8) {
+            } else if (randVal < 0.833) {
                 initialChar = 'growbyfun';
             } else {
                 initialChar = 'nadicamonika';

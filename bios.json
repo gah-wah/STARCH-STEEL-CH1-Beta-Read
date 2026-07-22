@@ -14,6 +14,21 @@
             "SWEETNESS": 15
         }
     },
+    "carrotjak": {
+        "name": "Carrotjak",
+        "supporter": "Carrotjak",
+        "tier": "Super Supporter",
+        "donation": "$10",
+        "sprite": "https://image.starchandsteel.com/Carrotjak.png",
+        "class": "Geometry Dash Exposer",
+        "bio": "Mr. Happy Junior ✅\nGeometry Dash YouTube ✅\nGeometry Dash Exposer ✅\nMost Viewed GD Short ✅",
+        "stats": {
+            "STARCH": 50,
+            "STEEL": 60,
+            "SPICINESS": 85,
+            "SWEETNESS": 40
+        }
+    },
     "jagle": {
         "name": "jagle",
         "supporter": "jagle",
