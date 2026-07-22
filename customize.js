@@ -150,6 +150,19 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
+        // Randomize single category when clicking the label text
+        if (prevBtn && prevBtn.parentElement) {
+            const labelEl = prevBtn.parentElement.querySelector('.control-label');
+            if (labelEl) {
+                labelEl.addEventListener('click', () => {
+                    const category = categories[categoryKey];
+                    const max = category.options.length;
+                    category.currentIndex = Math.floor(Math.random() * max);
+                    updateLayer(categoryKey, true);
+                });
+            }
+        }
+
         if (numInput) {
             const handleInputChange = () => {
                 const category = categories[categoryKey];

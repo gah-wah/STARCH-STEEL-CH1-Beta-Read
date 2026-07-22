@@ -101,9 +101,6 @@ body {
 /* Chromatic aberration filter applied to all text, labels, and buttons */
 .back-button,
 .header h1,
-.list-number-container,
-.num-input,
-.denom-slash,
 .control-label,
 .arrow-btn,
 .refresh-btn,
@@ -209,7 +206,7 @@ body {
 
 .control-group {
     display: grid;
-    grid-template-columns: 50px 1fr 50px;
+    grid-template-columns: 52px 1fr 52px;
     align-items: center;
     padding: 0.75rem 0;
     border-bottom: 1px solid var(--border-color);
@@ -272,46 +269,86 @@ body {
     align-items: center;
     justify-content: flex-start;
     padding-left: 4px;
-    width: 50px;
+    width: 52px;
     height: 28px;
 }
 
 .selector-arrows {
     display: grid;
-    grid-template-columns: 28px 135px 28px;
+    grid-template-columns: 28px 1fr 28px;
     align-items: center;
     justify-content: center;
     justify-self: center;
-    gap: 0.35rem;
+    width: 100%;
+    max-width: 210px;
+    margin: 0 auto;
+    gap: 0.25rem;
 }
 
 .control-label {
+    position: relative;
     font-weight: bold;
-    font-size: 0.95rem;
+    font-size: 0.92rem;
     color: var(--text-primary);
-    width: 135px;
     text-align: center;
     text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.control-label:hover {
+    color: #ffcc00;
+}
+
+.control-label[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #0b0b0c;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 3px 7px;
+    border-radius: 6px;
+    font-size: 0.65rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+}
+
+.control-label[data-tooltip]:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-2px);
 }
 
 .refresh-btn {
     position: relative;
-    background: rgba(255, 255, 255, 0.08);
+    background: transparent;
     border: none;
-    color: var(--text-primary);
+    border-radius: 0;
+    color: #94a3b8; /* Subtle light gray */
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 28px;
     height: 28px;
-    border-radius: 50%;
-    transition: color 0.2s, transform 0.2s, background 0.2s;
+    transition: color 0.2s, transform 0.2s;
 }
 
 .refresh-btn:hover {
-    color: white;
-    background: rgba(255, 255, 255, 0.2);
+    color: #cbd5e1; /* Brighter light gray on hover */
+    background: transparent;
     transform: translateY(-2px);
 }
 
@@ -319,7 +356,7 @@ body {
     transform: translateY(0) scale(0.9);
 }
 
-/* Tooltip on hover */
+/* Tooltip on hover for up-arrow buttons */
 .refresh-btn[data-tooltip]::after {
     content: attr(data-tooltip);
     position: absolute;
@@ -344,16 +381,6 @@ body {
 .refresh-btn[data-tooltip]:hover::after {
     opacity: 1;
     transform: translateX(-50%) translateY(-2px);
-}
-
-
-.control-label {
-    font-weight: bold;
-    font-size: 1rem;
-    color: var(--text-primary);
-    width: 150px;
-    text-align: center;
-    text-transform: uppercase;
 }
 
 .arrow-btn {

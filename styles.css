@@ -1332,12 +1332,11 @@ body {
 }
 
 .modal-bio-date {
-    font-family: 'RetroNumbers', 'Georgia', 'Times New Roman', Times, serif;
-    font-size: 0.72rem;
+    font-family: 'Georgia', 'Times New Roman', Times, serif;
+    font-size: 0.78rem;
     font-weight: bold;
     color: var(--text-secondary);
     margin-top: 0.75rem;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
+    letter-spacing: 0.3px;
     text-align: center;
 }
