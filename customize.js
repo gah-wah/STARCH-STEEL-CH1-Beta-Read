@@ -229,23 +229,28 @@ document.addEventListener('DOMContentLoaded', () => {
     function triggerGoldFlash(el) {
         if (!el) return;
         
-        // Remove class & clear inline style first to ensure clean state
+        // Instant burst to gold
         el.classList.remove('gold-flash');
+        el.style.transition = 'none';
         el.style.backgroundColor = '#ffcc00';
         el.style.color = '#000000';
         el.style.borderColor = '#ffcc00';
-        el.style.boxShadow = '0 0 30px #ffcc00';
+        el.style.boxShadow = '0 0 35px rgba(255, 204, 0, 0.9)';
 
-        void el.offsetWidth; // Reflow
+        void el.offsetWidth; // Reflow to register initial state
+
+        // Smooth 1.2s dissolve back to normal
+        el.style.transition = 'background-color 1.2s cubic-bezier(0.16, 1, 0.3, 1), color 1.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 1.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 1.2s cubic-bezier(0.16, 1, 0.3, 1)';
+        el.style.backgroundColor = '';
+        el.style.color = '';
+        el.style.borderColor = '';
+        el.style.boxShadow = '';
         el.classList.add('gold-flash');
 
         setTimeout(() => {
-            el.style.backgroundColor = '';
-            el.style.color = '';
-            el.style.borderColor = '';
-            el.style.boxShadow = '';
+            el.style.transition = '';
             el.classList.remove('gold-flash');
-        }, 500);
+        }, 1200);
     }
 
     // Back button handling: return to previous scroll position on index page

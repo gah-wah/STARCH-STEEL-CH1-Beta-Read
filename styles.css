@@ -858,9 +858,9 @@ body {
     display: block;
     width: max-content;
     text-align: center;
-    font-family: 'Times New Roman', Times, serif; /* Times New Roman */
-    font-size: 0.70rem; /* Increased size */
-    font-weight: bold !important;
+    font-family: 'Lexend', sans-serif; /* Lexend font */
+    font-size: 0.68rem;
+    font-weight: 600 !important;
     color: #000000; /* Black text */
     text-shadow: 
         -1px -1px 0 #fff,  1px -1px 0 #fff, 
@@ -1370,11 +1370,11 @@ body {
 }
 
 .modal-bio-date {
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 0.78rem;
-    font-weight: bold;
+    font-family: 'Lexend', sans-serif;
+    font-size: 0.76rem;
+    font-weight: 600;
     color: var(--text-secondary);
     margin-top: 0.75rem;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.2px;
     text-align: center;
 }

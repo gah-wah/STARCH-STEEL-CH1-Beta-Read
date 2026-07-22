@@ -328,11 +328,11 @@ body {
 }
 
 .randomize-btn.gold-flash {
-    animation: goldFlashRandomize 0.55s cubic-bezier(0.25, 1, 0.5, 1);
+    animation: goldFlashRandomize 1.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .export-btn.gold-flash {
-    animation: goldFlashExport 0.55s cubic-bezier(0.25, 1, 0.5, 1);
+    animation: goldFlashExport 1.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .control-label:hover {
