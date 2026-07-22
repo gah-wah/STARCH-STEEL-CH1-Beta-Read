@@ -264,6 +264,60 @@ document.addEventListener('DOMContentLoaded', () => {
     let startX = 0;
     let startY = 0;
 
+    // Check and combine characters of the exact same type when stacked on top of each other
+    function checkAndCombineCharacters(droppedGuy) {
+        if (!droppedGuy || !droppedGuy.parentNode) return;
+
+        const allPlaced = document.querySelectorAll('.placed-food-guy');
+        const rect1 = droppedGuy.getBoundingClientRect();
+        if (rect1.width === 0 || rect1.height === 0) return;
+
+        const center1X = rect1.left + rect1.width / 2;
+        const center1Y = rect1.top + rect1.height / 2;
+
+        for (const other of allPlaced) {
+            if (other === droppedGuy || !other.parentNode) continue;
+
+            // Check if exact same character image
+            if (other.src === droppedGuy.src) {
+                const rect2 = other.getBoundingClientRect();
+                const center2X = rect2.left + rect2.width / 2;
+                const center2Y = rect2.top + rect2.height / 2;
+
+                const dist = Math.hypot(center1X - center2X, center1Y - center2Y);
+                const maxDist = ((rect1.width + rect2.width) / 2) * 0.75;
+
+                if (dist < maxDist) {
+                    // Combine! Grow droppedGuy, remove other
+                    const currentWidth = parseFloat(droppedGuy.style.width) || rect1.width || 64;
+                    const otherWidth = parseFloat(other.style.width) || rect2.width || 64;
+                    const baseWidth = Math.max(currentWidth, otherWidth);
+                    const newWidth = Math.min(Math.round(baseWidth * 1.35), 300);
+
+                    const deltaW = newWidth - currentWidth;
+                    const currentLeft = parseFloat(droppedGuy.style.left) || 0;
+                    const currentTop = parseFloat(droppedGuy.style.top) || 0;
+
+                    droppedGuy.style.width = newWidth + 'px';
+                    droppedGuy.style.left = (currentLeft - deltaW / 2) + 'px';
+                    droppedGuy.style.top = (currentTop - deltaW / 2) + 'px';
+
+                    other.remove();
+
+                    // Visual bounce pop effect
+                    droppedGuy.style.transform = 'scale(1.25)';
+                    setTimeout(() => {
+                        if (droppedGuy && droppedGuy.parentNode) {
+                            droppedGuy.style.transform = 'scale(1)';
+                        }
+                    }, 200);
+
+                    break;
+                }
+            }
+        }
+    }
+
     // Drag-to-move for already-placed characters, tap/click to delete
     function makePlacedGuyDraggable(placedGuy) {
         let isDraggingPlaced = false;
@@ -336,6 +390,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 dragInitiatedPlaced = false;
                 justPlacedChar = true;
                 setTimeout(() => { justPlacedChar = false; }, 150);
+                
+                checkAndCombineCharacters(placedGuy);
+
                 e.stopPropagation();
                 if (e.cancelable) {
                     e.preventDefault();
@@ -417,10 +474,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 isDraggingChar = false;
 
                 if (dragInitiated && activeCharClone) {
-                    activeCharClone.style.pointerEvents = 'auto';
-                    activeCharClone.style.zIndex = ''; // Let stylesheet z-index: 80 apply when placed
+                    const clonedGuy = activeCharClone;
+                    clonedGuy.style.pointerEvents = 'auto';
+                    clonedGuy.style.zIndex = ''; // Let stylesheet z-index: 80 apply when placed
                     
-                    makePlacedGuyDraggable(activeCharClone);
+                    makePlacedGuyDraggable(clonedGuy);
+                    checkAndCombineCharacters(clonedGuy);
                     
                     activeCharClone = null;
                     justDraggedChar = true;
