@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     const clickedSetIndex = parseInt(thumb.dataset.setIndex, 10);
                     if (category.currentIndex === optIndex) {
-                        // Clicking already active thumbnail -> Move to Top!
+                        // Clicking already active thumbnail -> Refresh pop-in animation & bring to front!
                         bringToFront(categoryKey);
                         const layerImg = document.getElementById(category.layerId);
                         if (layerImg && opt.file) {
@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        // 1:1 Pointer Tracking Click-and-Drag with Physics Damping & Infinite Loop
+        // 1:1 Desktop Mouse Drag with Momentum & Native Mobile Touch Panning
         if (!strip.dataset.dragBound) {
             strip.dataset.dragBound = 'true';
             let isDragging = false;
@@ -229,6 +229,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const onPointerDown = (e) => {
                 if (e.button !== undefined && e.button !== 0) return;
+                // Allow mobile touchscreens to use native 60fps hardware-accelerated touch panning
+                if (e.pointerType === 'touch') return;
+
                 isDragging = true;
                 strip.dataset.isDragging = 'false';
                 startX = e.clientX;
@@ -236,32 +239,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 lastX = e.clientX;
                 velocity = 0;
                 if (animFrame) cancelAnimationFrame(animFrame);
-                try { strip.setPointerCapture(e.pointerId); } catch (err) {}
             };
 
             const onPointerMove = (e) => {
-                if (!isDragging) return;
+                if (!isDragging || e.pointerType === 'touch') return;
                 const dx = e.clientX - startX;
-                // Only consider it a drag if moved more than 12px (prevents blocking quick taps/clicks)
-                if (Math.abs(dx) > 12) {
+                if (Math.abs(dx) > 10) {
                     strip.dataset.isDragging = 'true';
                 }
-                // 1:1 exact pointer tracking!
                 strip.scrollLeft = startScrollLeft - dx;
                 velocity = e.clientX - lastX;
                 lastX = e.clientX;
             };
 
             const onPointerUp = (e) => {
-                if (!isDragging) return;
+                if (!isDragging || e.pointerType === 'touch') return;
                 isDragging = false;
-                try { strip.releasePointerCapture(e.pointerId); } catch (err) {}
 
-                // Damped friction momentum physics
                 const applyMomentum = () => {
                     if (Math.abs(velocity) > 0.5) {
                         strip.scrollLeft -= velocity;
-                        velocity *= 0.90; // Dampening friction
+                        velocity *= 0.90;
                         animFrame = requestAnimationFrame(applyMomentum);
                     } else {
                         setTimeout(() => {
@@ -273,9 +271,8 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             strip.addEventListener('pointerdown', onPointerDown);
-            strip.addEventListener('pointermove', onPointerMove);
-            strip.addEventListener('pointerup', onPointerUp);
-            strip.addEventListener('pointercancel', onPointerUp);
+            window.addEventListener('pointermove', onPointerMove);
+            window.addEventListener('pointerup', onPointerUp);
         }
     }
 
@@ -313,9 +310,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const stripCenter = stripRect.left + (stripRect.width / 2);
             const diff = thumbCenter - stripCenter;
             const targetScroll = strip.scrollLeft + diff;
-            
+
             if (smooth) {
                 strip.scrollTo({ left: Math.max(0, targetScroll), behavior: 'smooth' });
+                // Fallback timeout to guarantee 100% dead centering even during fast randomize spamming
+                if (category.centerTimeout) clearTimeout(category.centerTimeout);
+                category.centerTimeout = setTimeout(() => {
+                    centerCarouselItem(categoryKey, false, 1);
+                }, 320);
             } else {
                 strip.scrollLeft = Math.max(0, targetScroll);
             }
@@ -433,28 +435,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
         bindHoldButton(prevBtn, () => {
             const category = categories[categoryKey];
-            const oldIdx = category.currentIndex;
+            const strip = document.getElementById(`carousel-strip-${categoryKey}`);
             category.currentIndex--;
-            let setTarget = 1;
             if (category.currentIndex < 0) {
                 category.currentIndex = category.options.length - 1; // Wrap left
-                setTarget = 0; // Target Set 0 thumbnail to animate LEFT
+                if (strip && strip.scrollWidth > 0) {
+                    const setWidth = strip.scrollWidth / 3;
+                    strip.scrollLeft += setWidth; // Silently jump right to Set 2 so scroll animates LEFT
+                }
             }
             updateLayer(categoryKey, true);
-            updateCarouselActiveState(categoryKey, setTarget);
+            updateCarouselActiveState(categoryKey, 1);
         });
 
         bindHoldButton(nextBtn, () => {
             const category = categories[categoryKey];
-            const oldIdx = category.currentIndex;
+            const strip = document.getElementById(`carousel-strip-${categoryKey}`);
             category.currentIndex++;
-            let setTarget = 1;
             if (category.currentIndex >= category.options.length) {
                 category.currentIndex = 0; // Wrap right
-                setTarget = 2; // Target Set 2 thumbnail to animate RIGHT
+                if (strip && strip.scrollWidth > 0) {
+                    const setWidth = strip.scrollWidth / 3;
+                    strip.scrollLeft -= setWidth; // Silently jump left to Set 0 so scroll animates RIGHT
+                }
             }
             updateLayer(categoryKey, true);
-            updateCarouselActiveState(categoryKey, setTarget);
+            updateCarouselActiveState(categoryKey, 1);
         });
     }
 
