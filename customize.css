@@ -249,8 +249,8 @@ body {
     padding: 0.4rem 0.6rem;
     overflow-x: auto;
     overflow-y: hidden;
-    scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
     /* Hide scrollbars for click-and-drag swipe experience */
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE/Edge */

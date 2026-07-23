@@ -95,14 +95,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const layerImg = document.getElementById(category.layerId);
         if (!layerImg) return;
 
-        layerImg.onload = null;
-        layerImg.onerror = () => {
-            layerImg.classList.remove('visible', 'pop-in', 'pop-out');
-            layerImg.src = transparentPixel;
-        };
-
         if (option.file) {
-            const targetSrc = getAssetUrl(option.file);
+            const targetSrc = baseUrl + option.file;
             if (layerImg.src !== targetSrc) {
                 layerImg.src = targetSrc;
             }
@@ -130,12 +124,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (wrapper && !wrapper.classList.contains('active')) {
             wrapper.classList.add('active');
             renderCarousel(categoryKey);
+            // Instant center positioning on open to prevent slow rotation
             requestAnimationFrame(() => centerCarouselItem(categoryKey, false));
-            setTimeout(() => centerCarouselItem(categoryKey, true), 180);
-            setTimeout(() => centerCarouselItem(categoryKey, true), 360);
+            setTimeout(() => centerCarouselItem(categoryKey, false), 150);
+            setTimeout(() => centerCarouselItem(categoryKey, false), 350);
         } else if (wrapper && wrapper.classList.contains('active')) {
             renderCarousel(categoryKey);
-            requestAnimationFrame(() => centerCarouselItem(categoryKey, true));
+            requestAnimationFrame(() => centerCarouselItem(categoryKey, false));
         }
         activeCategoryKey = categoryKey;
     }
@@ -158,7 +153,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!strip) return;
         const category = categories[categoryKey];
         const hasNone = category.options[0].name === 'None';
-        const numOptions = category.options.length;
 
         strip.innerHTML = '';
 
@@ -177,12 +171,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     thumb.innerHTML = `<span class="carousel-thumb-none">NONE</span>${numSpan}`;
                 } else {
                     const img = document.createElement('img');
-                    img.src = getAssetUrl(opt.file);
+                    img.src = baseUrl + opt.file;
                     img.alt = opt.name;
                     img.loading = 'lazy';
-                    img.onerror = () => {
-                        img.style.display = 'none';
-                    };
                     thumb.appendChild(img);
                     thumb.insertAdjacentHTML('beforeend', numSpan);
                 }
@@ -195,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         // Clicking already active thumbnail -> Move to Top!
                         bringToFront(categoryKey);
                         const layerImg = document.getElementById(category.layerId);
-                        if (layerImg && option.file) {
+                        if (layerImg && opt.file) {
                             layerImg.classList.remove('pop-in', 'pop-out');
                             void layerImg.offsetWidth;
                             layerImg.classList.add('pop-in');
@@ -210,66 +201,78 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        // Click-and-Drag / Touch-Drag Panning with Momentum Physics & Infinite Loop Jumping
+        // 1:1 Pointer Tracking Click-and-Drag with Physics Damping & Infinite Loop
         if (!strip.dataset.dragBound) {
             strip.dataset.dragBound = 'true';
-            let isDown = false;
+            let isDragging = false;
             let startX = 0;
-            let scrollStart = 0;
+            let startScrollLeft = 0;
+            let lastX = 0;
+            let velocity = 0;
+            let animFrame = null;
 
             const handleInfiniteScrollJump = () => {
-                const totalChildren = strip.children.length;
-                if (totalChildren === 0) return;
-                const setWidth = strip.scrollWidth / 3;
-                if (setWidth <= 0) return;
+                const totalWidth = strip.scrollWidth;
+                if (totalWidth <= 0) return;
+                const setWidth = totalWidth / 3;
 
-                if (strip.scrollLeft < setWidth * 0.4) {
+                if (strip.scrollLeft < setWidth * 0.35) {
                     strip.scrollLeft += setWidth;
-                } else if (strip.scrollLeft > setWidth * 1.6) {
+                } else if (strip.scrollLeft > setWidth * 1.65) {
                     strip.scrollLeft -= setWidth;
                 }
             };
 
             strip.addEventListener('scroll', handleInfiniteScrollJump, { passive: true });
 
-            const startDrag = (pageX) => {
-                isDown = true;
+            const onPointerDown = (e) => {
+                if (e.button !== undefined && e.button !== 0) return;
+                isDragging = true;
                 strip.dataset.isDragging = 'false';
-                startX = pageX - strip.offsetLeft;
-                scrollStart = strip.scrollLeft;
+                startX = e.clientX;
+                startScrollLeft = strip.scrollLeft;
+                lastX = e.clientX;
+                velocity = 0;
+                if (animFrame) cancelAnimationFrame(animFrame);
+                try { strip.setPointerCapture(e.pointerId); } catch (err) {}
             };
 
-            const moveDrag = (pageX) => {
-                if (!isDown) return;
-                const x = pageX - strip.offsetLeft;
-                const walk = x - startX;
-                if (Math.abs(walk) > 5) {
+            const onPointerMove = (e) => {
+                if (!isDragging) return;
+                const dx = e.clientX - startX;
+                if (Math.abs(dx) > 4) {
                     strip.dataset.isDragging = 'true';
                 }
-                strip.scrollLeft = scrollStart - walk;
+                // 1:1 exact pointer tracking!
+                strip.scrollLeft = startScrollLeft - dx;
+                velocity = e.clientX - lastX;
+                lastX = e.clientX;
             };
 
-            const endDrag = () => {
-                isDown = false;
-                setTimeout(() => {
-                    strip.dataset.isDragging = 'false';
-                }, 60);
+            const onPointerUp = (e) => {
+                if (!isDragging) return;
+                isDragging = false;
+                try { strip.releasePointerCapture(e.pointerId); } catch (err) {}
+
+                // Damped friction momentum physics
+                const applyMomentum = () => {
+                    if (Math.abs(velocity) > 0.5) {
+                        strip.scrollLeft -= velocity;
+                        velocity *= 0.90; // Dampening friction
+                        animFrame = requestAnimationFrame(applyMomentum);
+                    } else {
+                        setTimeout(() => {
+                            strip.dataset.isDragging = 'false';
+                        }, 50);
+                    }
+                };
+                applyMomentum();
             };
 
-            strip.addEventListener('mousedown', (e) => startDrag(e.pageX));
-            window.addEventListener('mousemove', (e) => { if (isDown) moveDrag(e.pageX); });
-            window.addEventListener('mouseup', () => { if (isDown) endDrag(); });
-
-            strip.addEventListener('touchstart', (e) => {
-                if (e.touches.length === 1) startDrag(e.touches[0].pageX);
-            }, { passive: true });
-
-            strip.addEventListener('touchmove', (e) => {
-                if (isDown && e.touches.length === 1) moveDrag(e.touches[0].pageX);
-            }, { passive: true });
-
-            strip.addEventListener('touchend', endDrag, { passive: true });
-            strip.addEventListener('touchcancel', endDrag, { passive: true });
+            strip.addEventListener('pointerdown', onPointerDown);
+            strip.addEventListener('pointermove', onPointerMove);
+            strip.addEventListener('pointerup', onPointerUp);
+            strip.addEventListener('pointercancel', onPointerUp);
         }
     }
 
@@ -289,19 +292,23 @@ document.addEventListener('DOMContentLoaded', () => {
         centerCarouselItem(categoryKey, true);
     }
 
-    function centerCarouselItem(categoryKey, smooth = true) {
+    function centerCarouselItem(categoryKey, smooth = false) {
         const strip = document.getElementById(`carousel-strip-${categoryKey}`);
         if (!strip) return;
         const category = categories[categoryKey];
         // Target middle set (setIndex 1) thumbnail for perfect dead-center positioning
         const activeThumb = strip.querySelector(`.carousel-thumb[data-set-index="1"][data-index="${category.currentIndex}"]`);
         if (activeThumb) {
-            const containerWidth = strip.clientWidth || strip.offsetWidth;
+            const containerWidth = strip.clientWidth;
             if (containerWidth <= 0) return;
             const thumbLeft = activeThumb.offsetLeft;
             const thumbWidth = activeThumb.offsetWidth || 54;
             const targetScroll = thumbLeft - (containerWidth / 2) + (thumbWidth / 2);
-            strip.scrollTo({ left: Math.max(0, targetScroll), behavior: smooth ? 'smooth' : 'auto' });
+            if (smooth) {
+                strip.scrollTo({ left: Math.max(0, targetScroll), behavior: 'smooth' });
+            } else {
+                strip.scrollLeft = Math.max(0, targetScroll);
+            }
         }
     }
 
@@ -311,8 +318,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const nextBtn = document.getElementById(`btn-${categoryKey}-next`);
         const refreshBtn = document.getElementById(`btn-${categoryKey}-refresh`);
         const numInput = document.getElementById(`input-${categoryKey}`);
-
-        preloadCategoryAssets(categoryKey);
 
         // Dice Button: Randomizes ONLY this single category attribute
         if (refreshBtn) {
@@ -381,7 +386,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Click-and-Hold Arrow Buttons (Loops infinitely through options)
+        // Click-and-Hold Arrow Buttons (Loops infinitely through options, slightly slower repeat)
         function bindHoldButton(btn, stepCallback) {
             if (!btn) return;
             let holdTimeout = null;
@@ -402,8 +407,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 holdTimeout = setTimeout(() => {
                     holdInterval = setInterval(() => {
                         stepCallback();
-                    }, 80); // Smooth repeat every 80ms while held
-                }, 260);
+                    }, 150); // Slower, comfortable repeat interval
+                }, 320);
             };
 
             btn.addEventListener('mousedown', startHold);
