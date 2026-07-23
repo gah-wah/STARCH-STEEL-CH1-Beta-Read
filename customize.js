@@ -94,6 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 layerImg.classList.remove('visible', 'pop-out', 'pop-in');
                 layerImg.src = transparentPixel;
             }
+            updateCarouselActiveState(categoryKey);
             return;
         }
 
@@ -135,17 +136,133 @@ document.addEventListener('DOMContentLoaded', () => {
                 layerImg.classList.remove('visible', 'pop-out', 'pop-in');
                 layerImg.src = transparentPixel;
             }
+            updateCarouselActiveState(categoryKey);
         }, 200);
     }
 
+    // --- Expandable Carousel Tray Controller ---
+    let activeCategoryKey = null;
+
+    function openCarousel(categoryKey) {
+        if (activeCategoryKey === categoryKey) return;
+        closeAllCarousels();
+        activeCategoryKey = categoryKey;
+        const wrapper = document.getElementById(`wrapper-${categoryKey}`);
+        if (wrapper) {
+            wrapper.classList.add('active');
+        }
+        renderCarousel(categoryKey);
+        // Small delay to allow CSS max-height transition to begin before centering
+        setTimeout(() => centerCarouselItem(categoryKey), 50);
+    }
+
+    function closeAllCarousels() {
+        activeCategoryKey = null;
+        document.querySelectorAll('.control-group-wrapper').forEach(w => {
+            w.classList.remove('active');
+        });
+    }
+
+    function renderCarousel(categoryKey) {
+        const strip = document.getElementById(`carousel-strip-${categoryKey}`);
+        if (!strip) return;
+        const category = categories[categoryKey];
+        const hasNone = category.options[0].name === 'None';
+
+        strip.innerHTML = '';
+        category.options.forEach((opt, index) => {
+            const thumb = document.createElement('div');
+            thumb.className = 'carousel-thumb' + (index === category.currentIndex ? ' active' : '');
+            thumb.dataset.index = index;
+
+            const itemNum = hasNone ? index : index + 1;
+            const numSpan = `<span class="carousel-thumb-number">${itemNum}</span>`;
+
+            if (!opt.file) {
+                thumb.innerHTML = `<span class="carousel-thumb-none">NONE</span>${numSpan}`;
+            } else {
+                const img = document.createElement('img');
+                img.src = baseUrl + opt.file + '?cb=' + cacheBuster;
+                img.alt = opt.name;
+                img.loading = 'lazy';
+                thumb.appendChild(img);
+                thumb.insertAdjacentHTML('beforeend', numSpan);
+            }
+
+            thumb.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (category.currentIndex !== index) {
+                    category.currentIndex = index;
+                    updateLayer(categoryKey, true);
+                }
+            });
+
+            strip.appendChild(thumb);
+        });
+
+        // Convert vertical mouse wheel to horizontal scroll strip scrolling
+        if (!strip.dataset.wheelBound) {
+            strip.dataset.wheelBound = 'true';
+            strip.addEventListener('wheel', (e) => {
+                if (e.deltaY !== 0) {
+                    e.preventDefault();
+                    strip.scrollLeft += e.deltaY * 1.2;
+                }
+            }, { passive: false });
+        }
+    }
+
+    function updateCarouselActiveState(categoryKey) {
+        const strip = document.getElementById(`carousel-strip-${categoryKey}`);
+        if (!strip || !strip.children.length) return;
+        const category = categories[categoryKey];
+        const thumbs = strip.querySelectorAll('.carousel-thumb');
+        thumbs.forEach((t, i) => {
+            if (i === category.currentIndex) {
+                t.classList.add('active');
+            } else {
+                t.classList.remove('active');
+            }
+        });
+        if (activeCategoryKey === categoryKey) {
+            centerCarouselItem(categoryKey);
+        }
+    }
+
+    function centerCarouselItem(categoryKey) {
+        const strip = document.getElementById(`carousel-strip-${categoryKey}`);
+        if (!strip) return;
+        const category = categories[categoryKey];
+        const activeThumb = strip.querySelector(`.carousel-thumb[data-index="${category.currentIndex}"]`);
+        if (activeThumb) {
+            const stripWidth = strip.clientWidth;
+            const thumbLeft = activeThumb.offsetLeft;
+            const thumbWidth = activeThumb.clientWidth;
+            const targetScroll = thumbLeft - (stripWidth / 2) + (thumbWidth / 2);
+            strip.scrollTo({ left: targetScroll, behavior: 'smooth' });
+        }
+    }
+
     function setupControls(categoryKey) {
+        const wrapper = document.getElementById(`wrapper-${categoryKey}`);
         const prevBtn = document.getElementById(`btn-${categoryKey}-prev`);
         const nextBtn = document.getElementById(`btn-${categoryKey}-next`);
         const refreshBtn = document.getElementById(`btn-${categoryKey}-refresh`);
         const numInput = document.getElementById(`input-${categoryKey}`);
 
+        if (wrapper) {
+            wrapper.addEventListener('click', (e) => {
+                // Open carousel whenever clicking anywhere inside the control group row
+                if (!e.target.closest('.carousel-strip')) {
+                    openCarousel(categoryKey);
+                }
+            });
+        }
+
         if (refreshBtn) {
-            refreshBtn.addEventListener('click', () => {
+            refreshBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openCarousel(categoryKey);
                 updateLayer(categoryKey);
             });
         }
@@ -154,7 +271,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (prevBtn && prevBtn.parentElement) {
             const labelEl = prevBtn.parentElement.querySelector('.control-label');
             if (labelEl) {
-                labelEl.addEventListener('click', () => {
+                labelEl.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openCarousel(categoryKey);
                     const category = categories[categoryKey];
                     const max = category.options.length;
                     category.currentIndex = Math.floor(Math.random() * max);
@@ -202,11 +321,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
             numInput.addEventListener('focus', () => {
+                openCarousel(categoryKey);
                 numInput.select();
             });
         }
 
-        prevBtn.addEventListener('click', () => {
+        prevBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openCarousel(categoryKey);
             const category = categories[categoryKey];
             category.currentIndex--;
             if (category.currentIndex < 0) {
@@ -215,7 +337,9 @@ document.addEventListener('DOMContentLoaded', () => {
             updateLayer(categoryKey);
         });
 
-        nextBtn.addEventListener('click', () => {
+        nextBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openCarousel(categoryKey);
             const category = categories[categoryKey];
             category.currentIndex++;
             if (category.currentIndex >= category.options.length) {
@@ -227,6 +351,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Randomize all categories
     function randomizeAll() {
+        closeAllCarousels();
         for (const key in categories) {
             const category = categories[key];
             const max = category.options.length;
@@ -234,6 +359,13 @@ document.addEventListener('DOMContentLoaded', () => {
             updateLayer(key, true); // Enable bounce animations on randomize
         }
     }
+
+    // Collapse open carousel when clicking outside controls container
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.controls-container')) {
+            closeAllCarousels();
+        }
+    });
 
     // Helper to flash button gold on click (uses inline style burst to override any filters or active states)
     function triggerGoldFlash(el) {

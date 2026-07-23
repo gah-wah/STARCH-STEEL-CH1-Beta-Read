@@ -8,7 +8,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <link rel="stylesheet" href="customize.css?v=24">
+    <link rel="stylesheet" href="customize.css?v=25">
     <meta name="theme-color" content="#000000">
 </head>
 <body>
@@ -35,88 +35,113 @@
         </div>
 
         <div class="controls-container">
-            <div class="control-group">
-                <div class="list-number-container">
-                    <input type="number" inputmode="numeric" pattern="[0-9]*" class="num-input" id="input-body" value="1" min="1" max="6" aria-label="Food number">
-                    <span class="denom-slash">/6</span>
+            <div class="control-group-wrapper" id="wrapper-body">
+                <div class="control-group">
+                    <div class="list-number-container">
+                        <input type="number" inputmode="numeric" pattern="[0-9]*" class="num-input" id="input-body" value="1" min="1" max="6" aria-label="Food number">
+                        <span class="denom-slash">/6</span>
+                    </div>
+                    <div class="selector-arrows">
+                        <button class="arrow-btn" id="btn-body-prev" aria-label="Previous Food">&lt;</button>
+                        <span class="control-label" data-tooltip="Randomize" title="Randomize">FOOD</span>
+                        <button class="arrow-btn" id="btn-body-next" aria-label="Next Food">&gt;</button>
+                    </div>
+                    <div class="move-top-container">
+                        <button class="refresh-btn" id="btn-body-refresh" aria-label="Move to Top" data-tooltip="Move to Top" title="Move to Top">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+                        </button>
+                    </div>
                 </div>
-                <div class="selector-arrows">
-                    <button class="arrow-btn" id="btn-body-prev" aria-label="Previous Food">&lt;</button>
-                    <span class="control-label" data-tooltip="Randomize" title="Randomize">FOOD</span>
-                    <button class="arrow-btn" id="btn-body-next" aria-label="Next Food">&gt;</button>
-                </div>
-                <div class="move-top-container">
-                    <button class="refresh-btn" id="btn-body-refresh" aria-label="Move to Top" data-tooltip="Move to Top" title="Move to Top">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
-                    </button>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <div class="list-number-container">
-                    <input type="number" inputmode="numeric" pattern="[0-9]*" class="num-input" id="input-face" value="0" min="0" max="50" aria-label="Face number">
-                    <span class="denom-slash">/50</span>
-                </div>
-                <div class="selector-arrows">
-                    <button class="arrow-btn" id="btn-face-prev" aria-label="Previous Face">&lt;</button>
-                    <span class="control-label" data-tooltip="Randomize" title="Randomize">FACE</span>
-                    <button class="arrow-btn" id="btn-face-next" aria-label="Next Face">&gt;</button>
-                </div>
-                <div class="move-top-container">
-                    <button class="refresh-btn" id="btn-face-refresh" aria-label="Move to Top" data-tooltip="Move to Top" title="Move to Top">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
-                    </button>
+                <div class="carousel-tray" id="carousel-tray-body">
+                    <div class="carousel-strip" id="carousel-strip-body"></div>
                 </div>
             </div>
 
-            <div class="control-group">
-                <div class="list-number-container">
-                    <input type="number" inputmode="numeric" pattern="[0-9]*" class="num-input" id="input-hat" value="0" min="0" max="35" aria-label="Hat number">
-                    <span class="denom-slash">/35</span>
+            <div class="control-group-wrapper" id="wrapper-face">
+                <div class="control-group">
+                    <div class="list-number-container">
+                        <input type="number" inputmode="numeric" pattern="[0-9]*" class="num-input" id="input-face" value="0" min="0" max="50" aria-label="Face number">
+                        <span class="denom-slash">/50</span>
+                    </div>
+                    <div class="selector-arrows">
+                        <button class="arrow-btn" id="btn-face-prev" aria-label="Previous Face">&lt;</button>
+                        <span class="control-label" data-tooltip="Randomize" title="Randomize">FACE</span>
+                        <button class="arrow-btn" id="btn-face-next" aria-label="Next Face">&gt;</button>
+                    </div>
+                    <div class="move-top-container">
+                        <button class="refresh-btn" id="btn-face-refresh" aria-label="Move to Top" data-tooltip="Move to Top" title="Move to Top">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+                        </button>
+                    </div>
                 </div>
-                <div class="selector-arrows">
-                    <button class="arrow-btn" id="btn-hat-prev" aria-label="Previous Hat">&lt;</button>
-                    <span class="control-label" data-tooltip="Randomize" title="Randomize">HAT</span>
-                    <button class="arrow-btn" id="btn-hat-next" aria-label="Next Hat">&gt;</button>
-                </div>
-                <div class="move-top-container">
-                    <button class="refresh-btn" id="btn-hat-refresh" aria-label="Move to Top" data-tooltip="Move to Top" title="Move to Top">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
-                    </button>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <div class="list-number-container">
-                    <input type="number" inputmode="numeric" pattern="[0-9]*" class="num-input" id="input-acc1" value="0" min="0" max="40" aria-label="Accessory 1 number">
-                    <span class="denom-slash">/40</span>
-                </div>
-                <div class="selector-arrows">
-                    <button class="arrow-btn" id="btn-acc1-prev" aria-label="Previous Accessory 1">&lt;</button>
-                    <span class="control-label" data-tooltip="Randomize" title="Randomize">ACCESSORY 1</span>
-                    <button class="arrow-btn" id="btn-acc1-next" aria-label="Next Accessory 1">&gt;</button>
-                </div>
-                <div class="move-top-container">
-                    <button class="refresh-btn" id="btn-acc1-refresh" aria-label="Move to Top" data-tooltip="Move to Top" title="Move to Top">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
-                    </button>
+                <div class="carousel-tray" id="carousel-tray-face">
+                    <div class="carousel-strip" id="carousel-strip-face"></div>
                 </div>
             </div>
 
-            <div class="control-group">
-                <div class="list-number-container">
-                    <input type="number" inputmode="numeric" pattern="[0-9]*" class="num-input" id="input-acc2" value="0" min="0" max="40" aria-label="Accessory 2 number">
-                    <span class="denom-slash">/40</span>
+            <div class="control-group-wrapper" id="wrapper-hat">
+                <div class="control-group">
+                    <div class="list-number-container">
+                        <input type="number" inputmode="numeric" pattern="[0-9]*" class="num-input" id="input-hat" value="0" min="0" max="35" aria-label="Hat number">
+                        <span class="denom-slash">/35</span>
+                    </div>
+                    <div class="selector-arrows">
+                        <button class="arrow-btn" id="btn-hat-prev" aria-label="Previous Hat">&lt;</button>
+                        <span class="control-label" data-tooltip="Randomize" title="Randomize">HAT</span>
+                        <button class="arrow-btn" id="btn-hat-next" aria-label="Next Hat">&gt;</button>
+                    </div>
+                    <div class="move-top-container">
+                        <button class="refresh-btn" id="btn-hat-refresh" aria-label="Move to Top" data-tooltip="Move to Top" title="Move to Top">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+                        </button>
+                    </div>
                 </div>
-                <div class="selector-arrows">
-                    <button class="arrow-btn" id="btn-acc2-prev" aria-label="Previous Accessory 2">&lt;</button>
-                    <span class="control-label" data-tooltip="Randomize" title="Randomize">ACCESSORY 2</span>
-                    <button class="arrow-btn" id="btn-acc2-next" aria-label="Next Accessory 2">&gt;</button>
+                <div class="carousel-tray" id="carousel-tray-hat">
+                    <div class="carousel-strip" id="carousel-strip-hat"></div>
                 </div>
-                <div class="move-top-container">
-                    <button class="refresh-btn" id="btn-acc2-refresh" aria-label="Move to Top" data-tooltip="Move to Top" title="Move to Top">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
-                    </button>
+            </div>
+
+            <div class="control-group-wrapper" id="wrapper-acc1">
+                <div class="control-group">
+                    <div class="list-number-container">
+                        <input type="number" inputmode="numeric" pattern="[0-9]*" class="num-input" id="input-acc1" value="0" min="0" max="40" aria-label="Accessory 1 number">
+                        <span class="denom-slash">/40</span>
+                    </div>
+                    <div class="selector-arrows">
+                        <button class="arrow-btn" id="btn-acc1-prev" aria-label="Previous Accessory 1">&lt;</button>
+                        <span class="control-label" data-tooltip="Randomize" title="Randomize">ACCESSORY 1</span>
+                        <button class="arrow-btn" id="btn-acc1-next" aria-label="Next Accessory 1">&gt;</button>
+                    </div>
+                    <div class="move-top-container">
+                        <button class="refresh-btn" id="btn-acc1-refresh" aria-label="Move to Top" data-tooltip="Move to Top" title="Move to Top">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="carousel-tray" id="carousel-tray-acc1">
+                    <div class="carousel-strip" id="carousel-strip-acc1"></div>
+                </div>
+            </div>
+
+            <div class="control-group-wrapper" id="wrapper-acc2">
+                <div class="control-group">
+                    <div class="list-number-container">
+                        <input type="number" inputmode="numeric" pattern="[0-9]*" class="num-input" id="input-acc2" value="0" min="0" max="40" aria-label="Accessory 2 number">
+                        <span class="denom-slash">/40</span>
+                    </div>
+                    <div class="selector-arrows">
+                        <button class="arrow-btn" id="btn-acc2-prev" aria-label="Previous Accessory 2">&lt;</button>
+                        <span class="control-label" data-tooltip="Randomize" title="Randomize">ACCESSORY 2</span>
+                        <button class="arrow-btn" id="btn-acc2-next" aria-label="Next Accessory 2">&gt;</button>
+                    </div>
+                    <div class="move-top-container">
+                        <button class="refresh-btn" id="btn-acc2-refresh" aria-label="Move to Top" data-tooltip="Move to Top" title="Move to Top">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="carousel-tray" id="carousel-tray-acc2">
+                    <div class="carousel-strip" id="carousel-strip-acc2"></div>
                 </div>
             </div>
             
@@ -152,6 +177,6 @@
         </filter>
     </svg>
 
-    <script src="customize.js?v=27"></script>
+    <script src="customize.js?v=28"></script>
 </body>
 </html>

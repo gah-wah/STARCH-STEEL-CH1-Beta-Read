@@ -204,16 +204,132 @@ body {
     transform: scale(0.98);
 }
 
+/* Segmented Attribute Window Wrappers */
+.control-group-wrapper {
+    border-bottom: 1px solid var(--border-color);
+    transition: background 0.25s ease, border-radius 0.25s ease;
+}
+
+.control-group-wrapper:last-of-type {
+    border-bottom: none;
+}
+
+.control-group-wrapper.active {
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 12px;
+}
+
 .control-group {
     display: grid;
     grid-template-columns: 52px 1fr 52px;
     align-items: center;
     padding: 0.75rem 0;
-    border-bottom: 1px solid var(--border-color);
 }
 
-.control-group:last-child {
-    border-bottom: none;
+/* Expandable Carousel Tray */
+.carousel-tray {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease, margin-bottom 0.25s ease;
+    margin-bottom: 0;
+}
+
+.control-group-wrapper.active .carousel-tray {
+    max-height: 110px;
+    opacity: 1;
+    margin-bottom: 0.75rem;
+}
+
+/* Horizontal Scroll Strip */
+.carousel-strip {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.6rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    /* Custom scrollbar styling */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 204, 0, 0.5) rgba(0, 0, 0, 0.3);
+}
+
+.carousel-strip::-webkit-scrollbar {
+    height: 4px;
+}
+
+.carousel-strip::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+.carousel-strip::-webkit-scrollbar-thumb {
+    background: rgba(255, 204, 0, 0.5);
+    border-radius: 4px;
+}
+
+/* Individual Thumbnail Item */
+.carousel-thumb {
+    flex: 0 0 54px;
+    width: 54px;
+    height: 54px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+    transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.carousel-thumb:hover {
+    transform: translateY(-2px) scale(1.05);
+    border-color: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.carousel-thumb.active {
+    border-color: #ffcc00;
+    background: rgba(255, 204, 0, 0.15);
+    box-shadow: 0 0 12px rgba(255, 204, 0, 0.5);
+    transform: scale(1.08);
+    z-index: 2;
+}
+
+.carousel-thumb img {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+    image-rendering: pixelated;
+    pointer-events: none;
+}
+
+.carousel-thumb-none {
+    font-size: 0.65rem;
+    font-weight: bold;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.carousel-thumb-number {
+    position: absolute;
+    bottom: 2px;
+    right: 4px;
+    font-family: 'RetroNumbers', 'Georgia', serif;
+    font-size: 0.55rem;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.carousel-thumb.active .carousel-thumb-number {
+    color: #ffcc00;
 }
 
 .list-number-container {
