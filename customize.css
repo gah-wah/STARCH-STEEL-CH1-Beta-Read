@@ -251,23 +251,19 @@ body {
     overflow-y: hidden;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
-    /* Custom scrollbar styling */
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 204, 0, 0.5) rgba(0, 0, 0, 0.3);
+    /* Hide scrollbars for click-and-drag swipe experience */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+    cursor: grab;
+    user-select: none;
 }
 
 .carousel-strip::-webkit-scrollbar {
-    height: 4px;
+    display: none; /* Chrome/Safari/Webkit */
 }
 
-.carousel-strip::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
-}
-
-.carousel-strip::-webkit-scrollbar-thumb {
-    background: rgba(255, 204, 0, 0.5);
-    border-radius: 4px;
+.carousel-strip:active {
+    cursor: grabbing;
 }
 
 /* Individual Thumbnail Item */

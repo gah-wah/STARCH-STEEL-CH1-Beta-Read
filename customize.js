@@ -69,75 +69,36 @@ document.addEventListener('DOMContentLoaded', () => {
         // Update the list number input display
         const numInput = document.getElementById(`input-${categoryKey}`);
         if (numInput && document.activeElement !== numInput) {
-            // If the first option is 'None', currentIndex 0 is 0. Otherwise it's 1-based.
             const hasNone = category.options[0].name === 'None';
             numInput.value = hasNone ? category.currentIndex : category.currentIndex + 1;
         }
 
         const layerImg = document.getElementById(category.layerId);
-        layerImg.onload = null; // Reset any previous load listener
+        if (!layerImg) return;
 
-        // Cancel any active animation timeout for this layer to prevent overlapping state updates
-        if (category.activeTimeout) {
-            clearTimeout(category.activeTimeout);
-            category.activeTimeout = null;
+        // Cancel any pending load listeners
+        layerImg.onload = null;
+        layerImg.onerror = null;
+
+        if (option.file) {
+            const targetSrc = baseUrl + option.file + '?cb=' + cacheBuster;
+            if (layerImg.src !== targetSrc) {
+                layerImg.src = targetSrc;
+            }
+            layerImg.classList.add('visible');
+            bringToFront(categoryKey);
+
+            if (animate) {
+                layerImg.classList.remove('pop-in', 'pop-out');
+                void layerImg.offsetWidth; // Reflow
+                layerImg.classList.add('pop-in');
+            }
+        } else {
+            layerImg.classList.remove('visible', 'pop-in', 'pop-out');
+            layerImg.src = transparentPixel;
         }
 
-        if (!animate) {
-            // Instant update (used for init and randomize)
-            if (option.file) {
-                layerImg.src = baseUrl + option.file + '?cb=' + cacheBuster;
-                layerImg.classList.remove('pop-out', 'pop-in');
-                layerImg.classList.add('visible');
-                bringToFront(categoryKey);
-            } else {
-                layerImg.classList.remove('visible', 'pop-out', 'pop-in');
-                layerImg.src = transparentPixel;
-            }
-            updateCarouselActiveState(categoryKey);
-            return;
-        }
-
-        // Animated update: pop out first
-        layerImg.classList.remove('pop-in');
-        layerImg.classList.add('pop-out');
-
-        // Wait for pop-out animation to complete (200ms)
-        category.activeTimeout = setTimeout(() => {
-            category.activeTimeout = null;
-            if (option.file) {
-                // Hide old image and classes immediately so it does not overlay during load
-                layerImg.classList.remove('visible', 'pop-out', 'pop-in');
-                
-                // Clear active listeners
-                layerImg.onload = null;
-                layerImg.onerror = null;
-                
-                // Animate ONLY after the new image asset has successfully loaded
-                layerImg.onload = () => {
-                    layerImg.onload = null;
-                    layerImg.onerror = null;
-                    
-                    layerImg.classList.add('visible');
-                    bringToFront(categoryKey);
-                    
-                    void layerImg.offsetWidth; // trigger reflow to restart animation
-                    layerImg.classList.add('pop-in');
-                };
-                
-                layerImg.onerror = () => {
-                    layerImg.onload = null;
-                    layerImg.onerror = null;
-                    layerImg.src = transparentPixel;
-                };
-                
-                layerImg.src = baseUrl + option.file + '?cb=' + cacheBuster;
-            } else {
-                layerImg.classList.remove('visible', 'pop-out', 'pop-in');
-                layerImg.src = transparentPixel;
-            }
-            updateCarouselActiveState(categoryKey);
-        }, 200);
+        updateCarouselActiveState(categoryKey);
     }
 
     // --- Expandable Carousel Tray Controller ---
@@ -152,8 +113,10 @@ document.addEventListener('DOMContentLoaded', () => {
             wrapper.classList.add('active');
         }
         renderCarousel(categoryKey);
-        // Small delay to allow CSS max-height transition to begin before centering
-        setTimeout(() => centerCarouselItem(categoryKey), 50);
+        // Center immediately and re-center after accordion CSS animation completes
+        requestAnimationFrame(() => centerCarouselItem(categoryKey));
+        setTimeout(() => centerCarouselItem(categoryKey), 200);
+        setTimeout(() => centerCarouselItem(categoryKey), 360);
     }
 
     function closeAllCarousels() {
@@ -191,6 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             thumb.addEventListener('click', (e) => {
                 e.stopPropagation();
+                if (strip.dataset.isDragging === 'true') return; // Ignore click if user was dragging!
                 if (category.currentIndex !== index) {
                     category.currentIndex = index;
                     updateLayer(categoryKey, true);
@@ -200,15 +164,53 @@ document.addEventListener('DOMContentLoaded', () => {
             strip.appendChild(thumb);
         });
 
-        // Convert vertical mouse wheel to horizontal scroll strip scrolling
-        if (!strip.dataset.wheelBound) {
-            strip.dataset.wheelBound = 'true';
-            strip.addEventListener('wheel', (e) => {
-                if (e.deltaY !== 0) {
-                    e.preventDefault();
-                    strip.scrollLeft += e.deltaY * 1.2;
+        // Click-and-Drag / Touch-Drag Panning on Carousel Strip
+        if (!strip.dataset.dragBound) {
+            strip.dataset.dragBound = 'true';
+            let isDown = false;
+            let startX = 0;
+            let scrollStart = 0;
+
+            const startDrag = (pageX) => {
+                isDown = true;
+                strip.dataset.isDragging = 'false';
+                startX = pageX - strip.offsetLeft;
+                scrollStart = strip.scrollLeft;
+            };
+
+            const moveDrag = (pageX) => {
+                if (!isDown) return;
+                const x = pageX - strip.offsetLeft;
+                const walk = x - startX;
+                if (Math.abs(walk) > 5) {
+                    strip.dataset.isDragging = 'true';
                 }
-            }, { passive: false });
+                strip.scrollLeft = scrollStart - walk;
+            };
+
+            const endDrag = () => {
+                isDown = false;
+                setTimeout(() => {
+                    strip.dataset.isDragging = 'false';
+                }, 60);
+            };
+
+            // Mouse events
+            strip.addEventListener('mousedown', (e) => startDrag(e.pageX));
+            window.addEventListener('mousemove', (e) => { if (isDown) moveDrag(e.pageX); });
+            window.addEventListener('mouseup', () => { if (isDown) endDrag(); });
+
+            // Touch events
+            strip.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) startDrag(e.touches[0].pageX);
+            }, { passive: true });
+
+            strip.addEventListener('touchmove', (e) => {
+                if (isDown && e.touches.length === 1) moveDrag(e.touches[0].pageX);
+            }, { passive: true });
+
+            strip.addEventListener('touchend', endDrag, { passive: true });
+            strip.addEventListener('touchcancel', endDrag, { passive: true });
         }
     }
 
@@ -235,11 +237,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const category = categories[categoryKey];
         const activeThumb = strip.querySelector(`.carousel-thumb[data-index="${category.currentIndex}"]`);
         if (activeThumb) {
-            const stripWidth = strip.clientWidth;
+            const stripWidth = strip.clientWidth || strip.offsetWidth;
+            if (stripWidth <= 0) return;
             const thumbLeft = activeThumb.offsetLeft;
-            const thumbWidth = activeThumb.clientWidth;
+            const thumbWidth = activeThumb.offsetWidth || activeThumb.clientWidth || 54;
             const targetScroll = thumbLeft - (stripWidth / 2) + (thumbWidth / 2);
-            strip.scrollTo({ left: targetScroll, behavior: 'smooth' });
+            strip.scrollTo({ left: Math.max(0, targetScroll), behavior: 'smooth' });
         }
     }
 
@@ -326,26 +329,56 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        prevBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            openCarousel(categoryKey);
+        // Click-and-Hold Button Controller for Arrows
+        function bindHoldButton(btn, stepCallback) {
+            if (!btn) return;
+            let holdTimeout = null;
+            let holdInterval = null;
+
+            const stopHold = () => {
+                if (holdTimeout) { clearTimeout(holdTimeout); holdTimeout = null; }
+                if (holdInterval) { clearInterval(holdInterval); holdInterval = null; }
+            };
+
+            const startHold = (e) => {
+                if (e.button !== undefined && e.button !== 0) return; // Left click only for mouse
+                e.stopPropagation();
+                openCarousel(categoryKey);
+                stepCallback(); // Initial step
+
+                stopHold();
+                holdTimeout = setTimeout(() => {
+                    holdInterval = setInterval(() => {
+                        stepCallback();
+                    }, 85); // Repeat every 85ms while held
+                }, 280);
+            };
+
+            btn.addEventListener('mousedown', startHold);
+            btn.addEventListener('touchstart', startHold, { passive: true });
+
+            window.addEventListener('mouseup', stopHold);
+            window.addEventListener('touchend', stopHold);
+            window.addEventListener('touchcancel', stopHold);
+            btn.addEventListener('mouseleave', stopHold);
+        }
+
+        bindHoldButton(prevBtn, () => {
             const category = categories[categoryKey];
             category.currentIndex--;
             if (category.currentIndex < 0) {
-                category.currentIndex = category.options.length - 1; // loop to end
+                category.currentIndex = category.options.length - 1;
             }
-            updateLayer(categoryKey);
+            updateLayer(categoryKey, true);
         });
 
-        nextBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            openCarousel(categoryKey);
+        bindHoldButton(nextBtn, () => {
             const category = categories[categoryKey];
             category.currentIndex++;
             if (category.currentIndex >= category.options.length) {
-                category.currentIndex = 0; // loop to start
+                category.currentIndex = 0;
             }
-            updateLayer(categoryKey);
+            updateLayer(categoryKey, true);
         });
     }
 
