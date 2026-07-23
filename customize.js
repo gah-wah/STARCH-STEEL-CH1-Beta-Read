@@ -182,6 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     e.stopPropagation();
                     if (strip.dataset.isDragging === 'true') return; // Ignore drag clicks
                     
+                    const clickedSetIndex = parseInt(thumb.dataset.setIndex, 10);
                     if (category.currentIndex === optIndex) {
                         // Clicking already active thumbnail -> Move to Top!
                         bringToFront(categoryKey);
@@ -194,6 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else {
                         category.currentIndex = optIndex;
                         updateLayer(categoryKey, true);
+                        updateCarouselActiveState(categoryKey, clickedSetIndex);
                     }
                 });
 
@@ -240,7 +242,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const onPointerMove = (e) => {
                 if (!isDragging) return;
                 const dx = e.clientX - startX;
-                if (Math.abs(dx) > 4) {
+                // Only consider it a drag if moved more than 12px (prevents blocking quick taps/clicks)
+                if (Math.abs(dx) > 12) {
                     strip.dataset.isDragging = 'true';
                 }
                 // 1:1 exact pointer tracking!
@@ -301,14 +304,15 @@ document.addEventListener('DOMContentLoaded', () => {
             activeThumb = strip.querySelector(`.carousel-thumb[data-set-index="1"][data-index="${category.currentIndex}"]`);
         }
         if (activeThumb) {
-            const containerWidth = strip.clientWidth;
-            if (containerWidth <= 0) return;
-            const stripStyle = getComputedStyle(strip);
-            const padLeft = parseFloat(stripStyle.paddingLeft) || 0;
-            
-            // Midpoint of active thumbnail inside content box
-            const thumbCenterInContent = activeThumb.offsetLeft - padLeft + (activeThumb.offsetWidth / 2);
-            const targetScroll = thumbCenterInContent - (containerWidth / 2);
+            const stripRect = strip.getBoundingClientRect();
+            const thumbRect = activeThumb.getBoundingClientRect();
+            if (stripRect.width <= 0 || thumbRect.width <= 0) return;
+
+            // Absolute screen pixel center of thumbnail vs strip container
+            const thumbCenter = thumbRect.left + (thumbRect.width / 2);
+            const stripCenter = stripRect.left + (stripRect.width / 2);
+            const diff = thumbCenter - stripCenter;
+            const targetScroll = strip.scrollLeft + diff;
             
             if (smooth) {
                 strip.scrollTo({ left: Math.max(0, targetScroll), behavior: 'smooth' });
@@ -325,7 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const refreshBtn = document.getElementById(`btn-${categoryKey}-refresh`);
         const numInput = document.getElementById(`input-${categoryKey}`);
 
-        // Dice Button: Randomizes ONLY this single category attribute
+        // Dice Button: Randomizes ONLY this single category attribute & smoothly scrolls carousel
         if (refreshBtn) {
             refreshBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -334,6 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 category.currentIndex = Math.floor(Math.random() * max);
                 openCarousel(categoryKey);
                 updateLayer(categoryKey, true);
+                updateCarouselActiveState(categoryKey, 1);
             });
         }
 
@@ -460,6 +465,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const max = category.options.length;
             category.currentIndex = Math.floor(Math.random() * max);
             updateLayer(key, true); // Enable bounce animations on randomize
+            updateCarouselActiveState(key, 1);
         }
     }
 
