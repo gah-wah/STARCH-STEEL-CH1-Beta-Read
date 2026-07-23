@@ -164,9 +164,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (numInput) {
+            const category = categories[categoryKey];
+            const hasNone = category.options[0].name === 'None';
+            const maxVal = hasNone ? category.options.length - 1 : category.options.length;
+            numInput.max = maxVal;
+            const container = numInput.closest('.list-number-container');
+            if (container) {
+                const denomEl = container.querySelector('.denom-slash');
+                if (denomEl) {
+                    denomEl.textContent = `/${maxVal}`;
+                }
+            }
+
             const handleInputChange = () => {
-                const category = categories[categoryKey];
-                const hasNone = category.options[0].name === 'None';
                 const minVal = hasNone ? 0 : 1;
                 const maxVal = hasNone ? category.options.length - 1 : category.options.length;
 
