@@ -18,31 +18,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const categories = {
         body: {
             layerId: 'layer-body',
-            options: generateOptions('Body', 5, false),
+            options: generateOptions('Body', 6, false),
             currentIndex: 0,
             activeTimeout: null
         },
         face: {
             layerId: 'layer-face',
-            options: generateOptions('Face', 40, true),
+            options: generateOptions('Face', 50, true),
             currentIndex: 0,
             activeTimeout: null
         },
         hat: {
             layerId: 'layer-hat',
-            options: generateOptions('Hat', 30, true),
+            options: generateOptions('Hat', 35, true),
             currentIndex: 0,
             activeTimeout: null
         },
         acc1: {
             layerId: 'layer-acc1',
-            options: generateOptions('Accessory', 31, true),
+            options: generateOptions('Accessory', 40, true),
             currentIndex: 0,
             activeTimeout: null
         },
         acc2: {
             layerId: 'layer-acc2',
-            options: generateOptions('Accessory', 31, true),
+            options: generateOptions('Accessory', 40, true),
             currentIndex: 0,
             activeTimeout: null
         }
