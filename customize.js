@@ -62,6 +62,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1x1 transparent gif to prevent broken image icon
     const transparentPixel = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
+    // Image Cache to eliminate unloaded texture gaps and network latency
+    const imageCache = {};
+
+    function getAssetUrl(file) {
+        if (!file) return transparentPixel;
+        return baseUrl + file;
+    }
+
+    function preloadCategoryAssets(categoryKey) {
+        const category = categories[categoryKey];
+        category.options.forEach(opt => {
+            if (opt.file && !imageCache[opt.file]) {
+                const img = new Image();
+                img.src = getAssetUrl(opt.file);
+                imageCache[opt.file] = img;
+            }
+        });
+    }
+
     function updateLayer(categoryKey, animate = true) {
         const category = categories[categoryKey];
         const option = category.options[category.currentIndex];
@@ -76,12 +95,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const layerImg = document.getElementById(category.layerId);
         if (!layerImg) return;
 
-        // Cancel any pending load listeners
         layerImg.onload = null;
-        layerImg.onerror = null;
+        layerImg.onerror = () => {
+            layerImg.classList.remove('visible', 'pop-in', 'pop-out');
+            layerImg.src = transparentPixel;
+        };
 
         if (option.file) {
-            const targetSrc = baseUrl + option.file + '?cb=' + cacheBuster;
+            const targetSrc = getAssetUrl(option.file);
             if (layerImg.src !== targetSrc) {
                 layerImg.src = targetSrc;
             }
@@ -101,29 +122,35 @@ document.addEventListener('DOMContentLoaded', () => {
         updateCarouselActiveState(categoryKey);
     }
 
-    // --- Expandable Carousel Tray Controller ---
+    // --- Infinite Expandable Carousel Tray Controller ---
     let activeCategoryKey = null;
 
     function openCarousel(categoryKey) {
-        if (activeCategoryKey === categoryKey) return;
-        closeAllCarousels();
-        activeCategoryKey = categoryKey;
         const wrapper = document.getElementById(`wrapper-${categoryKey}`);
-        if (wrapper) {
+        if (wrapper && !wrapper.classList.contains('active')) {
             wrapper.classList.add('active');
+            renderCarousel(categoryKey);
+            requestAnimationFrame(() => centerCarouselItem(categoryKey, false));
+            setTimeout(() => centerCarouselItem(categoryKey, true), 180);
+            setTimeout(() => centerCarouselItem(categoryKey, true), 360);
+        } else if (wrapper && wrapper.classList.contains('active')) {
+            renderCarousel(categoryKey);
+            requestAnimationFrame(() => centerCarouselItem(categoryKey, true));
         }
-        renderCarousel(categoryKey);
-        // Center immediately and re-center after accordion CSS animation completes
-        requestAnimationFrame(() => centerCarouselItem(categoryKey));
-        setTimeout(() => centerCarouselItem(categoryKey), 200);
-        setTimeout(() => centerCarouselItem(categoryKey), 360);
+        activeCategoryKey = categoryKey;
     }
 
-    function closeAllCarousels() {
-        activeCategoryKey = null;
-        document.querySelectorAll('.control-group-wrapper').forEach(w => {
-            w.classList.remove('active');
-        });
+    function toggleCarousel(categoryKey) {
+        const wrapper = document.getElementById(`wrapper-${categoryKey}`);
+        if (!wrapper) return;
+        if (wrapper.classList.contains('active')) {
+            wrapper.classList.remove('active');
+            if (activeCategoryKey === categoryKey) {
+                activeCategoryKey = null;
+            }
+        } else {
+            openCarousel(categoryKey);
+        }
     }
 
     function renderCarousel(categoryKey) {
@@ -131,45 +158,79 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!strip) return;
         const category = categories[categoryKey];
         const hasNone = category.options[0].name === 'None';
+        const numOptions = category.options.length;
 
         strip.innerHTML = '';
-        category.options.forEach((opt, index) => {
-            const thumb = document.createElement('div');
-            thumb.className = 'carousel-thumb' + (index === category.currentIndex ? ' active' : '');
-            thumb.dataset.index = index;
 
-            const itemNum = hasNone ? index : index + 1;
-            const numSpan = `<span class="carousel-thumb-number">${itemNum}</span>`;
+        // Render 3 identical sets of thumbnails to create a 100% seamless infinite loop
+        [0, 1, 2].forEach(setIndex => {
+            category.options.forEach((opt, optIndex) => {
+                const thumb = document.createElement('div');
+                thumb.className = 'carousel-thumb' + (optIndex === category.currentIndex ? ' active' : '');
+                thumb.dataset.setIndex = setIndex;
+                thumb.dataset.index = optIndex;
 
-            if (!opt.file) {
-                thumb.innerHTML = `<span class="carousel-thumb-none">NONE</span>${numSpan}`;
-            } else {
-                const img = document.createElement('img');
-                img.src = baseUrl + opt.file + '?cb=' + cacheBuster;
-                img.alt = opt.name;
-                img.loading = 'lazy';
-                thumb.appendChild(img);
-                thumb.insertAdjacentHTML('beforeend', numSpan);
-            }
+                const itemNum = hasNone ? optIndex : optIndex + 1;
+                const numSpan = `<span class="carousel-thumb-number">${itemNum}</span>`;
 
-            thumb.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (strip.dataset.isDragging === 'true') return; // Ignore click if user was dragging!
-                if (category.currentIndex !== index) {
-                    category.currentIndex = index;
-                    updateLayer(categoryKey, true);
+                if (!opt.file) {
+                    thumb.innerHTML = `<span class="carousel-thumb-none">NONE</span>${numSpan}`;
+                } else {
+                    const img = document.createElement('img');
+                    img.src = getAssetUrl(opt.file);
+                    img.alt = opt.name;
+                    img.loading = 'lazy';
+                    img.onerror = () => {
+                        img.style.display = 'none';
+                    };
+                    thumb.appendChild(img);
+                    thumb.insertAdjacentHTML('beforeend', numSpan);
                 }
-            });
 
-            strip.appendChild(thumb);
+                thumb.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (strip.dataset.isDragging === 'true') return; // Ignore drag clicks
+                    
+                    if (category.currentIndex === optIndex) {
+                        // Clicking already active thumbnail -> Move to Top!
+                        bringToFront(categoryKey);
+                        const layerImg = document.getElementById(category.layerId);
+                        if (layerImg && option.file) {
+                            layerImg.classList.remove('pop-in', 'pop-out');
+                            void layerImg.offsetWidth;
+                            layerImg.classList.add('pop-in');
+                        }
+                    } else {
+                        category.currentIndex = optIndex;
+                        updateLayer(categoryKey, true);
+                    }
+                });
+
+                strip.appendChild(thumb);
+            });
         });
 
-        // Click-and-Drag / Touch-Drag Panning on Carousel Strip
+        // Click-and-Drag / Touch-Drag Panning with Momentum Physics & Infinite Loop Jumping
         if (!strip.dataset.dragBound) {
             strip.dataset.dragBound = 'true';
             let isDown = false;
             let startX = 0;
             let scrollStart = 0;
+
+            const handleInfiniteScrollJump = () => {
+                const totalChildren = strip.children.length;
+                if (totalChildren === 0) return;
+                const setWidth = strip.scrollWidth / 3;
+                if (setWidth <= 0) return;
+
+                if (strip.scrollLeft < setWidth * 0.4) {
+                    strip.scrollLeft += setWidth;
+                } else if (strip.scrollLeft > setWidth * 1.6) {
+                    strip.scrollLeft -= setWidth;
+                }
+            };
+
+            strip.addEventListener('scroll', handleInfiniteScrollJump, { passive: true });
 
             const startDrag = (pageX) => {
                 isDown = true;
@@ -195,12 +256,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, 60);
             };
 
-            // Mouse events
             strip.addEventListener('mousedown', (e) => startDrag(e.pageX));
             window.addEventListener('mousemove', (e) => { if (isDown) moveDrag(e.pageX); });
             window.addEventListener('mouseup', () => { if (isDown) endDrag(); });
 
-            // Touch events
             strip.addEventListener('touchstart', (e) => {
                 if (e.touches.length === 1) startDrag(e.touches[0].pageX);
             }, { passive: true });
@@ -219,30 +278,30 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!strip || !strip.children.length) return;
         const category = categories[categoryKey];
         const thumbs = strip.querySelectorAll('.carousel-thumb');
-        thumbs.forEach((t, i) => {
-            if (i === category.currentIndex) {
+        thumbs.forEach(t => {
+            const idx = parseInt(t.dataset.index, 10);
+            if (idx === category.currentIndex) {
                 t.classList.add('active');
             } else {
                 t.classList.remove('active');
             }
         });
-        if (activeCategoryKey === categoryKey) {
-            centerCarouselItem(categoryKey);
-        }
+        centerCarouselItem(categoryKey, true);
     }
 
-    function centerCarouselItem(categoryKey) {
+    function centerCarouselItem(categoryKey, smooth = true) {
         const strip = document.getElementById(`carousel-strip-${categoryKey}`);
         if (!strip) return;
         const category = categories[categoryKey];
-        const activeThumb = strip.querySelector(`.carousel-thumb[data-index="${category.currentIndex}"]`);
+        // Target middle set (setIndex 1) thumbnail for perfect dead-center positioning
+        const activeThumb = strip.querySelector(`.carousel-thumb[data-set-index="1"][data-index="${category.currentIndex}"]`);
         if (activeThumb) {
-            const stripWidth = strip.clientWidth || strip.offsetWidth;
-            if (stripWidth <= 0) return;
+            const containerWidth = strip.clientWidth || strip.offsetWidth;
+            if (containerWidth <= 0) return;
             const thumbLeft = activeThumb.offsetLeft;
-            const thumbWidth = activeThumb.offsetWidth || activeThumb.clientWidth || 54;
-            const targetScroll = thumbLeft - (stripWidth / 2) + (thumbWidth / 2);
-            strip.scrollTo({ left: Math.max(0, targetScroll), behavior: 'smooth' });
+            const thumbWidth = activeThumb.offsetWidth || 54;
+            const targetScroll = thumbLeft - (containerWidth / 2) + (thumbWidth / 2);
+            strip.scrollTo({ left: Math.max(0, targetScroll), behavior: smooth ? 'smooth' : 'auto' });
         }
     }
 
@@ -253,34 +312,27 @@ document.addEventListener('DOMContentLoaded', () => {
         const refreshBtn = document.getElementById(`btn-${categoryKey}-refresh`);
         const numInput = document.getElementById(`input-${categoryKey}`);
 
-        if (wrapper) {
-            wrapper.addEventListener('click', (e) => {
-                // Open carousel whenever clicking anywhere inside the control group row
-                if (!e.target.closest('.carousel-strip')) {
-                    openCarousel(categoryKey);
-                }
-            });
-        }
+        preloadCategoryAssets(categoryKey);
 
+        // Dice Button: Randomizes ONLY this single category attribute
         if (refreshBtn) {
             refreshBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
+                const category = categories[categoryKey];
+                const max = category.options.length;
+                category.currentIndex = Math.floor(Math.random() * max);
                 openCarousel(categoryKey);
-                updateLayer(categoryKey);
+                updateLayer(categoryKey, true);
             });
         }
 
-        // Randomize single category when clicking the label text
+        // Control Label Name (FOOD/FACE/etc): Toggles Carousel Menu open/close
         if (prevBtn && prevBtn.parentElement) {
             const labelEl = prevBtn.parentElement.querySelector('.control-label');
             if (labelEl) {
                 labelEl.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    openCarousel(categoryKey);
-                    const category = categories[categoryKey];
-                    const max = category.options.length;
-                    category.currentIndex = Math.floor(Math.random() * max);
-                    updateLayer(categoryKey, true);
+                    toggleCarousel(categoryKey);
                 });
             }
         }
@@ -304,16 +356,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 let val = parseInt(numInput.value, 10);
 
-                // If invalid or out of range, reset to 0 (or 1 for food/body)
                 if (isNaN(val) || val < minVal || val > maxVal) {
-                    val = 0; // Return to 0 as requested if no corresponding art exists
+                    val = 0;
                     if (!hasNone && val < minVal) {
-                        val = minVal; // Body starts at 1 minimum
+                        val = minVal;
                     }
                 }
 
                 category.currentIndex = hasNone ? val : val - 1;
                 numInput.value = val;
+                openCarousel(categoryKey);
                 updateLayer(categoryKey, true);
             };
 
@@ -329,7 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Click-and-Hold Button Controller for Arrows
+        // Click-and-Hold Arrow Buttons (Loops infinitely through options)
         function bindHoldButton(btn, stepCallback) {
             if (!btn) return;
             let holdTimeout = null;
@@ -341,17 +393,17 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             const startHold = (e) => {
-                if (e.button !== undefined && e.button !== 0) return; // Left click only for mouse
+                if (e.button !== undefined && e.button !== 0) return;
                 e.stopPropagation();
                 openCarousel(categoryKey);
-                stepCallback(); // Initial step
+                stepCallback();
 
                 stopHold();
                 holdTimeout = setTimeout(() => {
                     holdInterval = setInterval(() => {
                         stepCallback();
-                    }, 85); // Repeat every 85ms while held
-                }, 280);
+                    }, 80); // Smooth repeat every 80ms while held
+                }, 260);
             };
 
             btn.addEventListener('mousedown', startHold);
@@ -367,7 +419,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const category = categories[categoryKey];
             category.currentIndex--;
             if (category.currentIndex < 0) {
-                category.currentIndex = category.options.length - 1;
+                category.currentIndex = category.options.length - 1; // Seamless infinite loop
             }
             updateLayer(categoryKey, true);
         });
@@ -376,7 +428,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const category = categories[categoryKey];
             category.currentIndex++;
             if (category.currentIndex >= category.options.length) {
-                category.currentIndex = 0;
+                category.currentIndex = 0; // Seamless infinite loop
             }
             updateLayer(categoryKey, true);
         });
@@ -384,7 +436,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Randomize all categories
     function randomizeAll() {
-        closeAllCarousels();
         for (const key in categories) {
             const category = categories[key];
             const max = category.options.length;
@@ -392,13 +443,6 @@ document.addEventListener('DOMContentLoaded', () => {
             updateLayer(key, true); // Enable bounce animations on randomize
         }
     }
-
-    // Collapse open carousel when clicking outside controls container
-    document.addEventListener('click', (e) => {
-        if (!e.target.closest('.controls-container')) {
-            closeAllCarousels();
-        }
-    });
 
     // Helper to flash button gold on click (uses inline style burst to override any filters or active states)
     function triggerGoldFlash(el) {
