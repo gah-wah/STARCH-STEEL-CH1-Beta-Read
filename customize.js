@@ -276,7 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function updateCarouselActiveState(categoryKey) {
+    function updateCarouselActiveState(categoryKey, targetSetIndex = 1) {
         const strip = document.getElementById(`carousel-strip-${categoryKey}`);
         if (!strip || !strip.children.length) return;
         const category = categories[categoryKey];
@@ -289,21 +289,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 t.classList.remove('active');
             }
         });
-        centerCarouselItem(categoryKey, true);
+        centerCarouselItem(categoryKey, true, targetSetIndex);
     }
 
-    function centerCarouselItem(categoryKey, smooth = false) {
+    function centerCarouselItem(categoryKey, smooth = true, setTargetIndex = 1) {
         const strip = document.getElementById(`carousel-strip-${categoryKey}`);
         if (!strip) return;
         const category = categories[categoryKey];
-        // Target middle set (setIndex 1) thumbnail for perfect dead-center positioning
-        const activeThumb = strip.querySelector(`.carousel-thumb[data-set-index="1"][data-index="${category.currentIndex}"]`);
+        let activeThumb = strip.querySelector(`.carousel-thumb[data-set-index="${setTargetIndex}"][data-index="${category.currentIndex}"]`);
+        if (!activeThumb) {
+            activeThumb = strip.querySelector(`.carousel-thumb[data-set-index="1"][data-index="${category.currentIndex}"]`);
+        }
         if (activeThumb) {
             const containerWidth = strip.clientWidth;
             if (containerWidth <= 0) return;
-            const thumbLeft = activeThumb.offsetLeft;
-            const thumbWidth = activeThumb.offsetWidth || 54;
-            const targetScroll = thumbLeft - (containerWidth / 2) + (thumbWidth / 2);
+            const stripStyle = getComputedStyle(strip);
+            const padLeft = parseFloat(stripStyle.paddingLeft) || 0;
+            
+            // Midpoint of active thumbnail inside content box
+            const thumbCenterInContent = activeThumb.offsetLeft - padLeft + (activeThumb.offsetWidth / 2);
+            const targetScroll = thumbCenterInContent - (containerWidth / 2);
+            
             if (smooth) {
                 strip.scrollTo({ left: Math.max(0, targetScroll), behavior: 'smooth' });
             } else {
@@ -386,7 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Click-and-Hold Arrow Buttons (Loops infinitely through options, slightly slower repeat)
+        // Click-and-Hold Arrow Buttons (Seamless infinite loop with synchronized speed)
         function bindHoldButton(btn, stepCallback) {
             if (!btn) return;
             let holdTimeout = null;
@@ -407,8 +413,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 holdTimeout = setTimeout(() => {
                     holdInterval = setInterval(() => {
                         stepCallback();
-                    }, 150); // Slower, comfortable repeat interval
-                }, 320);
+                    }, 180); // Synchronized, comfortable repeat speed
+                }, 350);
             };
 
             btn.addEventListener('mousedown', startHold);
@@ -422,20 +428,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
         bindHoldButton(prevBtn, () => {
             const category = categories[categoryKey];
+            const oldIdx = category.currentIndex;
             category.currentIndex--;
+            let setTarget = 1;
             if (category.currentIndex < 0) {
-                category.currentIndex = category.options.length - 1; // Seamless infinite loop
+                category.currentIndex = category.options.length - 1; // Wrap left
+                setTarget = 0; // Target Set 0 thumbnail to animate LEFT
             }
             updateLayer(categoryKey, true);
+            updateCarouselActiveState(categoryKey, setTarget);
         });
 
         bindHoldButton(nextBtn, () => {
             const category = categories[categoryKey];
+            const oldIdx = category.currentIndex;
             category.currentIndex++;
+            let setTarget = 1;
             if (category.currentIndex >= category.options.length) {
-                category.currentIndex = 0; // Seamless infinite loop
+                category.currentIndex = 0; // Wrap right
+                setTarget = 2; // Target Set 2 thumbnail to animate RIGHT
             }
             updateLayer(categoryKey, true);
+            updateCarouselActiveState(categoryKey, setTarget);
         });
     }
 
