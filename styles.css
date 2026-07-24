@@ -193,6 +193,7 @@ body::-webkit-scrollbar {
     justify-content: center !important;
     gap: 2px !important;
     padding-bottom: 5px;
+    text-align: center;
 }
 
 .char-selector-trigger {
@@ -200,12 +201,15 @@ body::-webkit-scrollbar {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    text-align: center;
     cursor: pointer;
     padding: 0;
     background: none;
     border: none;
     transition: transform 0.2s ease;
     -webkit-tap-highlight-color: transparent;
+    width: 100%;
 }
 
 .char-sprite-wrapper {
@@ -213,6 +217,7 @@ body::-webkit-scrollbar {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    margin: 0 auto;
 }
 
 .char-selector-trigger:hover {
@@ -1190,13 +1195,16 @@ body {
 
 /* Shrunk label for bottom selector */
 .donor-fridge-label {
+    display: block;
+    text-align: center;
     font-size: 0.65rem; /* Shrunk a lot! */
     font-weight: bold;
     color: #ffcc00; /* Gold */
-    margin: 0;
+    margin: 2px auto 0 auto;
     letter-spacing: 0.5px;
     white-space: nowrap;
     text-shadow: 0 0 6px rgba(255, 204, 0, 0.4);
+    width: 100%;
 }
 
 /* Ending Message GIF container styling */
