@@ -107,7 +107,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (option.file) {
             const targetSrc = baseUrl + option.file;
-            layerImg.crossOrigin = "anonymous";
             if (layerImg.src !== targetSrc) {
                 layerImg.src = targetSrc;
             }
@@ -296,8 +295,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const setWidth = strip.scrollWidth / numSets;
         if (setWidth <= 0) return;
 
-        const minBound = midSet * setWidth - (setWidth * 0.4);
-        const maxBound = (midSet + 1) * setWidth - (setWidth * 0.4);
+        const stripWidth = strip.clientWidth || 360;
+        const halfViewport = stripWidth / 2;
+
+        // Set bounds relative to the middle set (midSet)
+        const minBound = (midSet * setWidth) - halfViewport - 10;
+        const maxBound = ((midSet + 1) * setWidth) - halfViewport + 10;
 
         if (strip.scrollLeft > maxBound) {
             const count = Math.floor((strip.scrollLeft - maxBound) / setWidth) + 1;
@@ -600,20 +603,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         for (const layer of layers) {
             try {
-                await new Promise((resolve) => {
-                    const tempImg = new Image();
-                    tempImg.crossOrigin = "anonymous";
-                    tempImg.onload = () => {
-                        ctx.drawImage(tempImg, 0, 0, size, size);
-                        resolve();
-                    };
-                    tempImg.onerror = (e) => {
-                        console.warn("Failed to load layer image for canvas export:", layer.src, e);
-                        resolve(); // Skip failed layer gracefully
-                    };
-                    const srcUrl = layer.src;
-                    tempImg.src = srcUrl.includes('?') ? `${srcUrl}&cors=1` : `${srcUrl}?cors=1`;
-                });
+                if (layer.complete && layer.naturalHeight !== 0) {
+                    ctx.drawImage(layer, 0, 0, size, size);
+                } else {
+                    await new Promise((resolve) => {
+                        const tempImg = new Image();
+                        tempImg.onload = () => {
+                            ctx.drawImage(tempImg, 0, 0, size, size);
+                            resolve();
+                        };
+                        tempImg.onerror = resolve; // Skip on error
+                        tempImg.src = layer.src;
+                    });
+                }
             } catch (err) {
                 console.error("Error drawing layer:", layer.id, err);
             }
