@@ -195,6 +195,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (introScreen) {
             introScreen.style.display = 'none';
         }
+        const endMessage = document.getElementById('chapter-end-message');
+        if (endMessage) {
+            endMessage.style.display = 'block';
+        }
         document.body.style.overflow = '';
     }
 
@@ -1036,6 +1040,13 @@ document.addEventListener('DOMContentLoaded', () => {
         bioModal.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = ''; // Unlock background scrolling
     };
+
+    // Stop propagation on all patreon-character clicks so they never toggle top/bottom nav bars
+    document.querySelectorAll('.patreon-character').forEach(charEl => {
+        charEl.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+    });
 
     // Attach listeners to all bio links
     document.querySelectorAll('a[href^="bio.html?char="]').forEach(link => {

@@ -48,7 +48,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&display=swap" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="styles.css?v=81">
+    <link rel="stylesheet" href="styles.css?v=82">
 </head>
 
 <body>
@@ -108,8 +108,19 @@
         <div class="timelapse-gif-container">
             <img src="https://image.starchandsteel.com/timelapsegif.gif" alt="Comic Creation Timelapse" class="timelapse-gif" draggable="false">
         </div>
+
+        <p class="leave-fridge-text">Otherwise you are free to <a href="index.html">leave... the fridge.</a></p>
+
+        <!-- Donor Fridge Target -->
         <div class="donor-fridge-target"></div>
-        <p style="margin-top: 2rem;">Otherwise you are free to <a href="index.html">leave... the fridge.</a></p>
+
+        <!-- Join in on the fun GIF -->
+        <div class="landing-extra-container">
+            <p class="landing-extra-text">They can join in on the fun</p>
+            <div class="landing-gif-wrapper">
+                <img src="https://image.starchandsteel.com/placeyourfoodgif.gif" alt="Place Your Food" class="landing-extra-gif" draggable="false">
+            </div>
+        </div>
     </div>
 
     <div class="bottom-nav" id="bottom-nav">
@@ -241,13 +252,13 @@
 
                 <!-- Shelf 1 (Top Shelf) Examples -->
                 <!-- Patreon Character 1 (Tato) -->
-                <a href="bio.html?char=tato" class="patreon-character">
+                <a href="bio.html?char=tato" class="patreon-character patreon-char-s1-c1" id="patreon-char-tato">
                     <span class="patreon-char-name">Example Tato</span>
                     <img class="patreon-char-sprite" src="https://image.starchandsteel.com/1_Example_Tato.png" alt="Example Tato">
                 </a>
 
                 <!-- Patreon Character 2 (Karreth) -->
-                <a href="bio.html?char=karreth" class="patreon-character">
+                <a href="bio.html?char=karreth" class="patreon-character patreon-char-s1-c2" id="patreon-char-karreth">
                     <span class="patreon-char-name">Example Karreth</span>
                     <img class="patreon-char-sprite" src="https://image.starchandsteel.com/1_Example_Karreth.png" alt="Example Karreth">
                 </a>
@@ -301,7 +312,7 @@
     </template>
 
     <!-- Custom JS -->
-    <script src="script.js?v=57"></script>
+    <script src="script.js?v=58"></script>
 </body>
 
 </html>
