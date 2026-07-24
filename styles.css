@@ -1143,8 +1143,12 @@ body {
     image-rendering: pixelated;
     filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.5));
     transition: transform 0.2s ease;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
     -webkit-user-drag: none;
+    -webkit-touch-callout: none;
     z-index: 80; /* Render behind top panel (z-index 100) and bottom panel (z-index 85) */
     will-change: transform, left, top; /* Fix Chromium ghost drop-shadow repainting bug */
 }

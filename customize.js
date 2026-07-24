@@ -536,6 +536,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Back button handling: return to home page and restore exact scroll position
+    const backBtn = document.querySelector('.back-button');
+    if (backBtn) {
+        backBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = 'index.html';
+        });
+    }
+
     const randomBtn = document.getElementById('btn-randomize');
     if (randomBtn) {
         randomBtn.addEventListener('click', () => {

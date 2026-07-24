@@ -442,20 +442,31 @@ document.addEventListener('DOMContentLoaded', () => {
         // Drag to copy character overlays onto the screen
         if (bottomCharSprite) {
             const startDrag = (e) => {
+                if (e.button !== undefined && e.button !== 0) return;
+                if (e.cancelable) e.preventDefault(); // Prevents browser text/DOM selection
+                e.stopPropagation();
+
                 const clientX = e.touches ? e.touches[0].clientX : e.clientX;
                 const clientY = e.touches ? e.touches[0].clientY : e.clientY;
                 startX = clientX;
                 startY = clientY;
                 isDraggingChar = true;
                 dragInitiated = false;
-                
-                if (e.touches) {
-                    e.stopPropagation();
+
+                // Clear any accidental text selection
+                if (window.getSelection) {
+                    window.getSelection().removeAllRanges();
                 }
             };
 
             const dragMove = (e) => {
                 if (!isDraggingChar) return;
+
+                // Clear any text selection while dragging
+                if (window.getSelection) {
+                    window.getSelection().removeAllRanges();
+                }
+
                 const clientX = e.touches ? e.touches[0].clientX : e.clientX;
                 const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
