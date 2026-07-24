@@ -9,6 +9,19 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+input, textarea {
+    -webkit-user-select: auto;
+    -moz-user-select: auto;
+    -ms-user-select: auto;
+    user-select: auto;
 }
 
 :root {
@@ -416,44 +429,6 @@ body {
     white-space: nowrap;
     cursor: pointer;
     transition: color 0.2s;
-}
-
-/* Gold flash animation for RANDOM! button */
-@keyframes goldFlashRandomize {
-    0% {
-        background-color: #ffcc00 !important;
-        color: #000000 !important;
-        box-shadow: 0 0 25px rgba(255, 204, 0, 0.9) !important;
-    }
-    100% {
-        background-color: #ffffff;
-        color: #000000;
-        box-shadow: none;
-    }
-}
-
-/* Gold flash animation for COPY and DOWNLOAD buttons */
-@keyframes goldFlashExport {
-    0% {
-        background-color: #ffcc00 !important;
-        color: #000000 !important;
-        border-color: #ffcc00 !important;
-        box-shadow: 0 0 25px rgba(255, 204, 0, 0.9) !important;
-    }
-    100% {
-        background-color: transparent;
-        color: var(--text-primary);
-        border-color: var(--border-color);
-        box-shadow: none;
-    }
-}
-
-.randomize-btn.gold-flash {
-    animation: goldFlashRandomize 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.export-btn.gold-flash {
-    animation: goldFlashExport 1.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .control-label:hover {

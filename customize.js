@@ -484,7 +484,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 isHolding = true;
 
                 openCarousel(categoryKey);
-                stepCallback();
+                stepCallback(true); // First click uses smooth animation
 
                 if (holdTimeout) clearTimeout(holdTimeout);
                 if (holdInterval) clearInterval(holdInterval);
@@ -493,7 +493,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (!isHolding) return;
                     holdInterval = setInterval(() => {
                         if (!isHolding) return;
-                        stepCallback();
+                        stepCallback(false); // Repeat ticks use direct step to keep highlight and scroll in 100% sync
                     }, 180); // Synchronized, comfortable repeat speed
                 }, 350);
             };
@@ -504,24 +504,24 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.addEventListener('mouseleave', stopHold);
         }
 
-        bindHoldButton(prevBtn, () => {
+        bindHoldButton(prevBtn, (isFirstClick = true) => {
             const category = categories[categoryKey];
             category.currentIndex--;
             if (category.currentIndex < 0) {
                 category.currentIndex = category.options.length - 1; // Wrap left
             }
             updateLayer(categoryKey, true);
-            updateCarouselActiveState(categoryKey, true, -1);
+            updateCarouselActiveState(categoryKey, isFirstClick, -1);
         });
 
-        bindHoldButton(nextBtn, () => {
+        bindHoldButton(nextBtn, (isFirstClick = true) => {
             const category = categories[categoryKey];
             category.currentIndex++;
             if (category.currentIndex >= category.options.length) {
                 category.currentIndex = 0; // Wrap right
             }
             updateLayer(categoryKey, true);
-            updateCarouselActiveState(categoryKey, true, 1);
+            updateCarouselActiveState(categoryKey, isFirstClick, 1);
         });
     }
 
@@ -536,51 +536,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Helper to flash button gold on click (uses inline style burst to override any filters or active states)
-    function triggerGoldFlash(el) {
-        if (!el) return;
-        
-        // Instant burst to gold
-        el.classList.remove('gold-flash');
-        el.style.transition = 'none';
-        el.style.backgroundColor = '#ffcc00';
-        el.style.color = '#000000';
-        el.style.borderColor = '#ffcc00';
-        el.style.boxShadow = '0 0 35px rgba(255, 204, 0, 0.9)';
-
-        void el.offsetWidth; // Reflow to register initial state
-
-        // Smooth 1.2s dissolve back to normal
-        el.style.transition = 'background-color 1.2s cubic-bezier(0.16, 1, 0.3, 1), color 1.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 1.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 1.2s cubic-bezier(0.16, 1, 0.3, 1)';
-        el.style.backgroundColor = '';
-        el.style.color = '';
-        el.style.borderColor = '';
-        el.style.boxShadow = '';
-        el.classList.add('gold-flash');
-
-        setTimeout(() => {
-            el.style.transition = '';
-            el.classList.remove('gold-flash');
-        }, 1200);
-    }
-
-    // Back button handling: return to previous scroll position on index page
-    const backBtn = document.querySelector('.back-button');
-    if (backBtn) {
-        backBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (document.referrer && document.referrer.includes(window.location.hostname)) {
-                window.history.back();
-            } else {
-                window.location.href = 'index.html#reader';
-            }
-        });
-    }
-
     const randomBtn = document.getElementById('btn-randomize');
     if (randomBtn) {
         randomBtn.addEventListener('click', () => {
-            triggerGoldFlash(randomBtn);
             randomizeAll();
         });
     }
@@ -629,7 +587,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const downloadBtn = document.getElementById('btn-download');
     if (downloadBtn) {
         downloadBtn.addEventListener('click', async () => {
-            triggerGoldFlash(downloadBtn);
             const originalText = downloadBtn.innerHTML;
             downloadBtn.textContent = "PROCESSING...";
             downloadBtn.disabled = true;
@@ -665,7 +622,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const copyBtn = document.getElementById('btn-copy');
     if (copyBtn) {
         copyBtn.addEventListener('click', async () => {
-            triggerGoldFlash(copyBtn);
             const originalText = copyBtn.innerHTML;
             copyBtn.textContent = "COPYING...";
             copyBtn.disabled = true;
