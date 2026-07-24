@@ -121,14 +121,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function openCarousel(categoryKey) {
         const wrapper = document.getElementById(`wrapper-${categoryKey}`);
-        if (wrapper && !wrapper.classList.contains('active')) {
+        if (!wrapper) return;
+        if (!wrapper.classList.contains('active')) {
             wrapper.classList.add('active');
-            renderCarousel(categoryKey);
-            // Instant center positioning on open to prevent slow rotation
-            requestAnimationFrame(() => centerCarouselItem(categoryKey, false));
-            setTimeout(() => centerCarouselItem(categoryKey, false), 150);
-            setTimeout(() => centerCarouselItem(categoryKey, false), 350);
-        } else if (wrapper && wrapper.classList.contains('active')) {
             renderCarousel(categoryKey);
             requestAnimationFrame(() => centerCarouselItem(categoryKey, false));
         }
@@ -218,9 +213,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (totalWidth <= 0) return;
                 const setWidth = totalWidth / 3;
 
-                if (strip.scrollLeft < setWidth * 0.35) {
+                if (strip.scrollLeft < setWidth * 0.4) {
                     strip.scrollLeft += setWidth;
-                } else if (strip.scrollLeft > setWidth * 1.65) {
+                } else if (strip.scrollLeft > setWidth * 2.4) {
                     strip.scrollLeft -= setWidth;
                 }
             };
@@ -276,7 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function updateCarouselActiveState(categoryKey, targetSetIndex = 1) {
+    function updateCarouselActiveState(categoryKey, smooth = true) {
         const strip = document.getElementById(`carousel-strip-${categoryKey}`);
         if (!strip || !strip.children.length) return;
         const category = categories[categoryKey];
@@ -289,38 +284,45 @@ document.addEventListener('DOMContentLoaded', () => {
                 t.classList.remove('active');
             }
         });
-        centerCarouselItem(categoryKey, true, targetSetIndex);
+        centerCarouselItem(categoryKey, smooth);
     }
 
-    function centerCarouselItem(categoryKey, smooth = true, setTargetIndex = 1) {
+    function centerCarouselItem(categoryKey, smooth = true) {
         const strip = document.getElementById(`carousel-strip-${categoryKey}`);
         if (!strip) return;
         const category = categories[categoryKey];
-        let activeThumb = strip.querySelector(`.carousel-thumb[data-set-index="${setTargetIndex}"][data-index="${category.currentIndex}"]`);
-        if (!activeThumb) {
-            activeThumb = strip.querySelector(`.carousel-thumb[data-set-index="1"][data-index="${category.currentIndex}"]`);
-        }
-        if (activeThumb) {
-            const stripRect = strip.getBoundingClientRect();
-            const thumbRect = activeThumb.getBoundingClientRect();
-            if (stripRect.width <= 0 || thumbRect.width <= 0) return;
+        const targetIndex = category.currentIndex;
 
-            // Absolute screen pixel center of thumbnail vs strip container
+        const thumbs = Array.from(strip.querySelectorAll(`.carousel-thumb[data-index="${targetIndex}"]`));
+        if (!thumbs.length) return;
+
+        const stripRect = strip.getBoundingClientRect();
+        if (stripRect.width <= 0) return;
+        const stripCenter = stripRect.left + (stripRect.width / 2);
+
+        // Find thumbnail closest to current center of viewport
+        let closestThumb = thumbs[0];
+        let minDistance = Infinity;
+
+        thumbs.forEach(thumb => {
+            const thumbRect = thumb.getBoundingClientRect();
             const thumbCenter = thumbRect.left + (thumbRect.width / 2);
-            const stripCenter = stripRect.left + (stripRect.width / 2);
-            const diff = thumbCenter - stripCenter;
-            const targetScroll = strip.scrollLeft + diff;
-
-            if (smooth) {
-                strip.scrollTo({ left: Math.max(0, targetScroll), behavior: 'smooth' });
-                // Fallback timeout to guarantee 100% dead centering even during fast randomize spamming
-                if (category.centerTimeout) clearTimeout(category.centerTimeout);
-                category.centerTimeout = setTimeout(() => {
-                    centerCarouselItem(categoryKey, false, 1);
-                }, 320);
-            } else {
-                strip.scrollLeft = Math.max(0, targetScroll);
+            const dist = Math.abs(thumbCenter - stripCenter);
+            if (dist < minDistance) {
+                minDistance = dist;
+                closestThumb = thumb;
             }
+        });
+
+        const closestRect = closestThumb.getBoundingClientRect();
+        const thumbCenter = closestRect.left + (closestRect.width / 2);
+        const diff = thumbCenter - stripCenter;
+        const targetScroll = strip.scrollLeft + diff;
+
+        if (smooth) {
+            strip.scrollTo({ left: Math.max(0, targetScroll), behavior: 'smooth' });
+        } else {
+            strip.scrollLeft = Math.max(0, targetScroll);
         }
     }
 
@@ -435,32 +437,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         bindHoldButton(prevBtn, () => {
             const category = categories[categoryKey];
-            const strip = document.getElementById(`carousel-strip-${categoryKey}`);
             category.currentIndex--;
             if (category.currentIndex < 0) {
                 category.currentIndex = category.options.length - 1; // Wrap left
-                if (strip && strip.scrollWidth > 0) {
-                    const setWidth = strip.scrollWidth / 3;
-                    strip.scrollLeft += setWidth; // Silently jump right to Set 2 so scroll animates LEFT
-                }
             }
             updateLayer(categoryKey, true);
-            updateCarouselActiveState(categoryKey, 1);
+            updateCarouselActiveState(categoryKey, true);
         });
 
         bindHoldButton(nextBtn, () => {
             const category = categories[categoryKey];
-            const strip = document.getElementById(`carousel-strip-${categoryKey}`);
             category.currentIndex++;
             if (category.currentIndex >= category.options.length) {
                 category.currentIndex = 0; // Wrap right
-                if (strip && strip.scrollWidth > 0) {
-                    const setWidth = strip.scrollWidth / 3;
-                    strip.scrollLeft -= setWidth; // Silently jump left to Set 0 so scroll animates RIGHT
-                }
             }
             updateLayer(categoryKey, true);
-            updateCarouselActiveState(categoryKey, 1);
+            updateCarouselActiveState(categoryKey, true);
         });
     }
 
