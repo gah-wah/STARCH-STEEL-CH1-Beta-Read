@@ -1034,7 +1034,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    const closeBioModal = () => {
+    const closeBioModal = (e) => {
+        if (e && e.stopPropagation) {
+            e.stopPropagation();
+        }
         if (!bioModal) return;
         bioModal.classList.remove('open');
         bioModal.setAttribute('aria-hidden', 'true');
@@ -1062,10 +1065,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     if (bioModalClose) {
-        bioModalClose.addEventListener('click', closeBioModal);
+        bioModalClose.addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeBioModal(e);
+        });
     }
     if (bioModalBackdrop) {
-        bioModalBackdrop.addEventListener('click', closeBioModal);
+        bioModalBackdrop.addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeBioModal(e);
+        });
     }
     // Close on Escape key press
     window.addEventListener('keydown', (e) => {

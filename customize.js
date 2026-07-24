@@ -299,8 +299,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const halfViewport = stripWidth / 2;
 
         // Set bounds relative to the middle set (midSet)
-        const minBound = (midSet * setWidth) - halfViewport - 10;
-        const maxBound = ((midSet + 1) * setWidth) - halfViewport + 10;
+        const minBound = (midSet * setWidth) - 50;
+        const maxBound = ((midSet + 1) * setWidth) + 50;
 
         if (strip.scrollLeft > maxBound) {
             const count = Math.floor((strip.scrollLeft - maxBound) / setWidth) + 1;
@@ -494,8 +494,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     holdInterval = setInterval(() => {
                         if (!isHolding) return;
                         stepCallback();
-                    }, 140); // Fast, silky-smooth repeat speed
-                }, 300);
+                    }, 220); // Comfortable smooth repeat speed for mobile GPUs
+                }, 320);
             };
 
             btn.addEventListener('pointerdown', startHold);
