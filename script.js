@@ -119,6 +119,18 @@ document.addEventListener('DOMContentLoaded', () => {
         introImage.addEventListener('click', () => {
             if (introImage.classList.contains('zoom-fade')) return; // Prevent multiple clicks
 
+            // Ensure chapter end message is displayed when entering reader
+            const endMessage = document.getElementById('chapter-end-message');
+            if (endMessage) {
+                endMessage.style.display = 'block';
+            }
+
+            // Hide hover image overlay so open door texture displays on frame 1
+            const introHover = document.getElementById('intro-image-hover');
+            if (introHover) {
+                introHover.style.opacity = '0';
+            }
+
             // Trigger Zaraz Cloudflare tracking if available right before routing
             if (typeof zaraz !== 'undefined' && typeof zaraz.track === 'function') {
                 try {

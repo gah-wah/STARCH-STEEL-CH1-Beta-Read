@@ -635,10 +635,11 @@ body {
 }
 
 .intro-screen.animating #intro-landing-image,
+.intro-screen.animating #intro-image-hover,
 .intro-screen.animating .intro-text,
 .intro-screen.animating .customize-link,
 .intro-screen.animating .patreon-fridge-container {
-    opacity: 0;
+    opacity: 0 !important;
 }
 
 .patreon-fridge-container {
