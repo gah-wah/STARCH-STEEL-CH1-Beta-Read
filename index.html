@@ -48,7 +48,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&display=swap" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="styles.css?v=85">
+    <link rel="stylesheet" href="styles.css?v=86">
 </head>
 
 <body>
@@ -136,12 +136,14 @@
             <!-- Character Selector Widget -->
             <div class="char-selector-container">
                 <div class="char-selector-trigger" id="char-selector-trigger" aria-haspopup="listbox" aria-expanded="false" title="Switch character">
-                    <img id="bottom-char-sprite" src="https://image.starchandsteel.com/BrocoLoco.png?v=2" alt="Broco Loco" draggable="false">
-                    <span class="dropdown-chevron">
-                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                    </span>
+                    <div class="char-sprite-wrapper">
+                        <img id="bottom-char-sprite" src="https://image.starchandsteel.com/BrocoLoco.png?v=2" alt="Broco Loco" draggable="false">
+                        <span class="dropdown-chevron">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                        </span>
+                    </div>
+                    <span class="donor-fridge-label">Donor Fridge</span>
                 </div>
-                <span class="donor-fridge-label">Donor Fridge</span>
                 <div class="char-selector-dropdown" id="bottom-char-dropdown">
                     <a href="https://ko-fi.com/gahwahgahwah" target="_blank" rel="noopener" class="dropdown-header-link">Donate For Your Own Custom Character</a>
                     <div class="dropdown-item dono-name-gold" data-char="tato">
@@ -312,7 +314,7 @@
     </template>
 
     <!-- Custom JS -->
-    <script src="script.js?v=63"></script>
+    <script src="script.js?v=64"></script>
 </body>
 
 </html>

@@ -509,7 +509,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (bottomCharSprite) {
             const startDrag = (e) => {
                 if (e.button !== undefined && e.button !== 0) return;
-                if (e.cancelable) e.preventDefault(); // Prevents browser text/DOM selection
                 e.stopPropagation();
 
                 const clientX = e.touches ? e.touches[0].clientX : e.clientX;
