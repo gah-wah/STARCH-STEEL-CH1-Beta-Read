@@ -484,7 +484,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 isHolding = true;
 
                 openCarousel(categoryKey);
-                stepCallback(true); // First click uses smooth animation
+                stepCallback();
 
                 if (holdTimeout) clearTimeout(holdTimeout);
                 if (holdInterval) clearInterval(holdInterval);
@@ -493,9 +493,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (!isHolding) return;
                     holdInterval = setInterval(() => {
                         if (!isHolding) return;
-                        stepCallback(false); // Repeat ticks use direct step to keep highlight and scroll in 100% sync
-                    }, 180); // Synchronized, comfortable repeat speed
-                }, 350);
+                        stepCallback();
+                    }, 140); // Fast, silky-smooth repeat speed
+                }, 300);
             };
 
             btn.addEventListener('pointerdown', startHold);
@@ -504,24 +504,24 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.addEventListener('mouseleave', stopHold);
         }
 
-        bindHoldButton(prevBtn, (isFirstClick = true) => {
+        bindHoldButton(prevBtn, () => {
             const category = categories[categoryKey];
             category.currentIndex--;
             if (category.currentIndex < 0) {
                 category.currentIndex = category.options.length - 1; // Wrap left
             }
             updateLayer(categoryKey, true);
-            updateCarouselActiveState(categoryKey, isFirstClick, -1);
+            updateCarouselActiveState(categoryKey, true, -1);
         });
 
-        bindHoldButton(nextBtn, (isFirstClick = true) => {
+        bindHoldButton(nextBtn, () => {
             const category = categories[categoryKey];
             category.currentIndex++;
             if (category.currentIndex >= category.options.length) {
                 category.currentIndex = 0; // Wrap right
             }
             updateLayer(categoryKey, true);
-            updateCarouselActiveState(categoryKey, isFirstClick, 1);
+            updateCarouselActiveState(categoryKey, true, 1);
         });
     }
 
