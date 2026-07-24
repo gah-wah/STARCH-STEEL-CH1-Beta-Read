@@ -75,6 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
         category.options.forEach(opt => {
             if (opt.file && !imageCache[opt.file]) {
                 const img = new Image();
+                img.decoding = 'async';
                 img.src = getAssetUrl(opt.file);
                 imageCache[opt.file] = img;
             }
@@ -168,7 +169,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     const img = document.createElement('img');
                     img.src = baseUrl + opt.file;
                     img.alt = opt.name;
-                    img.loading = 'lazy';
+                    img.loading = 'eager';
+                    img.decoding = 'async';
                     thumb.appendChild(img);
                     thumb.insertAdjacentHTML('beforeend', numSpan);
                 }
@@ -276,9 +278,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const setWidth = strip.scrollWidth / 3;
         if (setWidth <= 0) return;
 
-        if (strip.scrollLeft >= setWidth * 2) {
+        if (strip.scrollLeft >= setWidth * 2.2) {
             strip.scrollLeft -= setWidth;
-        } else if (strip.scrollLeft < setWidth) {
+        } else if (strip.scrollLeft <= setWidth * 0.4) {
             strip.scrollLeft += setWidth;
         }
     }

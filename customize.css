@@ -105,8 +105,17 @@ body {
 .arrow-btn,
 .refresh-btn,
 .randomize-btn,
-.export-btn {
+.export-btn,
+.list-number-container,
+.denom-slash,
+.carousel-thumb {
     filter: url(#chromatic-aberration);
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .character-preview {
