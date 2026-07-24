@@ -107,6 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (option.file) {
             const targetSrc = baseUrl + option.file;
+            layerImg.crossOrigin = "anonymous";
             if (layerImg.src !== targetSrc) {
                 layerImg.src = targetSrc;
             }
@@ -295,11 +296,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const setWidth = strip.scrollWidth / numSets;
         if (setWidth <= 0) return;
 
-        const currentSet = Math.floor((strip.scrollLeft + (setWidth * 0.5)) / setWidth);
-        const setDiff = currentSet - midSet;
+        const minBound = midSet * setWidth - (setWidth * 0.4);
+        const maxBound = (midSet + 1) * setWidth - (setWidth * 0.4);
 
-        if (Math.abs(setDiff) >= 1) {
-            strip.scrollLeft -= setDiff * setWidth;
+        if (strip.scrollLeft > maxBound) {
+            const count = Math.floor((strip.scrollLeft - maxBound) / setWidth) + 1;
+            strip.scrollLeft -= count * setWidth;
+        } else if (strip.scrollLeft < minBound) {
+            const count = Math.floor((minBound - strip.scrollLeft) / setWidth) + 1;
+            strip.scrollLeft += count * setWidth;
         }
     }
 
@@ -595,24 +600,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         for (const layer of layers) {
             try {
-                // Draw the DOM image directly. Since the images have crossorigin="anonymous" in HTML,
-                // and the CORS headers are set on the bucket, this will not taint the canvas.
-                // We use a small timeout fallback just in case the image hasn't fully rendered its latest source,
-                // though the load event in updateLayer usually guarantees it.
-                if (layer.complete && layer.naturalHeight !== 0) {
-                    ctx.drawImage(layer, 0, 0, size, size);
-                } else {
-                    await new Promise((resolve) => {
-                        const tempImg = new Image();
-                        tempImg.crossOrigin = "anonymous";
-                        tempImg.onload = () => {
-                            ctx.drawImage(tempImg, 0, 0, size, size);
-                            resolve();
-                        };
-                        tempImg.onerror = resolve; // Skip on error
-                        tempImg.src = layer.src;
-                    });
-                }
+                await new Promise((resolve) => {
+                    const tempImg = new Image();
+                    tempImg.crossOrigin = "anonymous";
+                    tempImg.onload = () => {
+                        ctx.drawImage(tempImg, 0, 0, size, size);
+                        resolve();
+                    };
+                    tempImg.onerror = (e) => {
+                        console.warn("Failed to load layer image for canvas export:", layer.src, e);
+                        resolve(); // Skip failed layer gracefully
+                    };
+                    const srcUrl = layer.src;
+                    tempImg.src = srcUrl.includes('?') ? `${srcUrl}&cors=1` : `${srcUrl}?cors=1`;
+                });
             } catch (err) {
                 console.error("Error drawing layer:", layer.id, err);
             }
