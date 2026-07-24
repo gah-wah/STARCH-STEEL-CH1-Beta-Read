@@ -51,6 +51,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Global z-index counter for dynamic layering
     let topZIndex = 10;
 
+    // Helper to calculate required set repeats so short lists (like Food with 6 options) have enough scroll width
+    const getNumSets = (optionCount) => {
+        const setWidth = optionCount * 62;
+        let sets = Math.ceil(3600 / setWidth);
+        if (sets < 3) sets = 3;
+        if (sets % 2 === 0) sets += 1;
+        return sets;
+    };
+
     function bringToFront(categoryKey) {
         if (categoryKey === 'body') return; // Body is the base and must stay at the bottom
         const category = categories[categoryKey];
@@ -149,11 +158,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!strip) return;
         const category = categories[categoryKey];
         const hasNone = category.options[0].name === 'None';
+        const numSets = getNumSets(category.options.length);
 
         strip.innerHTML = '';
+        strip.dataset.categoryKey = categoryKey;
 
-        // Render 3 identical sets of thumbnails to create a 100% seamless infinite loop
-        [0, 1, 2].forEach(setIndex => {
+        // Render numSets identical sets of thumbnails to create a 100% seamless infinite loop
+        for (let setIndex = 0; setIndex < numSets; setIndex++) {
             category.options.forEach((opt, optIndex) => {
                 const thumb = document.createElement('div');
                 thumb.className = 'carousel-thumb' + (optIndex === category.currentIndex ? ' active' : '');
@@ -192,13 +203,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else {
                         category.currentIndex = optIndex;
                         updateLayer(categoryKey, true);
-                        updateCarouselActiveState(categoryKey, clickedSetIndex);
+                        updateCarouselActiveState(categoryKey, true);
                     }
                 });
 
                 strip.appendChild(thumb);
             });
-        });
+        }
 
         // 1:1 Desktop Mouse Drag with Momentum & Native Mobile Touch Panning
         if (!strip.dataset.dragBound) {
@@ -273,15 +284,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function normalizeCarouselScroll(strip) {
+    function normalizeCarouselScroll(strip, categoryKey) {
         if (!strip || strip.scrollWidth <= 0) return;
-        const setWidth = strip.scrollWidth / 3;
+        const key = categoryKey || strip.dataset.categoryKey;
+        const category = categories[key];
+        if (!category) return;
+
+        const numSets = getNumSets(category.options.length);
+        const midSet = Math.floor(numSets / 2);
+        const setWidth = strip.scrollWidth / numSets;
         if (setWidth <= 0) return;
 
-        if (strip.scrollLeft >= setWidth * 2.2) {
-            strip.scrollLeft -= setWidth;
-        } else if (strip.scrollLeft <= setWidth * 0.4) {
-            strip.scrollLeft += setWidth;
+        const currentSet = Math.floor((strip.scrollLeft + (setWidth * 0.5)) / setWidth);
+        const setDiff = currentSet - midSet;
+
+        if (Math.abs(setDiff) >= 1) {
+            strip.scrollLeft -= setDiff * setWidth;
         }
     }
 
@@ -305,20 +323,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const strip = document.getElementById(`carousel-strip-${categoryKey}`);
         if (!strip) return;
 
-        normalizeCarouselScroll(strip);
+        normalizeCarouselScroll(strip, categoryKey);
 
         const category = categories[categoryKey];
+        const numSets = getNumSets(category.options.length);
+        const midSet = Math.floor(numSets / 2);
         const targetIndex = category.currentIndex;
         const maxIndex = category.options.length - 1;
 
         let targetThumb = null;
 
         if (direction === 1 && targetIndex === 0) {
-            // Moving NEXT and wrapping to 0 -> target Set 2 Index 0 to animate RIGHT
-            targetThumb = strip.querySelector(`.carousel-thumb[data-set-index="2"][data-index="0"]`);
+            // Moving NEXT and wrapping to 0 -> target (midSet + 1) Index 0 to animate RIGHT
+            targetThumb = strip.querySelector(`.carousel-thumb[data-set-index="${midSet + 1}"][data-index="0"]`);
         } else if (direction === -1 && targetIndex === maxIndex) {
-            // Moving PREV and wrapping to maxIndex -> target Set 0 Index maxIndex to animate LEFT
-            targetThumb = strip.querySelector(`.carousel-thumb[data-set-index="0"][data-index="${maxIndex}"]`);
+            // Moving PREV and wrapping to maxIndex -> target (midSet - 1) Index maxIndex to animate LEFT
+            targetThumb = strip.querySelector(`.carousel-thumb[data-set-index="${midSet - 1}"][data-index="${maxIndex}"]`);
         }
 
         if (!targetThumb) {
