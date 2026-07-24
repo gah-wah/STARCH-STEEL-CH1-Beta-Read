@@ -41,13 +41,48 @@ document.addEventListener('DOMContentLoaded', () => {
         if (showIntroTimeout2) { clearTimeout(showIntroTimeout2); showIntroTimeout2 = null; }
     }
 
-    // Scroll position restoration when returning from Play With Your Food customizer
+    // Scroll position & page state restoration when returning from Play With Your Food customizer
+    const returnTo = sessionStorage.getItem('returnTo');
     const savedScroll = sessionStorage.getItem('homeScrollPos');
-    if (savedScroll !== null) {
+
+    if (returnTo === 'home' || (savedScroll !== null && returnTo !== 'reader' && !hasReaderHash)) {
+        sessionStorage.removeItem('returnTo');
         sessionStorage.removeItem('homeScrollPos');
-        const targetY = parseInt(savedScroll, 10);
+        const targetY = parseInt(savedScroll || '0', 10);
+
+        if (introScreen) {
+            introScreen.style.display = '';
+            introScreen.classList.remove('fade-out', 'animating');
+            introScreen.style.opacity = '1';
+        }
+        if (window.location.hash) {
+            history.replaceState(null, '', 'index.html');
+        }
+
+        const introScroll = document.querySelector('.intro-scroll-container');
+        const restoreScroll = () => {
+            if (introScroll && targetY > 0) {
+                introScroll.scrollTop = targetY;
+            } else if (targetY > 0) {
+                window.scrollTo({ top: targetY, behavior: 'instant' });
+            }
+        };
+        requestAnimationFrame(() => {
+            restoreScroll();
+            setTimeout(restoreScroll, 50);
+            setTimeout(restoreScroll, 150);
+        });
+    } else if (returnTo === 'reader' || (savedScroll !== null && returnTo === 'reader')) {
+        sessionStorage.removeItem('returnTo');
+        sessionStorage.removeItem('homeScrollPos');
+        const targetY = parseInt(savedScroll || '0', 10);
+
         if (introScreen) {
             introScreen.style.display = 'none';
+        }
+        const endMessage = document.getElementById('chapter-end-message');
+        if (endMessage) {
+            endMessage.style.display = 'block';
         }
         document.body.style.overflow = '';
         if (window.location.hash !== '#reader') {
@@ -64,6 +99,10 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (hasReaderHash) {
         if (introScreen) {
             introScreen.style.display = 'none';
+        }
+        const endMessage = document.getElementById('chapter-end-message');
+        if (endMessage) {
+            endMessage.style.display = 'block';
         }
         document.body.style.overflow = ''; // Restore scrolling
     } else {
@@ -968,7 +1007,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Track PLAY WITH YOUR FOOD clicks and save scroll position
     document.querySelectorAll('a[href^="customize.html"]').forEach(link => {
         link.addEventListener('click', () => {
-            sessionStorage.setItem('homeScrollPos', window.scrollY);
+            const isReaderView = window.location.hash === '#reader' || (introScreen && introScreen.style.display === 'none');
+            const introScroll = document.querySelector('.intro-scroll-container');
+            const scrollPos = isReaderView ? window.scrollY : (introScroll ? introScroll.scrollTop : window.scrollY);
+            
+            sessionStorage.setItem('returnTo', isReaderView ? 'reader' : 'home');
+            sessionStorage.setItem('homeScrollPos', scrollPos);
             trackZaraz('play_with_your_food_clicked');
         });
     });
