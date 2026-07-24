@@ -1,4 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Instantiate single-source-of-truth Donor Fridge templates
+    const donorTemplate = document.getElementById('donor-fridge-template');
+    if (donorTemplate) {
+        document.querySelectorAll('.donor-fridge-target').forEach(target => {
+            target.appendChild(donorTemplate.content.cloneNode(true));
+        });
+    }
+
     // Preload opened door animation frames
     const openFrames = [
         'https://image.starchandsteel.com/fridgedooropenpng.png',
