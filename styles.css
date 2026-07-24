@@ -521,7 +521,7 @@ body {
     background-color: #000;
     z-index: 2000;
     overflow: hidden;
-    transition: opacity 0.4s ease-in-out;
+    transition: opacity 6s cubic-bezier(0.75, 0, 1, 1);
     animation: crt-brightness 10s infinite;
 }
 
@@ -914,7 +914,6 @@ body {
 .intro-screen.fade-out {
     opacity: 0;
     pointer-events: none;
-    transition: opacity 6s cubic-bezier(0.75, 0, 1, 1);
 }
 
 .customize-link {

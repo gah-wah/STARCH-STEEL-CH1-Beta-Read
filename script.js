@@ -207,6 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showIntroTimeout1 = setTimeout(() => {
             if (introScreen) {
                 introScreen.style.display = '';
+                introScreen.style.transition = 'none'; // Instant restore without lag
                 
                 // Force layout reflow while the elements are visible but in their starting transition states
                 void introScreen.offsetWidth;
@@ -215,6 +216,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 introScreen.classList.remove('fade-out');
                 introScreen.style.opacity = '';
                 introScreen.style.overflowY = '';
+
+                requestAnimationFrame(() => {
+                    if (introScreen) introScreen.style.transition = ''; // Restore 6s fade-out transition for next door click
+                });
                 
                 const introScroll = document.querySelector('.intro-scroll-container');
                 if (introScroll) {
