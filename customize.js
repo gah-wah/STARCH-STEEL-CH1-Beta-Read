@@ -208,19 +208,19 @@ document.addEventListener('DOMContentLoaded', () => {
             let velocity = 0;
             let animFrame = null;
 
-            const handleInfiniteScrollJump = () => {
-                const totalWidth = strip.scrollWidth;
-                if (totalWidth <= 0) return;
-                const setWidth = totalWidth / 3;
+            let scrollEndTimer = null;
 
-                if (strip.scrollLeft < setWidth * 0.4) {
-                    strip.scrollLeft += setWidth;
-                } else if (strip.scrollLeft > setWidth * 2.4) {
-                    strip.scrollLeft -= setWidth;
-                }
+            const handleScrollNormalize = () => {
+                if (scrollEndTimer) clearTimeout(scrollEndTimer);
+                scrollEndTimer = setTimeout(() => {
+                    normalizeCarouselScroll(strip);
+                }, 150);
             };
 
-            strip.addEventListener('scroll', handleInfiniteScrollJump, { passive: true });
+            strip.addEventListener('scroll', handleScrollNormalize, { passive: true });
+            if ('onscrollend' in window) {
+                strip.addEventListener('scrollend', () => normalizeCarouselScroll(strip), { passive: true });
+            }
 
             const onPointerDown = (e) => {
                 if (e.button !== undefined && e.button !== 0) return;
@@ -271,7 +271,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function updateCarouselActiveState(categoryKey, smooth = true) {
+    function normalizeCarouselScroll(strip) {
+        if (!strip || strip.scrollWidth <= 0) return;
+        const setWidth = strip.scrollWidth / 3;
+        if (setWidth <= 0) return;
+
+        if (strip.scrollLeft >= setWidth * 2) {
+            strip.scrollLeft -= setWidth;
+        } else if (strip.scrollLeft < setWidth) {
+            strip.scrollLeft += setWidth;
+        }
+    }
+
+    function updateCarouselActiveState(categoryKey, smooth = true, direction = 0) {
         const strip = document.getElementById(`carousel-strip-${categoryKey}`);
         if (!strip || !strip.children.length) return;
         const category = categories[categoryKey];
@@ -284,45 +296,64 @@ document.addEventListener('DOMContentLoaded', () => {
                 t.classList.remove('active');
             }
         });
-        centerCarouselItem(categoryKey, smooth);
+        centerCarouselItem(categoryKey, smooth, direction);
     }
 
-    function centerCarouselItem(categoryKey, smooth = true) {
+    function centerCarouselItem(categoryKey, smooth = true, direction = 0) {
         const strip = document.getElementById(`carousel-strip-${categoryKey}`);
         if (!strip) return;
+
+        normalizeCarouselScroll(strip);
+
         const category = categories[categoryKey];
         const targetIndex = category.currentIndex;
+        const maxIndex = category.options.length - 1;
 
-        const thumbs = Array.from(strip.querySelectorAll(`.carousel-thumb[data-index="${targetIndex}"]`));
-        if (!thumbs.length) return;
+        let targetThumb = null;
 
-        const stripRect = strip.getBoundingClientRect();
-        if (stripRect.width <= 0) return;
-        const stripCenter = stripRect.left + (stripRect.width / 2);
+        if (direction === 1 && targetIndex === 0) {
+            // Moving NEXT and wrapping to 0 -> target Set 2 Index 0 to animate RIGHT
+            targetThumb = strip.querySelector(`.carousel-thumb[data-set-index="2"][data-index="0"]`);
+        } else if (direction === -1 && targetIndex === maxIndex) {
+            // Moving PREV and wrapping to maxIndex -> target Set 0 Index maxIndex to animate LEFT
+            targetThumb = strip.querySelector(`.carousel-thumb[data-set-index="0"][data-index="${maxIndex}"]`);
+        }
 
-        // Find thumbnail closest to current center of viewport
-        let closestThumb = thumbs[0];
-        let minDistance = Infinity;
+        if (!targetThumb) {
+            const thumbs = Array.from(strip.querySelectorAll(`.carousel-thumb[data-index="${targetIndex}"]`));
+            if (!thumbs.length) return;
 
-        thumbs.forEach(thumb => {
-            const thumbRect = thumb.getBoundingClientRect();
-            const thumbCenter = thumbRect.left + (thumbRect.width / 2);
-            const dist = Math.abs(thumbCenter - stripCenter);
-            if (dist < minDistance) {
-                minDistance = dist;
-                closestThumb = thumb;
+            const stripRect = strip.getBoundingClientRect();
+            if (stripRect.width <= 0) return;
+            const stripCenter = stripRect.left + (stripRect.width / 2);
+
+            let minDistance = Infinity;
+            thumbs.forEach(thumb => {
+                const thumbRect = thumb.getBoundingClientRect();
+                const thumbCenter = thumbRect.left + (thumbRect.width / 2);
+                const dist = Math.abs(thumbCenter - stripCenter);
+                if (dist < minDistance) {
+                    minDistance = dist;
+                    targetThumb = thumb;
+                }
+            });
+        }
+
+        if (targetThumb) {
+            const stripRect = strip.getBoundingClientRect();
+            const closestRect = targetThumb.getBoundingClientRect();
+            if (stripRect.width <= 0 || closestRect.width <= 0) return;
+
+            const thumbCenter = closestRect.left + (closestRect.width / 2);
+            const stripCenter = stripRect.left + (stripRect.width / 2);
+            const diff = thumbCenter - stripCenter;
+            const targetScroll = strip.scrollLeft + diff;
+
+            if (smooth) {
+                strip.scrollTo({ left: Math.max(0, targetScroll), behavior: 'smooth' });
+            } else {
+                strip.scrollLeft = Math.max(0, targetScroll);
             }
-        });
-
-        const closestRect = closestThumb.getBoundingClientRect();
-        const thumbCenter = closestRect.left + (closestRect.width / 2);
-        const diff = thumbCenter - stripCenter;
-        const targetScroll = strip.scrollLeft + diff;
-
-        if (smooth) {
-            strip.scrollTo({ left: Math.max(0, targetScroll), behavior: 'smooth' });
-        } else {
-            strip.scrollLeft = Math.max(0, targetScroll);
         }
     }
 
@@ -406,8 +437,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!btn) return;
             let holdTimeout = null;
             let holdInterval = null;
+            let isHolding = false;
 
-            const stopHold = () => {
+            const stopHold = (e) => {
+                if (!isHolding) return;
+                isHolding = false;
                 if (holdTimeout) { clearTimeout(holdTimeout); holdTimeout = null; }
                 if (holdInterval) { clearInterval(holdInterval); holdInterval = null; }
             };
@@ -415,23 +449,28 @@ document.addEventListener('DOMContentLoaded', () => {
             const startHold = (e) => {
                 if (e.button !== undefined && e.button !== 0) return;
                 e.stopPropagation();
+                if (e.cancelable) e.preventDefault();
+                if (isHolding) return;
+                isHolding = true;
+
                 openCarousel(categoryKey);
                 stepCallback();
 
-                stopHold();
+                if (holdTimeout) clearTimeout(holdTimeout);
+                if (holdInterval) clearInterval(holdInterval);
+
                 holdTimeout = setTimeout(() => {
+                    if (!isHolding) return;
                     holdInterval = setInterval(() => {
+                        if (!isHolding) return;
                         stepCallback();
                     }, 180); // Synchronized, comfortable repeat speed
                 }, 350);
             };
 
-            btn.addEventListener('mousedown', startHold);
-            btn.addEventListener('touchstart', startHold, { passive: true });
-
-            window.addEventListener('mouseup', stopHold);
-            window.addEventListener('touchend', stopHold);
-            window.addEventListener('touchcancel', stopHold);
+            btn.addEventListener('pointerdown', startHold);
+            window.addEventListener('pointerup', stopHold);
+            window.addEventListener('pointercancel', stopHold);
             btn.addEventListener('mouseleave', stopHold);
         }
 
@@ -442,7 +481,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 category.currentIndex = category.options.length - 1; // Wrap left
             }
             updateLayer(categoryKey, true);
-            updateCarouselActiveState(categoryKey, true);
+            updateCarouselActiveState(categoryKey, true, -1);
         });
 
         bindHoldButton(nextBtn, () => {
@@ -452,7 +491,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 category.currentIndex = 0; // Wrap right
             }
             updateLayer(categoryKey, true);
-            updateCarouselActiveState(categoryKey, true);
+            updateCarouselActiveState(categoryKey, true, 1);
         });
     }
 

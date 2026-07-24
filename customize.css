@@ -250,7 +250,7 @@ body {
     overflow-x: auto;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
-    touch-action: pan-y;
+    touch-action: pan-x pan-y;
     /* Hide scrollbars for click-and-drag swipe experience */
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE/Edge */
