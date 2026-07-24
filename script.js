@@ -125,12 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 endMessage.style.display = 'block';
             }
 
-            // Hide hover image overlay so open door texture displays on frame 1
-            const introHover = document.getElementById('intro-image-hover');
-            if (introHover) {
-                introHover.style.opacity = '0';
-            }
-
             // Trigger Zaraz Cloudflare tracking if available right before routing
             if (typeof zaraz !== 'undefined' && typeof zaraz.track === 'function') {
                 try {
@@ -200,6 +194,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Keep the 'zoom-fade' class on it so it remains at scale 3 / opacity 0 in the background.
         if (introImage) {
             introImage.src = 'https://image.starchandsteel.com/fridgedoorpng.png';
+        }
+        const introHover = document.getElementById('intro-image-hover');
+        if (introHover) {
+            introHover.style.opacity = '';
         }
 
         // 2. Scroll the main window back to the top
