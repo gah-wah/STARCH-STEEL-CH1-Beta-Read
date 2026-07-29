@@ -773,7 +773,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to fetch the comic data
     async function fetchComicData() {
         try {
-            const response = await fetch('data.json');
+            const response = await fetch('data.json?v=' + Date.now());
             
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
