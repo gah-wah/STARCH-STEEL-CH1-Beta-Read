@@ -1,4 +1,20 @@
 {
+    "dodo": {
+        "name": "Dodo",
+        "supporter": "Dodo",
+        "tier": "Super Supporter",
+        "donation": "$30",
+        "date": "Aug 21st, 2026",
+        "sprite": "https://image.starchandsteel.com/%2430%20Dodo.png",
+        "class": "Super Supporter",
+        "bio": "",
+        "stats": {
+            "STARCH": 50,
+            "STEEL": 50,
+            "SPICINESS": 50,
+            "SWEETNESS": 50
+        }
+    },
     "wiggle": {
         "name": "Wiggle",
         "supporter": "Wiggle",
