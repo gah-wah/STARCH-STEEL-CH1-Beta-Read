@@ -84,6 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
         category.options.forEach(opt => {
             if (opt.file && !imageCache[opt.file]) {
                 const img = new Image();
+                img.crossOrigin = 'anonymous';
                 img.decoding = 'async';
                 img.src = getAssetUrl(opt.file);
                 imageCache[opt.file] = img;
@@ -108,6 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (option.file) {
             const targetSrc = baseUrl + option.file;
             if (layerImg.src !== targetSrc) {
+                layerImg.crossOrigin = 'anonymous';
                 layerImg.src = targetSrc;
             }
             layerImg.classList.add('visible');
@@ -178,6 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     thumb.innerHTML = `<span class="carousel-thumb-none">NONE</span>${numSpan}`;
                 } else {
                     const img = document.createElement('img');
+                    img.crossOrigin = 'anonymous';
                     img.src = baseUrl + opt.file;
                     img.alt = opt.name;
                     img.loading = 'eager';
@@ -553,6 +556,44 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Export Functionality ---
+    async function loadImageForCanvas(src) {
+        if (src.startsWith('data:')) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = reject;
+                img.src = src;
+            });
+        }
+        try {
+            const response = await fetch(src, { mode: 'cors' });
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const blob = await response.blob();
+            const objectUrl = URL.createObjectURL(blob);
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => {
+                    URL.revokeObjectURL(objectUrl);
+                    resolve(img);
+                };
+                img.onerror = (err) => {
+                    URL.revokeObjectURL(objectUrl);
+                    reject(err);
+                };
+                img.src = objectUrl;
+            });
+        } catch (e) {
+            console.warn("Fetch blob failed, falling back to Image crossOrigin anonymous:", e);
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+                img.onload = () => resolve(img);
+                img.onerror = reject;
+                img.src = src;
+            });
+        }
+    }
+
     async function flattenCharacter() {
         const canvas = document.createElement('canvas');
         const size = 800; // Output size
@@ -570,26 +611,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         for (const layer of layers) {
             try {
-                if (layer.complete && layer.naturalHeight !== 0) {
-                    ctx.drawImage(layer, 0, 0, size, size);
-                } else {
-                    await new Promise((resolve) => {
-                        const tempImg = new Image();
-                        tempImg.onload = () => {
-                            ctx.drawImage(tempImg, 0, 0, size, size);
-                            resolve();
-                        };
-                        tempImg.onerror = resolve; // Skip on error
-                        tempImg.src = layer.src;
-                    });
-                }
+                const loadedImg = await loadImageForCanvas(layer.src);
+                ctx.drawImage(loadedImg, 0, 0, size, size);
             } catch (err) {
                 console.error("Error drawing layer:", layer.id, err);
             }
         }
 
-        return new Promise(resolve => {
-            canvas.toBlob(blob => resolve(blob), 'image/png');
+        return new Promise((resolve, reject) => {
+            try {
+                canvas.toBlob(blob => {
+                    if (blob) resolve(blob);
+                    else reject(new Error("canvas.toBlob returned null"));
+                }, 'image/png');
+            } catch (err) {
+                reject(err);
+            }
         });
     }
 
