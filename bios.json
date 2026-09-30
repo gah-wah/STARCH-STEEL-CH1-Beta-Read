@@ -31,6 +31,22 @@
             "SWEETNESS": 15
         }
     },
+    "broccolee": {
+        "name": "Brocco Lee",
+        "supporter": "Brocco Lee",
+        "tier": "Super Supporter",
+        "donation": "$20",
+        "date": "Sept 29th, 2026",
+        "sprite": "https://image.starchandsteel.com/%2420%20Brocco%20Lee.png",
+        "class": "Super Supporter",
+        "bio": "",
+        "stats": {
+            "STARCH": 50,
+            "STEEL": 50,
+            "SPICINESS": 50,
+            "SWEETNESS": 50
+        }
+    },
     "carrotjak": {
         "name": "Carrotjak",
         "supporter": "Carrotjak",
