@@ -1,4 +1,20 @@
 {
+    "walterwhite": {
+        "name": "Walter White",
+        "supporter": "Walter White",
+        "tier": "Super Supporter",
+        "donation": "$50",
+        "date": "October 3rd, 2026",
+        "sprite": "https://image.starchandsteel.com/%2450%20Walter%20White.png",
+        "class": "Super Supporter",
+        "bio": "Say my name.",
+        "stats": {
+            "STARCH": 50,
+            "STEEL": 50,
+            "SPICINESS": 50,
+            "SWEETNESS": 50
+        }
+    },
     "dodo": {
         "name": "Dodo",
         "supporter": "Dodo",

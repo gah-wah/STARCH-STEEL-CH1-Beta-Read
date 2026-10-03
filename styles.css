@@ -925,6 +925,12 @@ body {
 .patreon-char-s3-c3 { left: 52%; bottom: 41.0%; }
 .patreon-char-s3-c4 { left: 72%; bottom: 41.0%; }
 
+/* Shelf 4 positions (Bottom Drawer / Extra Shelf) */
+.patreon-char-s4-c1 { left: 12%; bottom: 25.0%; }
+.patreon-char-s4-c2 { left: 32%; bottom: 25.0%; }
+.patreon-char-s4-c3 { left: 52%; bottom: 25.0%; }
+.patreon-char-s4-c4 { left: 72%; bottom: 25.0%; }
+
 .intro-screen.fade-out {
     opacity: 0;
     pointer-events: none;
